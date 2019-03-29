@@ -4,7 +4,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Home</title>
+    <title>Control</title>
+
+
 </head>
 <body>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -29,6 +31,22 @@
             </ul>
         </div>
     </nav>
-    <p>Bonjour, vous êtes dans l'home</p>
+
+    <div class="input-group mb-3">
+        <input type="text" id="degre" class="form-control" placeholder="Entrez un nombre" aria-label="Recipient's username" aria-describedby="basic-addon2">
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button" id="buttonDegre">Envoyer</button>
+        </div>
+    </div>
+
+    <script>
+        var buttonDegre = document.getElementById("buttonDegre"),
+            websocket = new WebSocket("ws://localhost:6789/");
+
+        buttonDegre.onclick = function (event) {
+            websocket.send(JSON.stringify({action : "tourner_plateau", plateau_degre : document.getElementById("degre").value}))
+        }
+    </script>
+
 </body>
 </html>

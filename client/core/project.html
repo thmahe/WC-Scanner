@@ -23,18 +23,36 @@
             <li class="nav-item">
                 <a class="nav-link" href="project.html">Project</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="control.html">Control</a>
+            </li>
         </ul>
     </div>
 </nav>
 <div class="list-group">
-    <button type="button" class="list-group-item list-group-item-action active">
-        Cras justo odio
-    </button>
-    <button type="button" class="list-group-item list-group-item-action">Dapibus ac facilisis in</button>
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" id="name_project" placeholder="Project name" aria-label="Project name" aria-describedby="basic-addon2">
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" id="create_project" type="button">Create</button>
+        </div>
+    </div>
+
+    <button type="button" class="list-group-item list-group-item-action">Cras justo odio</button>
     <button type="button" class="list-group-item list-group-item-action">Morbi leo risus</button>
     <button type="button" class="list-group-item list-group-item-action">Porta ac consectetur ac</button>
     <button type="button" class="list-group-item list-group-item-action" disabled>Vestibulum at eros</button>
 </div>
+
+<script>
+    var buttonCreateProject = document.getElementById("create_project"),
+        websocket = new WebSocket("ws://localhost:6789/");
+
+    buttonCreateProject.onclick = function (event){
+        websocket.send(JSON.stringify({action : "create_project", create_project : document.getElementById("name_project").value}))
+    }
+
+
+</script>
 
 </body>
 </html>
