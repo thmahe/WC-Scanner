@@ -5,7 +5,10 @@
 import asyncio
 import json
 import logging
+import os
+
 import websockets
+import subprocess
 
 logging.basicConfig()
 
@@ -50,12 +53,18 @@ async def counter(websocket, path):
             elif data['action'] == 'plus':
                 STATE['value'] += 1
                 await notify_state()
+            elif data['action'] == 'create_project':
+                createProject(data['nameProject'])
             else:
                 logging.error(
                     "unsupported event: {}", data)
     finally:
         await unregister(websocket)
 
+async def createProject(message):
+    subprocess.Popen('cd && mkdir .wcscanner -m 755 -p && cd .wcscanner && mkdir ' + message + ' -m -755 -p', shell=True)
+
+
 asyncio.get_event_loop().run_until_complete(
-    websockets.serve(counter, '192.168.43.97', 6789))
+    websockets.serve(counter, '10.154.124.140', 6789))
 asyncio.get_event_loop().run_forever()
