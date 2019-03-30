@@ -48,7 +48,7 @@
         websocket = new WebSocket("ws://localhost:6789/");
 
     buttonCreateProject.onclick = function (event){
-        websocket.send(JSON.stringify({action : "create_project", create_project : document.getElementById("name_project").value}))
+        websocket.send(JSON.stringify({action : "create_project", name_project : document.getElementById("name_project").value}))
     }
 
 

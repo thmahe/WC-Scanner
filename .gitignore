@@ -1,2 +1,4 @@
 
 server/\.idea/
+
+client/node_modules/*
