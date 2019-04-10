@@ -1,52 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<div class="row">
+    <div class="col-md-8">
+        <div class="form-group">
+            <h2>Turn Bed</h2>
 
-<head>
-    <meta charset="UTF-8">
-    <title>Control</title>
-
-
-</head>
-<body>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="../index.html">WCScanner</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item active">
-                    <a class="nav-link" href="home.html">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="project.html">Project</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="control.html">Control</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-
-    <div class="input-group mb-3">
-        <input type="text" id="degre" class="form-control" placeholder="Entrez un nombre" aria-label="Recipient's username" aria-describedby="basic-addon2">
-        <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="button" id="buttonDegre">Envoyer</button>
+            <div class="row">
+                <div class="col-md-3">
+                    <button class="btn blue-gradient"><i class="fas fa-redo mr-1 fa-flip-horizontal"></i> Left</button>
+                </div>
+                <div class="col-md-6">
+                    <div class="md-form input-group mb-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text md-addon" id="material-addon1">°</span>
+                        </div>
+                        <input type="number" class="form-control" placeholder="60" value="60" aria-label="degrees" aria-describedby="degrees_placeholder">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <button class="btn blue-gradient">Right <i class="fas fa-redo mr-1"></i></button>
+                </div>
+            </div>
         </div>
     </div>
-
-    <script>
-        var buttonDegre = document.getElementById("buttonDegre"),
-            websocket = new WebSocket("ws://localhost:6789/");
-
-        buttonDegre.onclick = function (event) {
-            websocket.send(JSON.stringify({action : "tourner_plateau", plateau_degre : document.getElementById("degre").value}))
-        }
-    </script>
-
-</body>
-</html>
+    <div class="col-sm-4">
+        RIGHT
+    </div>
+</div>
