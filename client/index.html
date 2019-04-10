@@ -24,37 +24,7 @@
     <!-- MDB core JavaScript -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.7.6/js/mdb.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script>
-        var content_div = document.getElementById("content");
-        var users = document.querySelector('.users'),
-            websocket = new WebSocket("ws://localhost:6789/");
-        websocket.onmessage = function (event) {
-            data = JSON.parse(event.data);
-            switch (data.type) {
-                case 'users':
-                    users.textContent = (
-                        data.count.toString() + " user" +
-                        (data.count == 1 ? "" : "s"));
-                    break;
-                default:
-                    console.error(
-                        "unsupported event", data);
-            }
-        };
 
-        $(document).ready(function(){
-            $('#content').load("./core/home.html");
-        });
-
-        function drawHomeContent() {
-            $('#content').load("./core/home.html");
-        }
-
-        function drawControlContent() {
-            $('#content').load("./core/control.html");
-        }
-
-    </script>
 
 
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -78,9 +48,59 @@
             </nav>
     <div class="container-fluid">
         <div id="content">
+            <div class="state">
+                <span class="users">?</span> online
+            </div>
         </div>
     </div>
 
+    <script>
+        var users, websocket;
 
+        $(document).ready(function(){
+            $('#content').load("./core/home.html");
+
+            websocket = new WebSocket("ws://localhost:6789/");
+
+            websocket.onmessage = function (event) {
+                data = JSON.parse(event.data);
+                console.log(data);
+                switch (data.type) {
+                    case 'users':
+                        document.getElementById('users').innerText = data.count.toString() + " user" + (data.count > 1 ? "s" :"");
+                        break;
+                    case 'state':
+                        //@TODO capter les changements dans les variables du scanner
+                        break;
+                    default:
+                        console.error(
+                            "unsupported event", data);
+                }
+            };
+        });
+
+        function drawHomeContent() {
+            $('#content').load("./core/home.html");
+        }
+
+        function drawControlContent() {
+            $('#content').load("./core/control.html");
+        }
+
+        /**
+         * Turn bed clockwise
+         */
+        function turn_bed_CW_trigger() {
+            let angle = document.getElementById("turn_bed_value").value;
+            websocket.send(JSON.stringify({action : "turn_bed_CW", plateau_degree : angle.toString()}))
+        }
+
+        function turn_bed_CCW_trigger() {
+            let angle = document.getElementById("turn_bed_value").value;
+            websocket.send(JSON.stringify({action : "turn_bed_CCW", plateau_degree : angle.toString()}))
+        }
+
+
+    </script>
     </body>
 </html>

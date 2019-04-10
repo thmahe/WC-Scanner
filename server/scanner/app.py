@@ -28,12 +28,14 @@ def users_event():
 
 
 async def notify_state():
+    print(USERS)
     if USERS:  # asyncio.wait doesn't accept an empty list
         message = state_event()
         await asyncio.wait([user.send(message) for user in USERS])
 
 
 async def notify_users():
+    print(USERS)
     if USERS:  # asyncio.wait doesn't accept an empty list
         message = users_event()
         await asyncio.wait([user.send(message) for user in USERS])
@@ -65,7 +67,10 @@ async def counter(websocket, path):
             elif data['action'] == 'create_project':
                 print(data)
                 await createProject(data['name_project'])
-            elif data['action'] == 'tourner_plateau':
+            elif data['action'] == 'turn_bed_CW':
+                angle = int(data['plateau_degree'])
+                print(data)
+            elif data['action'] == 'turn_bed_CCW':
                 print(data)
             else:
                 logging.error(
