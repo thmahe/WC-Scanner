@@ -1,6 +1,6 @@
 from time import sleep
 import RPi.GPIO as GPIO
-#from picamera import PiCamera
+from picamera import PiCamera
 
 class StepperMotor :
 
@@ -35,8 +35,7 @@ class StepperMotor :
             sleep(delay)
             GPIO.output(self.STEP_PIN, GPIO.LOW)
             sleep(delay)
-        GPIO.output(self.ENABLE_PIN, GPIO.LOW)
-
+        GPIO.output(self.ENABLE_PIN, GPIO.HIGH)
 
 
 class Scanner :
@@ -46,7 +45,7 @@ class Scanner :
         self.bed_rotation = 0
         self.cam_rotation = 0
 
-        #self.camera = PiCamera()
+        self.camera = PiCamera()
 
         self.bed_motor = StepperMotor(20, 21, 16, 200, 32)
 
@@ -59,9 +58,9 @@ class Scanner :
 
 scanner = Scanner()
 
-for i in range(36):
-    scanner.turn_bed(10)
-    scanner.camera_motor.turn(10)
+for i in range(3):
+    scanner.turn_bed(180)
+    #scanner.camera_motor.turn(10)
     sleep(0.5)
 
 GPIO.cleanup()
