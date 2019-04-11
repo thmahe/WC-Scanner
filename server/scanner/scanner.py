@@ -7,7 +7,7 @@ class StepperMotor :
     ## DIR, STEP, ENABLE PINS
     def __init__(self, DIR_PIN, STEP_PIN, ENABLE_PIN, step_per_rotation, micro_step):
         GPIO.setmode(GPIO.BCM)
-
+        GPIO.setwarnings(False)
         self.DIR_PIN = DIR_PIN
         self.STEP_PIN = STEP_PIN
         self.ENABLE_PIN = ENABLE_PIN

@@ -9,12 +9,19 @@ import os
 import re
 import websockets
 from RPi import GPIO
-
+import atexit
 from scanner.scanner import Scanner
 
-logging.basicConfig()
+def exit_handler():
+    GPIO.cleanup()
 
-APP_PATH = os.environ['HOME'] + '/.wcscanner'
+atexit.register(exit_handler)
+
+
+logging.basicConfig()
+GPIO.setwarnings(False)
+
+APP_PATH = '/home/pi/.wcscanner'
 
 STATE = {'value': 0}
 
@@ -109,7 +116,9 @@ def createProject(message):
 
 
 if __name__ == '__main__':
+    scanner.turn_bed(360)
+    scanner.turn_bed(-360)
     asyncio.get_event_loop().run_until_complete(
         websockets.serve(counter, '0.0.0.0', 6789))
     asyncio.get_event_loop().run_forever()
-    GPIO.cleanup()
+
