@@ -55,12 +55,12 @@ class Scanner :
     def turn_bed(self, degrees):
         self.bed_motor.turn(degrees)
 
+if __name__ == "__main__":
+    scanner = Scanner()
 
-scanner = Scanner()
+    for i in range(3):
+        scanner.turn_bed(180)
+        #scanner.camera_motor.turn(10)
+        sleep(0.5)
 
-for i in range(3):
-    scanner.turn_bed(180)
-    #scanner.camera_motor.turn(10)
-    sleep(0.5)
-
-GPIO.cleanup()
+    GPIO.cleanup()

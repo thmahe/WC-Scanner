@@ -1,5 +1,5 @@
 from unittest import TestCase
-from scanner import app
+import app
 import os
 
 class TestCreateProject(TestCase):

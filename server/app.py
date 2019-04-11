@@ -8,7 +8,9 @@ import logging
 import os
 import re
 import websockets
-import subprocess
+from RPi import GPIO
+
+from scanner.scanner import Scanner
 
 logging.basicConfig()
 
@@ -18,6 +20,7 @@ STATE = {'value': 0}
 
 USERS = set()
 
+scanner = Scanner()
 
 def state_event():
     return json.dumps({'type': 'state', **STATE})
@@ -56,6 +59,7 @@ async def counter(websocket, path):
     await register(websocket)
     try:
         await websocket.send(state_event())
+
         async for message in websocket:
             data = json.loads(message)
             if data['action'] == 'minus':
@@ -69,9 +73,13 @@ async def counter(websocket, path):
                 await createProject(data['name_project'])
             elif data['action'] == 'turn_bed_CW':
                 angle = int(data['plateau_degree'])
-                print(data)
+                scanner.turn_bed(angle)
+                await notify_state()
             elif data['action'] == 'turn_bed_CCW':
                 print(data)
+                angle = int(data['plateau_degree'])
+                scanner.turn_bed(-1 * angle)
+                await notify_state()
             else:
                 logging.error(
                     "unsupported event: {}", data)
@@ -102,5 +110,6 @@ def createProject(message):
 
 if __name__ == '__main__':
     asyncio.get_event_loop().run_until_complete(
-        websockets.serve(counter, 'localhost', 6789))
+        websockets.serve(counter, '0.0.0.0', 6789))
     asyncio.get_event_loop().run_forever()
+    GPIO.cleanup()

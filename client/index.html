@@ -60,7 +60,12 @@
         $(document).ready(function(){
             $('#content').load("./core/home.html");
 
-            websocket = new WebSocket("ws://localhost:6789/");
+            //websocket = new WebSocket("ws://localhost:6789/");
+
+            /**
+             * RPi address
+             */
+            websocket = new WebSocket("ws://10.3.141.1:6789/");
 
             websocket.onmessage = function (event) {
                 data = JSON.parse(event.data);
