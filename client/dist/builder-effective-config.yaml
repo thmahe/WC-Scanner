@@ -1,0 +1,47 @@
+directories:
+  output: dist
+  buildResources: build
+files:
+  - filter:
+      - build/**/*
+extraMetadata:
+  main: build/electron.js
+appId: com.your-domain
+compression: normal
+productName: Example
+mac:
+  icon: assets/icon.icns
+  type: distribution
+  target:
+    - pkg
+    - dmg
+    - mas
+  publish:
+    provider: s3
+    bucket: example-releases
+    path: releases
+  category: public.app-category.news
+mas:
+  entitlements: assets/entitlements.mas.plist
+  entitlementsInherit: assets/entitlements.mas.inherit.plist
+  provisioningProfile: assets/embedded.provisionprofile
+win:
+  target: nsis
+  icon: assets/icon.ico
+  publish:
+    provider: s3
+    bucket: example-releases
+    path: releases
+linux:
+  icon: assets/icon.png
+  target:
+    - snap
+    - AppImage
+  description: Example
+  category: Network;Feed
+  publish:
+    provider: s3
+    bucket: example-releases
+    path: releases
+extends: react-cra
+electronVersion: 2.0.18
