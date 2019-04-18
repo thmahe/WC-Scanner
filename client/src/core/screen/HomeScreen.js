@@ -1,8 +1,3 @@
-/* Bayou Application 2019
-    midounibillel@gmail.com
-    Billel Midouni 
-*/
-
 import * as React from "react";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";

@@ -1,8 +1,3 @@
-/* Bayou Application 2019
-    midounibillel@gmail.com
-    Billel Midouni 
-*/
-
 import React from "react";
 import { Switch, Route } from 'react-router-dom'
 import HomeScreen from "./HomeScreen";
