@@ -9,18 +9,14 @@ import Typography from "@material-ui/core/Typography";
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from '@material-ui/icons/Search';
 import MenuIcon from '@material-ui/icons/Menu';
-import Person from '@material-ui/icons/Person';
-import Build from '@material-ui/icons/Build';
-import Button from "@material-ui/core/Button";
 import Settings from '@material-ui/icons/Settings';
-import Wifi from '@material-ui/icons/Wifi';
 import Popper from "@material-ui/core/Popper";
 import Grow from "@material-ui/core/Grow";
 import Paper from "@material-ui/core/Paper";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import MenuList from "@material-ui/core/MenuList";
 import MenuItem from "@material-ui/core/MenuItem";
-import Slider from '@material-ui/lab/Slider';
+import Main from "./core/screen/Main";
 
 const styles = theme => ({
   root: {
@@ -86,7 +82,6 @@ const styles = theme => ({
     },
 });
 
-const websocket = new WebSocket("ws://localhost:6789/"); //new WebSocket("ws://10.3.141.1:6789/") RPI
 
 class App extends React.Component {
     constructor(props){
@@ -94,11 +89,7 @@ class App extends React.Component {
     }
 
     state={
-        connect: false,
         open: false,
-        angle: 90,
-        userNb: null,
-        buildNb: null,
     };
 
     handleToggle = () => {
@@ -117,25 +108,6 @@ class App extends React.Component {
         this.setState({ angle });
     };
 
-    componentDidMount() {
-
-        websocket.onmessage = function (event) {
-            let data = JSON.parse(event.data);
-            console.log(data);
-            switch (data.type) {
-                case 'users':
-                    //document.getElementById('users').innerText = data.count.toString() + " user" + (data.count > 1 ? "s" :"");
-                    this.setState({userNb: data.count == null ? '0' : data.count.toString()});
-                    break;
-                case 'state':
-                    //@TODO capter les changements dans les variables du scanner
-                    break;
-                default:
-                    console.error(
-                        "unsupported event", data);
-            }
-        };
-    }
 
     render() {
         const { classes } = this.props;
@@ -193,75 +165,7 @@ class App extends React.Component {
                         </IconButton>
                     </Toolbar>
                 </AppBar>
-
-                <div style={{display:'flex', width: '100%', height: '100%',flexDirection: 'column'}}>
-                    <div style={{display:'flex', width: '100%', height: '100%', flexDirection: 'column', alignItems:'center'}}>
-                        <p style={{fontSize: 30, fontWeight: '700'}}>Bienvenue</p>
-                        <div style={{display:'flex', width: '100%', height: '80%', alignItems:'center'}}>
-                            <div style={{display:'flex', width: '100%', height: '20%', flexDirection: 'row', alignItems:'center', justifyContent:'space-evenly'}}>
-                                <Button variant="contained" className={classes.button} style={{fontSize: 20}} onClick={() => websocket.send(JSON.stringify({action : "turn_bed_CW", plateau_degree : this.state.angle}))}>
-                                    Left
-                                </Button>
-                                <div>
-                                    <Typography id="label">angle de rotation : {this.state.angle}</Typography>
-                                    <Slider
-                                        value={this.state.angle}
-                                        style={{padding: '22px 0px', width: 200}}
-                                        aria-labelledby="label"
-                                        max='360'
-                                        step='1'
-                                        onChange={this.handleChange}/>
-                                </div>
-                                <Button variant="contained" className={classes.button} style={{fontSize: 20}} onClick={() =>  websocket.send(JSON.stringify({action : "turn_bed_CCW", plateau_degree : this.state.angle}))}>
-                                    Right
-                                </Button>
-                            </div>
-                        </div>
-                        <div style={{display:'flex', backgroundColor: '#fff', width: '100%', height: '20%', flexDirection: 'row', alignItems:'center', justifyContent:'space-evenly'}}>
-                            <Button variant="contained" color="primary" className={classes.button} style={{fontSize: 20}}>
-                                Voir un projet
-                            </Button>
-
-                            <Button variant="contained" color="primary" className={classes.button} style={{fontSize: 20}}>
-                                Commencer un projet
-                            </Button>
-                        </div>
-                    </div>
-                    <div style={{display:'flex', backgroundColor: '#4254B2', width: '100%', height: 80, justifyContent: 'space-around', alignItems:'center' }}>
-                        <div style={{display:'flex', color: '#fff', width: 200, alignItems:'center',  justifyContent:'space-around'}}>
-                            <Build style={{color: '#fff', fontSize: 40 }}/>
-                            <p style={{fontSize: 20}}> {this.state.buildNb} build en attente </p>
-                        </div>
-
-                        <div style={{display:'flex', color: '#fff', width: 200, alignItems:'center', justifyContent:'space-around'}}>
-                            <Person style={{color: '#fff', fontSize: 40 }}/>
-                            <p style={{fontSize: 20}}> {this.state.userNb} persone en ligne </p>
-                        </div>
-
-                        { this.state.connect ?
-                            <div style={{
-                                display: 'flex',
-                                color: '#fff',
-                                width: 150,
-                                alignItems: 'center',
-                                justifyContent: 'space-around'
-                            }}>
-                                <Wifi style={{color: '#fff', fontSize: 40}}/>
-                                <p style={{fontSize: 20}}> connecter </p>
-                            </div> :
-                            <div style={{
-                                display: 'flex',
-                                color: '#fff',
-                                width: 180,
-                                alignItems: 'center',
-                                justifyContent: 'space-around'
-                            }}>
-                                <Wifi style={{color: '#fff', fontSize: 40}}/>
-                                <p style={{fontSize: 20}}> non connecter </p>
-                            </div>
-                        }
-                    </div>
-                </div>
+                <Main/>
             </div>
         );
   }
