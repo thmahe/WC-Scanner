@@ -160,7 +160,7 @@ class HomeScreen extends React.Component{
 
                     <div style={{display:'flex', color: '#fff', width: 200, alignItems:'center', justifyContent:'space-around'}}>
                         <Person style={{color: '#fff', fontSize: 40 }}/>
-                        <p style={{fontSize: 20}}> {this.state.userNb} persone en ligne </p>
+                        <p style={{fontSize: 20}}> {this.state.userNb} personne en ligne </p>
                     </div>
 
                     { this.state.connect ?
@@ -172,7 +172,7 @@ class HomeScreen extends React.Component{
                             justifyContent: 'space-around'
                         }}>
                             <Wifi style={{color: '#fff', fontSize: 40}}/>
-                            <p style={{fontSize: 20}}> connecter </p>
+                            <p style={{fontSize: 20}}> connecté </p>
                         </div> :
                         <div style={{
                             display: 'flex',
@@ -182,7 +182,7 @@ class HomeScreen extends React.Component{
                             justifyContent: 'space-around'
                         }}>
                             <Wifi style={{color: '#fff', fontSize: 40}}/>
-                            <p style={{fontSize: 20}}> non connecter </p>
+                            <p style={{fontSize: 20}}> non connecté </p>
                         </div>
                     }
                 </div>

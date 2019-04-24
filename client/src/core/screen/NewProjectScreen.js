@@ -48,7 +48,7 @@ const styles = theme => ({
 });
 
 function getSteps() {
-    return ['Nom du Dossier', 'Caracteristique de l`objet', 'Qualite du scan'];
+    return ["Nom du Dossier", "Caractéristiques de l'objet", "Qualité du scan"];
 }
 
 function getStepContent(step) {
@@ -165,7 +165,7 @@ class NewProjectScreen extends React.Component{
             case 2:
                 return(
                     <FormControl component="fieldset" className={classes.formControl}>
-                        <FormLabel component="legend">Qualite du scan</FormLabel>
+                        <FormLabel component="legend">Qualité du scan</FormLabel>
                         <RadioGroup
                             aria-label="Gender"
                             name="gender1"
@@ -223,9 +223,9 @@ class NewProjectScreen extends React.Component{
                 </Stepper>
                 {activeStep === steps.length && (
                     <Paper square elevation={0} className={classes.resetContainer}>
-                        <Typography>Tout les etapes sont finis</Typography>
+                        <Typography>Toutes les étapes sont finies</Typography>
                         <Button onClick={this.handleReset} className={classes.button}>
-                            Crée le projet
+                            Créer un projet
                         </Button>
                     </Paper>
                 )}
