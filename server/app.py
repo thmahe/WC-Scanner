@@ -116,8 +116,8 @@ def createProject(message):
 
 
 if __name__ == '__main__':
-    scanner.turn_bed(360)
-    scanner.turn_bed(-360)
+    scanner.turn_bed(720)
+    scanner.turn_bed(-720)
     asyncio.get_event_loop().run_until_complete(
         websockets.serve(counter, '0.0.0.0', 6789))
     asyncio.get_event_loop().run_forever()
