@@ -10,7 +10,7 @@ import {fade} from "@material-ui/core/styles/colorManipulator";
 import {withStyles} from "@material-ui/core";
 import {Link} from "react-router-dom";
 
-const websocket = new WebSocket("ws://localhost:6789/"); //new WebSocket("ws://10.3.141.1:6789/") RPI
+const websocket = new WebSocket("ws://10.3.141.1:6789/"); //new WebSocket("ws://10.3.141.1:6789/") RPI
 
 const styles = theme => ({
     root: {
@@ -86,19 +86,20 @@ class HomeScreen extends React.Component{
         connect: false,
         open: false,
         angle: 90,
-        userNb: null,
+        userNb: 0,
         buildNb: null,
     };
 
     componentDidMount() {
-
+        let that = this;
         websocket.onmessage = function (event) {
             let data = JSON.parse(event.data);
-            console.log(data);
+            that.setState({connect: data != null });
             switch (data.type) {
                 case 'users':
                     //document.getElementById('users').innerText = data.count.toString() + " user" + (data.count > 1 ? "s" :"");
-                    this.setState({userNb: data.count == null ? '0' : data.count.toString()});
+                    that.setState({userNb: data.count == null ? '0' : data.count.toString()});
+
                     break;
                 case 'state':
                     //@TODO capter les changements dans les variables du scanner
@@ -129,7 +130,7 @@ class HomeScreen extends React.Component{
                                     aria-labelledby="label"
                                     max='360'
                                     step='1'
-                                    onChange={this.handleChange}/>
+                                    onChange={(angle) => this.setState({angle: angle})}/>
                             </div>
                             <Button variant="contained" className={classes.button} style={{fontSize: 20}} onClick={() =>  websocket.send(JSON.stringify({action : "turn_bed_CCW", plateau_degree : this.state.angle}))}>
                                 Right

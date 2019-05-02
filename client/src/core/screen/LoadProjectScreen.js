@@ -142,48 +142,46 @@ class LoadProjectScreen extends React.Component{
                 ],
                 url_file_3D: 'blabla'
             }
-
         ];
 
         return(
             <div style={{display: 'flex', justifyContent:'center', alignItems:'center', flexDirection: 'column'}}>
                 {
-                    projects.map((item, index) =>
-                    {<Card className={classes.card}>
-                        <CardContent>
-                            <Typography variant="h5" component="h2">
-                                {item.projectId}
-                            </Typography>
-                            <Paper className={classes.root}>
-                                <Table className={classes.table}>
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell align="center">Longueur</TableCell>
-                                            <TableCell align="center">Largeur</TableCell>
-                                            <TableCell align="center">Profondeur</TableCell>
-                                            <TableCell align="center">Qualité</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {rows.map(row => (
-                                            <TableRow key={row.id}>
-                                                <TableCell align="center">{row.longueur}</TableCell>
-                                                <TableCell align="center">{row.largeur}</TableCell>
-                                                <TableCell align="center">{row.profondeur}</TableCell>
-                                                <TableCell align="center">{row.qualite}</TableCell>
+                    projects.map(item => (
+                        <Card className={classes.card}>
+                            <CardContent>
+                                <Typography variant="h5" component="h2">
+                                    {item.projectId}
+                                </Typography>
+                                <Paper className={classes.root}>
+                                    <Table className={classes.table}>
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell align="center">Longueur</TableCell>
+                                                <TableCell align="center">Largeur</TableCell>
+                                                <TableCell align="center">Profondeur</TableCell>
+                                                <TableCell align="center">Qualité</TableCell>
                                             </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </Paper>
-
-                            <div style={{display:'flex', flexDirection:'row', justifyContent:'space-around', alignItems:'center', marginTop:10}}>
-                                Progression
-                                <CircularProgress className={classes.progress} variant={"static"} value={75}/>
-                            </div>
-                        </CardContent>
-                    </Card>
-                    } )
+                                        </TableHead>
+                                        <TableBody>
+                                            {rows.map(row => (
+                                                <TableRow key={row.id}>
+                                                    <TableCell align="center">{row.longueur}</TableCell>
+                                                    <TableCell align="center">{row.largeur}</TableCell>
+                                                    <TableCell align="center">{row.profondeur}</TableCell>
+                                                    <TableCell align="center">{row.qualite}</TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </Paper>
+                                <div style={{display:'flex', flexDirection:'row', justifyContent:'space-around', alignItems:'center', marginTop:10}}>
+                                    Progression
+                                    <CircularProgress className={classes.progress} variant={"static"} value={75}/>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    ))
                 }
             </div>
         );
