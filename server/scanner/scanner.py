@@ -56,6 +56,21 @@ class Scanner :
     def turn_bed(self, degrees):
         self.bed_motor.turn(degrees)
 
+	def visual(self, onoff):
+		if onoff == 1 :
+			subprocess.Popen('motion', shell=True)
+		else:
+			subprocess.Popen('pkill motion', shell=True)
+
+	def takePicture(self, nb):
+		self.camera.capture('{nb}.jpg', format=jpeg, use_video_port=False)
+
+	def closeCam(self):
+		self.camera.close()
+		
+
+
+
 
 scanner = Scanner()
 
