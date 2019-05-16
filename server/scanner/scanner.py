@@ -69,12 +69,12 @@ class Scanner :
 		
 
 
+if __name__ == "__main__":
 
+	scanner = Scanner()
 
-scanner = Scanner()
+	for i in range(3):
+		scanner.turn_bed(180)
+		sleep(0.5)
 
-for i in range(3):
-	scanner.turn_bed(180)
-	sleep(0.5)
-
-GPIO.cleanup()
+	GPIO.cleanup()
