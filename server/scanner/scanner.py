@@ -73,4 +73,8 @@ class Scanner :
 
 scanner = Scanner()
 
-    GPIO.cleanup()
+for i in range(3):
+	scanner.turn_bed(180)
+	sleep(0.5)
+
+GPIO.cleanup()
