@@ -55,12 +55,22 @@ class Scanner :
     def turn_bed(self, degrees):
         self.bed_motor.turn(degrees)
 
-if __name__ == "__main__":
-    scanner = Scanner()
+	def visual(self, onoff):
+		if onoff == 1 :
+			subprocess.Popen('motion', shell=True)
+		else:
+			subprocess.Popen('pkill motion', shell=True)
 
-    for i in range(3):
-        scanner.turn_bed(180)
-        #scanner.camera_motor.turn(10)
-        sleep(0.5)
+	def takePicture(self, nb):
+		self.camera.capture('{nb}.jpg', format=jpeg, use_video_port=False)
+
+	def closeCam(self):
+		self.camera.close()
+		
+
+
+
+
+scanner = Scanner()
 
     GPIO.cleanup()
