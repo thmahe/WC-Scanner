@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+
+
 <html>
 <!-- Font Awesome -->
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
@@ -28,7 +30,7 @@
 
 
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-                <a class="navbar-brand" href="index.html">WCScanner</a>
+                <a class="navbar-brand" onclick="drawHomeContent()" href="#">WCScanner</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -38,7 +40,7 @@
                             <a class="nav-link" onclick="drawHomeContent()" href="#">Home<span class="sr-only">(current)</span></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="core/project.html">Project</a>
+                            <a class="nav-link" onclick="drawProjectContent()" href="#">Project</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" onclick="drawControlContent()" href="#">Control</a>
@@ -47,12 +49,9 @@
                 </div>
             </nav>
 			
-    <div class="container-fluid">
+    <div class="container-fluid" >
         <div id="content">
-            <div class="state">
-                <span class="users">?</span> online
-				<img src= "http://localhost:8081/?action=stream" width="640" height="480" title="PI Cam"/>
-            </div>
+            <p type="online">Offline</p>
         </div>
     </div>
 
@@ -87,12 +86,21 @@
         });
 
         function drawHomeContent() {
-            $('#content').load("./core/home.html");
+            //document.getElementById('content').innerHTML = '';
+            //$('#content').load("./core/home.html");
+            document.getElementById("content").innerHTML='<object type="text/html" data="./core/home.html"></object>';
         }
 
         function drawControlContent() {
-            $('#content').load("./core/control.html");
+            //$('#content').load("./core/control.html");
+            document.getElementById("content").innerHTML='<object type="text/html" data="./core/control.html"></object>';
         }
+
+        function drawProjectContent() {
+            //$('#content').load("./core/control.html");
+            document.getElementById("content").innerHTML='<object type="text/html" data="./core/project.html"></object>';
+        }
+
 
         /**
          * Turn bed clockwise
