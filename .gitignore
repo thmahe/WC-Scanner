@@ -4,3 +4,5 @@ server/\.idea/
 client/node_modules/*
 
 client/\.idea/
+
+server/scanner/__pycache__/

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" serverName="scanner-3d">
+  <component name="PublishConfigData" serverName="pi@wcscanner.local:22">
     <serverData>
-      <paths name="scanner-3d">
+      <paths name="pi@wcscanner.local:22">
         <serverdata>
           <mappings>
-            <mapping deploy="/home/pi/Desktop" local="$PROJECT_DIR$/server" web="/" />
+            <mapping deploy="/home/pi/dev" local="$PROJECT_DIR$/server" />
           </mappings>
         </serverdata>
       </paths>
