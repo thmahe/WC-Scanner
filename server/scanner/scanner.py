@@ -1,10 +1,9 @@
 from time import sleep
 import RPi.GPIO as GPIO
-# from picamera import PiCamera
+#from picamera import PiCamera
 import pigpio
 import math
 import subprocess
-import numpy
 from scipy.integrate import quad
 
 class StepperMotor:
@@ -14,7 +13,7 @@ class StepperMotor:
         self.GPIO = pigpio.pi()
         if not self.GPIO.connected:
             p = subprocess.Popen('sudo pigpiod', shell=True)
-            #sleep(2)
+            p.wait()
             self.GPIO = pigpio.pi()
         self.DIR_PIN = DIR_PIN
         self.STEP_PIN = STEP_PIN
@@ -38,7 +37,7 @@ class StepperMotor:
 
         step_count = int((self.SPR / 360) * abs(degree))
         self.GPIO.write(self.ENABLE_PIN, 0)
-        self.generate_ramp(self.generate_progressive_range(20, step_count, 0))
+        self.generate_ramp(self.generate_progressive_range(20, step_count))
 
         while self.GPIO.wave_tx_busy():
             sleep(0.5)
@@ -46,30 +45,15 @@ class StepperMotor:
         self.GPIO.write(self.ENABLE_PIN, 1)
         self.GPIO.stop()
 
-    def generate_progressive_range(self, range_count, step_count, time_per_rotation):
-
-        acc_decc_step_count = int(0.2 * step_count) // 2
-
-        steps_at_max_speed = int(0.8 * step_count)
-
-        ranges_acc_decc = (range_count - 1) // 2
-
-        a = acc_decc_step_count // ranges_acc_decc
-
-        phase = [[a*i, a] for i in range(1, ranges_acc_decc+1)]
+    def generate_progressive_range(self, range_count, step_count):
 
         max_speed = math.log(math.pow(step_count, 7), 2) * 25
-
 
         sin_reduction = [abs(math.sin(math.radians(i))) for i in range(1, 181, 180 // range_count)]
 
         frequencies = [int(max_speed * sin_reduction[i]) for i in range(range_count)]
 
-
         ranges = [i for i in range(1, 181, 180 // range_count)]
-
-        steps_per_freq = [int(sin_reduction[i] * step_count) for i in range(range_count)]
-
 
 
         def result(a,b):
@@ -114,23 +98,19 @@ class StepperMotor:
             chain += [255, 0, wid[i], 255, 1, x, y]
 
         self.GPIO.wave_chain(chain)  # Transmit chain.
-        #self.GPIO.stop()
 
 
 class Scanner:
 
     def __init__(self):
         GPIO.setmode(GPIO.BCM)
-        # subprocess.call('sudo pigpiod', shell=True)
-        # sleep(1)
         self.bed_rotation = 0
-        self.cam_rotation = 0
-
         # self.camera = PiCamera()
-
         self.bed_motor = StepperMotor(12, 6, 5, 200, 32)
 
-    # self.camera_motor = StepperMotor(26,13,19,200,32)
+    def sayHello(self):
+        self.turn_bed(360)
+        self.turn_bed(-360)
 
     def turn_bed(self, degrees):
         self.bed_motor.turn(degrees)
@@ -139,10 +119,6 @@ class Scanner:
 if __name__ == "__main__":
     scanner = Scanner()
 
-    scanner.turn_bed(360)
-    #scanner.turn_bed(-360)
+    scanner.sayHello()
 
-    for i in range(24):
-        scanner.turn_bed(15)
     scanner.bed_motor.GPIO.stop()
-# GPIO.cleanup()
