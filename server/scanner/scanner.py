@@ -30,6 +30,7 @@ class StepperMotor:
     # self.GPIO.set_PWM_frequency(self.STEP_PIN, 5000)
 
     def turn(self, degree):
+        self.GPIO = pigpio.pi()
         if degree < 0:
             self.GPIO.write(self.DIR_PIN, self.CW)
         else:
@@ -43,6 +44,7 @@ class StepperMotor:
             sleep(0.5)
 
         self.GPIO.write(self.ENABLE_PIN, 1)
+        self.GPIO.stop()
 
     def generate_progressive_range(self, range_count, step_count, time_per_rotation):
 
@@ -56,13 +58,13 @@ class StepperMotor:
 
         phase = [[a*i, a] for i in range(1, ranges_acc_decc+1)]
 
-        max_speed = 2000
+        max_speed = math.log(math.pow(step_count, 7), 2) * 25
+
 
         sin_reduction = [abs(math.sin(math.radians(i))) for i in range(1, 181, 180 // range_count)]
 
         frequencies = [int(max_speed * sin_reduction[i]) for i in range(range_count)]
-        print(frequencies)
-        print(len(frequencies))
+
 
         ranges = [i for i in range(1, 181, 180 // range_count)]
 
@@ -84,10 +86,8 @@ class StepperMotor:
             index_max_freq = frequencies.index(max(frequencies))
             steps[index_max_freq-1] += missing_steps
 
-        print(step_count)
-        print(sum(steps))
         range_data = [[frequencies[i], steps[i]] for i in range(range_count)]
-        print(range_data)
+     
         return range_data
 
     def generate_ramp(self, ramp):
@@ -139,10 +139,10 @@ class Scanner:
 if __name__ == "__main__":
     scanner = Scanner()
 
-    #scanner.turn_bed(360)
+    scanner.turn_bed(360)
     #scanner.turn_bed(-360)
 
-    for i in range(12):
-        scanner.turn_bed(30)
+    for i in range(24):
+        scanner.turn_bed(15)
     scanner.bed_motor.GPIO.stop()
 # GPIO.cleanup()
