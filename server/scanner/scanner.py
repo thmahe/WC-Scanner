@@ -4,16 +4,18 @@ import RPi.GPIO as GPIO
 import pigpio
 import math
 import subprocess
-
-
-# import numpy as np
-# import scipy
+import numpy
+from scipy.integrate import quad
 
 class StepperMotor:
 
     ## DIR, STEP, ENABLE PINS
     def __init__(self, ENABLE_PIN, STEP_PIN, DIR_PIN, step_per_rotation, micro_step):
         self.GPIO = pigpio.pi()
+        if not self.GPIO.connected:
+            p = subprocess.Popen('sudo pigpiod', shell=True)
+            #sleep(2)
+            self.GPIO = pigpio.pi()
         self.DIR_PIN = DIR_PIN
         self.STEP_PIN = STEP_PIN
         self.ENABLE_PIN = ENABLE_PIN
@@ -33,47 +35,62 @@ class StepperMotor:
         else:
             self.GPIO.write(self.DIR_PIN, self.CCW)
 
-        delay = 0.005 / 64
         step_count = int((self.SPR / 360) * abs(degree))
         self.GPIO.write(self.ENABLE_PIN, 0)
         self.generate_ramp(self.generate_progressive_range(20, step_count, 0))
-        print(self.GPIO)
+
         while self.GPIO.wave_tx_busy():
-            sleep(0.1)
+            sleep(0.5)
 
         self.GPIO.write(self.ENABLE_PIN, 1)
 
     def generate_progressive_range(self, range_count, step_count, time_per_rotation):
+
+        acc_decc_step_count = int(0.2 * step_count) // 2
+
+        steps_at_max_speed = int(0.8 * step_count)
+
+        ranges_acc_decc = (range_count - 1) // 2
+
+        a = acc_decc_step_count // ranges_acc_decc
+
+        phase = [[a*i, a] for i in range(1, ranges_acc_decc+1)]
+
+        max_speed = 2000
+
+        sin_reduction = [abs(math.sin(math.radians(i))) for i in range(1, 181, 180 // range_count)]
+
+        frequencies = [int(max_speed * sin_reduction[i]) for i in range(range_count)]
+        print(frequencies)
+        print(len(frequencies))
+
+        ranges = [i for i in range(1, 181, 180 // range_count)]
+
+        steps_per_freq = [int(sin_reduction[i] * step_count) for i in range(range_count)]
+
+
+
+        def result(a,b):
+            return quad(lambda x: max_speed * abs(math.sin(math.radians(x))), a, b)
+
+        total_step_ratio = result(0, 180)[0]
+
+        steps = [int(step_count * (result(ranges[i-1], ranges[i])[0] / total_step_ratio)) for i in range(1, len(ranges))]
+
+        steps.insert(0, 5)
+        missing_steps = step_count - sum(steps)
+
+        if missing_steps > 0 :
+            index_max_freq = frequencies.index(max(frequencies))
+            steps[index_max_freq-1] += missing_steps
+
         print(step_count)
-
-        values = [math.sin(math.radians(i)) for i in range(1, 361, 180 // range_count)]
-        print(len(values))
-        print(values)
-
-        mean = 0
-        std = 0.01
-
-        x1 = mean + std
-        x2 = mean + 2.0 * std
-
-        range_data = [[int(abs(values[i] * 5000)), int((step_count // range_count) * values[i])] for i in
-                      range(range_count)]
-
-        for i in range(1, len(range_data)):
-            range_data[i][1] -= range_data[i - 1][1]
-
+        print(sum(steps))
+        range_data = [[frequencies[i], steps[i]] for i in range(range_count)]
         print(range_data)
-
-        sum2 = 0
-        for e in range_data:
-            sum2 += e[1]
-
-        print(sum2)
-
         return range_data
 
     def generate_ramp(self, ramp):
-        self.GPIO = pigpio.pi()
         self.GPIO.wave_clear()  # clear existing waves
         length = len(ramp)  # number of ramp levels
         wid = [-1] * length
@@ -122,7 +139,10 @@ class Scanner:
 if __name__ == "__main__":
     scanner = Scanner()
 
-    scanner.turn_bed(360)
-    scanner.turn_bed(-360)
+    #scanner.turn_bed(360)
+    #scanner.turn_bed(-360)
+
+    for i in range(12):
+        scanner.turn_bed(30)
     scanner.bed_motor.GPIO.stop()
 # GPIO.cleanup()
