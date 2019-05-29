@@ -37,7 +37,7 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item active">
-                            <a class="nav-link" onclick="drawHomeContent()" href="#">Home<span class="sr-only">(current)</span></a>
+                            <a class="nav-link" onclick="updateConnectionStatus()" href="#">Home<span class="sr-only">(current)</span></a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" onclick="drawProjectContent()" href="#">Project</a>
@@ -58,6 +58,26 @@
     <script>
         var users, websocket;
 
+        var retry = 0;
+
+
+        function get_connection_status(){
+            if (websocket.readyState === websocket.CLOSED){
+                websocket = new WebSocket("ws://localhost:6789/");
+                websocket.onclose = function (){
+                    updateConnectionStatus();
+                };
+                websocket.onopen = function(){
+                    updateConnectionStatus()
+                };
+                retry += 1;
+            }
+            if (retry > 10){
+                require('electron').remote.getCurrentWindow().close();
+            }
+        }
+
+
         $(document).ready(function(){
             //$('#content').load("./core/home.html");
 
@@ -67,7 +87,17 @@
              * RPi address
              */
             websocket = new WebSocket("ws://localhost:6789/");
-            drawHomeContent();
+
+            setInterval(get_connection_status, 1000);
+
+            updateConnectionStatus();
+
+            websocket.onclose = function (){
+                updateConnectionStatus();
+            };
+            websocket.onopen = function(){
+                updateConnectionStatus()
+            };
 
             websocket.onmessage = function (event) {
                 data = JSON.parse(event.data);
@@ -86,7 +116,7 @@
             };
         });
 
-        function drawHomeContent() {
+        function updateConnectionStatus() {
             if(websocket.readyState === websocket.CLOSED){
                 document.getElementById('content').innerHTML ='<style>\n' +
                     '    p[type=online] {\n' +
