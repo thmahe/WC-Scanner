@@ -2,13 +2,15 @@
 
 # WS server example that synchronizes state across clients
 
+from util import context_finder as context
+
 import asyncio
 import json
 import logging
 import os
 import re
 import websockets
-from scanner.scanner import Scanner
+from core.scanner import Scanner
 import subprocess
 
 logging.basicConfig()
@@ -68,15 +70,16 @@ async def counter(websocket, path):
                 STATE['value'] += 1
                 await notify_state()
             elif data['action'] == 'create_project':
-                print(data)
-                await createProject(data['name_project'])
+                print(str(data))
+                createProject(data['project_name'])
+                await notify_state()
             elif data['action'] == 'turn_bed_CW':
-                angle = int(data['plateau_degree'])
+                angle = float(data['plateau_degree'])
                 scanner.turn_bed(angle)
                 await notify_state()
             elif data['action'] == 'turn_bed_CCW':
                 print(data)
-                angle = int(data['plateau_degree'])
+                angle = float(data['plateau_degree'])
                 scanner.turn_bed(-1 * angle)
                 await notify_state()
             else:
@@ -87,7 +90,11 @@ async def counter(websocket, path):
 
 
 def createProject(message):
-    home_dir = os.environ['HOME']
+
+    if (context.running_on_raspberry):
+        home_dir = os.environ['HOME']
+    else :
+        home_dir = '/home/pi'
     print(home_dir)
     folders = os.listdir(home_dir)
     wcscanner_path = home_dir + '/.wcscanner'
@@ -105,16 +112,6 @@ def createProject(message):
         os.mkdir(wcscanner_path + '/{}_{}'.format(message, folders_same_name_size + 1))
     else :
         os.mkdir(wcscanner_path + '/{}'.format(message))
-
-
-def takePhoto(projectName, degre):
-    home_dir = os.environ['HOME']
-    wcscanner_path = home_dir + '/.wcscanner'
-    a=360/degre
-    for id in range(0, a) :
-        os.system('raspistill -vf -hf -o {}/{}/{}.jpg'.format(wcscanner_path, projectName, id))
-        scanner.turn_bed(degre)
-    return 1
 
 def activeUSB(usbNumber):
     usb = subprocess.check_output('lsusb')
@@ -142,6 +139,6 @@ def activeUSB(usbNumber):
 
 if __name__ == '__main__':
     asyncio.get_event_loop().run_until_complete(
-        websockets.serve(counter, 'localhost', 6789))
+        websockets.serve(counter, '0.0.0.0', 6789))
     asyncio.get_event_loop().run_forever()
 

@@ -122,6 +122,15 @@
             websocket.send(JSON.stringify({action : "turn_bed_CCW", plateau_degree : angle.toString()}))
         }
 
+        /**
+         * create project
+         */
+
+        function create_project() {
+            let project_name = document.getElementById("project_name").value;
+            websocket.send(JSON.stringify({action : "create_project", project_name : project_name}))
+        }
+
 
     </script>
     </body>
