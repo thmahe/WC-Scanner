@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "react-router-dom": "^5.0.0",
+    "streamedian": "^0.3.13"
+  }
+}

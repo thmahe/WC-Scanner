@@ -7,6 +7,8 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import ButtonBase from "@material-ui/core/ButtonBase";
 import Paper from "@material-ui/core/Paper";
+import StreamedianPlayer from "../../streamdian/StreamedianPlayer";
+
 
 
 const styles = theme => ({
@@ -15,7 +17,7 @@ const styles = theme => ({
     },
     paper: {
         margin: '0.5%',
-        width: "30%",
+        maxWidth: "48%",
     },
     image: {
         width: 128,
@@ -36,6 +38,7 @@ class LoadProjectScreen extends React.Component{
     handleExpandClick = () => {
         this.setState(state => ({ expanded: !state.expanded }));
     };
+
 
     render() {
         const { classes } = this.props;
@@ -157,47 +160,57 @@ class LoadProjectScreen extends React.Component{
 
             <div className={classes.root}>
 
+                <div style={{height: 300, width:'100%', alignItems: 'center', justifyContent: 'center', display:'flex', marginBottom: 10}}>
+                    <video id="test_video" controls width='100%' height={300}>
+                        <source src="rtsp://184.72.239.149/vod/mp4:BigBuckBunny_175k.mov" />
+                    </video>
+                </div>
 
-                <GridList cellHeight={180} className={classes.gridList}>
-                    <GridListTile key="Subheader" cols={2} style={{ height: 'auto' }}>
-                    </GridListTile>
-                    {projects.map(item => (
+                <div style={{height: '100%', widht: '100'}}>
+                    <GridList cellHeight={180} className={classes.gridList}>
+                        <GridListTile key="Subheader" cols={2} style={{ height: 'auto' }}>
+                        </GridListTile>
+                        {projects.map(item => (
 
-                <Paper className={classes.paper}>
-                    <Grid container spacing={2}>
-                        <Grid item>
-                            <ButtonBase className={classes.image}>
-                                <img className={classes.img} alt="image" src="/static/images/grid/complex.jpg" />
-                            </ButtonBase>
-                        </Grid>
-                        <Grid item xs={12} sm container>
-                            <Grid item xs container direction="column" spacing={2}>
-                                <Grid item xs>
-                                    <Typography gutterBottom variant="subtitle1">
-                                        {item.projectId}
-                                    </Typography>
-                                    <Typography variant="body2" gutterBottom>
-                                        Résolution : {item.sensibilite} • JPEG
-                                    </Typography>
-                                    <Typography variant="body2" color="textSecondary">
-                                        Auteur : {item.creatorID}
-                                    </Typography>
+                            <Paper className={classes.paper}>
+                                <Grid container spacing={2}>
+                                    <Grid item>
+                                        <ButtonBase className={classes.image}>
+                                            <img className={classes.img} alt="image" src="/static/images/grid/complex.jpg" />
+                                        </ButtonBase>
+                                    </Grid>
+                                    <Grid item xs={12} sm container>
+                                        <Grid item xs container direction="column" spacing={2}>
+                                            <Grid item xs>
+                                                <Typography gutterBottom variant="subtitle1">
+                                                    {item.projectId}
+                                                </Typography>
+                                                <Typography variant="body2" gutterBottom>
+                                                    Résolution : {item.sensibilite} • JPEG
+                                                </Typography>
+                                                <Typography variant="body2" color="textSecondary">
+                                                    Auteur : {item.creatorID}
+                                                </Typography>
+                                            </Grid>
+                                            <Grid item>
+                                                <Typography variant="body2" style={{ cursor: 'pointer' }}>
+                                                    Supprimer
+                                                </Typography>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid item>
+                                            <Typography variant="subtitle1"> {item.date} </Typography>
+                                        </Grid>
+                                    </Grid>
                                 </Grid>
-                                <Grid item>
-                                    <Typography variant="body2" style={{ cursor: 'pointer' }}>
-                                        Supprimer
-                                    </Typography>
-                                </Grid>
-                            </Grid>
-                            <Grid item>
-                                <Typography variant="subtitle1"> {item.date} </Typography>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </Paper>
+                            </Paper>
 
-                    ))}
-                </GridList>
+                        ))}
+                    </GridList>
+                </div>
+
+
+
             </div>
         );
     }
