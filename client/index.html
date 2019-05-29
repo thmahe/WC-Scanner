@@ -59,7 +59,7 @@
         var users, websocket;
 
         $(document).ready(function(){
-            $('#content').load("./core/home.html");
+            //$('#content').load("./core/home.html");
 
             //websocket = new WebSocket("ws://localhost:6789/");
 
@@ -67,6 +67,7 @@
              * RPi address
              */
             websocket = new WebSocket("ws://localhost:6789/");
+            drawHomeContent();
 
             websocket.onmessage = function (event) {
                 data = JSON.parse(event.data);
@@ -86,10 +87,46 @@
         });
 
         function drawHomeContent() {
-            var fs = require("fs");
-            var text = fs.readFileSync("./core/home.html");
-            document.getElementById('content').innerHTML = text;
-            //document.getElementById("content").innerHTML='<object type="text/html" data="./core/home.html"></object>';
+            if(websocket.readyState === websocket.CLOSED){
+                document.getElementById('content').innerHTML ='<style>\n' +
+                    '    p[type=online] {\n' +
+                    '        background-color: #b30006;\n' +
+                    '        border: none;\n' +
+                    '        border-radius: 12px;\n' +
+                    '        color: white;\n' +
+                    '        padding: 16px 16px;\n' +
+                    '        text-decoration: none;\n' +
+                    '        margin: 4px 10px;\n' +
+                    '        text-align: center;\n' +
+                    '        font-size: 250%;\n' +
+                    '        font-family: "Arial Black";\n' +
+                    '    }\n' +
+                    '</style>\n' +
+                    '<div class="state" id="on">\n' +
+                    '    <p type="online">OFFLINE</p>\n' +
+                    '</div>';
+            }
+            else{
+                var fs = require("fs");
+                var text = fs.readFileSync("./core/home.html");
+                document.getElementById('content').innerHTML = '<style>\n' +
+                    '    p[type=online] {\n' +
+                    '        background-color: #00b321;\n' +
+                    '        border: none;\n' +
+                    '        border-radius: 12px;\n' +
+                    '        color: white;\n' +
+                    '        padding: 16px 16px;\n' +
+                    '        text-decoration: none;\n' +
+                    '        margin: 4px 10px;\n' +
+                    '        text-align: center;\n' +
+                    '        font-size: 250%;\n' +
+                    '        font-family: "Arial Black";\n' +
+                    '    }\n' +
+                    '</style>\n' +
+                    '<div class="state" id="on">\n' +
+                    '    <p type="online">ONLINE</p>\n' +
+                    '</div>';
+            }
         }
 
         function drawControlContent() {
