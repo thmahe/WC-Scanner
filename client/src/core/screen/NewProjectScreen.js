@@ -225,7 +225,7 @@ class NewProjectScreen extends React.Component{
                     <Paper square elevation={0} className={classes.resetContainer}>
                         <Typography>Toutes les étapes sont finies</Typography>
                         <Button onClick={this.handleReset} className={classes.button}>
-                            Créer un projet
+                            C'est partie
                         </Button>
                     </Paper>
                 )}
