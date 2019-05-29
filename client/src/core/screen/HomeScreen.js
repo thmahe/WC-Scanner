@@ -10,7 +10,7 @@ import {fade} from "@material-ui/core/styles/colorManipulator";
 import {withStyles} from "@material-ui/core";
 import {Link} from "react-router-dom";
 
-const websocket = new WebSocket("ws://10.3.141.1:6789/"); //new WebSocket("ws://10.3.141.1:6789/") RPI
+const websocket = new WebSocket("ws://wcscanner.local:6789/"); //new WebSocket("ws://10.3.141.1:6789/") RPI
 
 const styles = theme => ({
     root: {

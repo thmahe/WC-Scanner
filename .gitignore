@@ -8,3 +8,11 @@ client/\.idea/
 client/\.build
 
 client/\.dist
+
+server/scanner/
+
+server/venv/
+
+\.idea/
+
+node_modules/
