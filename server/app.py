@@ -8,18 +8,10 @@ import logging
 import os
 import re
 import websockets
-from RPi import GPIO
-import atexit
 from scanner.scanner import Scanner
-
-def exit_handler():
-    GPIO.cleanup()
-
-atexit.register(exit_handler)
-
+import subprocess
 
 logging.basicConfig()
-GPIO.setwarnings(False)
 
 APP_PATH = '/home/pi/.wcscanner'
 

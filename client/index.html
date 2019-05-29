@@ -67,7 +67,7 @@
             /**
              * RPi address
              */
-            websocket = new WebSocket("ws://10.3.141.1:6789/");
+            websocket = new WebSocket("ws://wcscanner.local:6789/");
 
             websocket.onmessage = function (event) {
                 data = JSON.parse(event.data);
