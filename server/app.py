@@ -116,6 +116,10 @@ def takePhoto(projectName, degre):
         scanner.turn_bed(degre)
     return 1
 
+def activeUSB():
+    usb = a=subprocess.Popen('lsusb',stdout=subprocess.PIPE,shell=True)
+    @TODO
+
 
 if __name__ == '__main__':
     scanner.turn_bed(720)
