@@ -15,6 +15,7 @@ try :
 
 except RuntimeError as e:
     if str(e) == 'This module can only be run on a Raspberry Pi!':
+        fake_rpi.toggle_print(False)
         sys.modules['RPi'] = fake_rpi.RPi
         sys.modules['RPi.GPIO'] = fake_rpi.RPi.GPIO
         sys.modules['smbus'] = fake_rpi.smbus

@@ -3,6 +3,7 @@ import app
 import os
 
 class TestCreateProject(TestCase):
+
     def test_createProject(self):
         app.createProject("test")
 

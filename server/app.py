@@ -1,19 +1,14 @@
 #!/usr/bin/env python3
 
 # WS server example that synchronizes state across clients
-
-from util import context_finder as context
-
 import asyncio
 import json
-import logging
-import os
-import re
 import websockets
-from core.scanner import Scanner
 import subprocess
 
-logging.basicConfig()
+from util import logger
+from core.scanner import Scanner
+from util import project_manager as pm
 
 APP_PATH = '/home/pi/.wcscanner'
 
@@ -22,6 +17,8 @@ STATE = {'value': 0}
 USERS = set()
 
 scanner = Scanner()
+
+logger = logger.logger
 
 def state_event():
     return json.dumps({'type': 'state', **STATE})
@@ -32,14 +29,12 @@ def users_event():
 
 
 async def notify_state():
-    print(USERS)
     if USERS:  # asyncio.wait doesn't accept an empty list
         message = state_event()
         await asyncio.wait([user.send(message) for user in USERS])
 
 
 async def notify_users():
-    print(USERS)
     if USERS:  # asyncio.wait doesn't accept an empty list
         message = users_event()
         await asyncio.wait([user.send(message) for user in USERS])
@@ -55,7 +50,7 @@ async def unregister(websocket):
     await notify_users()
 
 
-async def counter(websocket, path):
+async def mainLoop(websocket, path):
     # register(websocket) sends user_event() to websocket
     await register(websocket)
     try:
@@ -63,6 +58,7 @@ async def counter(websocket, path):
 
         async for message in websocket:
             data = json.loads(message)
+            logger.info("Message received : %s", str(data))
             if data['action'] == 'minus':
                 STATE['value'] -= 1
                 await notify_state()
@@ -70,48 +66,21 @@ async def counter(websocket, path):
                 STATE['value'] += 1
                 await notify_state()
             elif data['action'] == 'create_project':
-                print(str(data))
-                createProject(data['project_name'])
+                pm.create_project(data['project_name'])
                 await notify_state()
             elif data['action'] == 'turn_bed_CW':
                 angle = float(data['plateau_degree'])
                 scanner.turn_bed(angle)
                 await notify_state()
             elif data['action'] == 'turn_bed_CCW':
-                print(data)
                 angle = float(data['plateau_degree'])
                 scanner.turn_bed(-1 * angle)
                 await notify_state()
             else:
-                logging.error(
-                    "unsupported event: {}", data)
+                logger.error("unsupported event: {}", data)
     finally:
         await unregister(websocket)
 
-
-def createProject(message):
-
-    if (context.running_on_raspberry):
-        home_dir = os.environ['HOME']
-    else :
-        home_dir = '/home/pi'
-    print(home_dir)
-    folders = os.listdir(home_dir)
-    wcscanner_path = home_dir + '/.wcscanner'
-    if '.wcscanner' not in folders :
-        os.mkdir(wcscanner_path)
-    else :
-        print(".wscanner already created")
-    folders = os.listdir(wcscanner_path)
-    print(folders)
-
-    regex = re.compile(r'^'+ message +'_\d+$')
-    folders_same_name_size = len(list(filter(regex.search, folders)))
-    print(folders_same_name_size)
-    if folders_same_name_size > 0 or message in folders:
-        os.mkdir(wcscanner_path + '/{}_{}'.format(message, folders_same_name_size + 1))
-    else :
-        os.mkdir(wcscanner_path + '/{}'.format(message))
 
 def activeUSB(usbNumber):
     usb = subprocess.check_output('lsusb')
@@ -135,10 +104,8 @@ def activeUSB(usbNumber):
         i = i.split(" ")
 
 
-
-
 if __name__ == '__main__':
     asyncio.get_event_loop().run_until_complete(
-        websockets.serve(counter, '0.0.0.0', 6789))
+        websockets.serve(mainLoop, '0.0.0.0', 6789))
     asyncio.get_event_loop().run_forever()
 
