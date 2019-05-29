@@ -69,6 +69,8 @@ function getStepContent(step) {
     }
 }
 
+const websocket = new WebSocket("ws://wcscanner.local:6789/");
+
 class NewProjectScreen extends React.Component{
 
     state = {
@@ -96,6 +98,17 @@ class NewProjectScreen extends React.Component{
         this.setState({
             activeStep: 0,
         });
+    };
+
+    handleCreateNewProject = () => {
+        let formulaire = {
+            nameProject : this.state.nameProject,
+            longeurObject: this.state.longeurObject,
+            hauteurObject: this.state.hauteurObject,
+            profondeurObject: this.state.profondeurObject,
+            qualityScan: 30,
+        };
+        websocket.send(JSON.stringify(formulaire));
     };
 
     handleChange = name => event => {
@@ -224,8 +237,8 @@ class NewProjectScreen extends React.Component{
                 {activeStep === steps.length && (
                     <Paper square elevation={0} className={classes.resetContainer}>
                         <Typography>Toutes les étapes sont finies</Typography>
-                        <Button onClick={this.handleReset} className={classes.button}>
-                            C'est partie
+                        <Button onClick={this.handleCreateNewProject} className={classes.button}>
+                            C'est parti
                         </Button>
                     </Paper>
                 )}

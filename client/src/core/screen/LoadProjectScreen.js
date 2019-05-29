@@ -8,6 +8,7 @@ import Grid from "@material-ui/core/Grid";
 import ButtonBase from "@material-ui/core/ButtonBase";
 import Paper from "@material-ui/core/Paper";
 import StreamedianPlayer from "../../streamdian/StreamedianPlayer";
+import Modal from "@material-ui/core/Modal";
 
 
 
@@ -29,20 +30,40 @@ const styles = theme => ({
         maxWidth: '100%',
         maxHeight: '100%',
     },
+
+    modal: {
+        position: 'absolute',
+        width: 400,
+        backgroundColor: theme.palette.background.paper,
+        boxShadow: theme.shadows[5],
+        outline: 'none',
+    },
+
 });
+
+
 
 class LoadProjectScreen extends React.Component{
 
-    state = { expanded: false };
+    state = {
+        expanded: false,
+        openModal: false,
+    };
 
     handleExpandClick = () => {
         this.setState(state => ({ expanded: !state.expanded }));
     };
 
+    handleOpenModal = () => {
+        this.setState({openModal: true});
+    };
+
+    handleCloseModal = () => {
+        this.setState({openModal: false});
+    };
 
     render() {
         const { classes } = this.props;
-
         const projects = [
             {
                 projectId : '44ASRA1',
@@ -157,9 +178,7 @@ class LoadProjectScreen extends React.Component{
         ];
 
         return(
-
             <div className={classes.root}>
-
                 <div style={{height: 300, width:'100%', alignItems: 'center', justifyContent: 'center', display:'flex', marginBottom: 10}}>
                     <video id="test_video" controls width='100%' height={300}>
                         <source src="rtsp://184.72.239.149/vod/mp4:BigBuckBunny_175k.mov" />
@@ -193,9 +212,14 @@ class LoadProjectScreen extends React.Component{
                                                 </Typography>
                                             </Grid>
                                             <Grid item>
-                                                <Typography variant="body2" style={{ cursor: 'pointer' }}>
-                                                    Supprimer
-                                                </Typography>
+                                                <div style={{display:'flex', flexDirection:'row', justifyContent:'space-between', }}>
+                                                    <Typography variant="body2" style={{ cursor: 'pointer', color: 'red' }}>
+                                                        Supprimer
+                                                    </Typography>
+                                                    <Typography variant="body2" style={{ cursor: 'pointer', color: 'green' }} onClick={() => this.handleOpenModal()}>
+                                                        export vers USB
+                                                    </Typography>
+                                                </div>
                                             </Grid>
                                         </Grid>
                                         <Grid item>
@@ -209,8 +233,21 @@ class LoadProjectScreen extends React.Component{
                     </GridList>
                 </div>
 
-
-
+                <Modal
+                    aria-labelledby="simple-modal-title"
+                    aria-describedby="simple-modal-description"
+                    open={this.state.openModal}
+                    onClose={this.handleCloseModal}
+                >
+                    <div style={{backgroundColor: 'white', width: 200, height: 400, alignSelf:'center'}} className={classes.modal}>
+                        <Typography variant="h6" id="modal-title">
+                            Text in a modal
+                        </Typography>
+                        <Typography variant="subtitle1" id="simple-modal-description">
+                            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+                        </Typography>
+                    </div>
+                </Modal>
             </div>
         );
     }
