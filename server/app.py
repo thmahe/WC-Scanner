@@ -107,6 +107,16 @@ def createProject(message):
         os.mkdir(wcscanner_path + '/{}'.format(message))
 
 
+def takePhoto(projectName, degre):
+    home_dir = os.environ['HOME']
+    wcscanner_path = home_dir + '/.wcscanner'
+    a=360/degre
+    for id in range(0, a) :
+        os.system('raspistill -vf -hf -o {}/{}/{}.jpg'.format(wcscanner_path, projectName, id))
+        scanner.turn_bed(degre)
+    return 1
+
+
 if __name__ == '__main__':
     scanner.turn_bed(720)
     scanner.turn_bed(-720)
