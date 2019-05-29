@@ -1,25 +1,94 @@
 {
-  "name": "electron-quick-start",
-  "version": "1.0.0",
-  "description": "A minimal Electron application",
-  "main": "main.js",
-  "scripts": {
-    "start": "electron ."
-  },
-  "repository": "https://github.com/electron/electron-quick-start",
-  "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
-  ],
-  "author": "GitHub",
-  "license": "CC0-1.0",
-  "devDependencies": {
-    "electron": "^4.1.1"
-  },
+  "name": "client_wc-scanner",
+  "version": "0.1.0",
+  "private": true,
   "dependencies": {
-    "yarn": "^1.15.2"
+    "@material-ui/core": "^3.9.3",
+    "@material-ui/icons": "^3.0.2",
+    "@material-ui/lab": "^3.0.0-alpha.30",
+    "classnames": "latest",
+    "clsx": "^1.0.4",
+    "electron-is-dev": "^0.3.0",
+    "electron-publisher-s3": "^20.17.2",
+    "immutable": "^4.0.0-rc.12",
+    "prop-types": "latest",
+    "react": "^16.4.1",
+    "react-dev-utils": "^5.0.1",
+    "react-dom": "^16.8.6",
+    "react-router-dom": "^5.0.0",
+    "wait-on": "^3.2.0"
+  },
+  "main": "public/electron.js",
+  "keywords": [
+    "Example",
+    "React",
+    "Electron"
+  ],
+  "scripts": {
+    "dev": "yarn react-scripts start",
+    "build": "react-scripts build",
+    "start": "concurrently \"cross-env BROWSER=none yarn react-scripts start\" \"wait-on http://localhost:3000 && electron .\"",
+    "pack": "electron-builder --dir",
+    "dist": "npx build --x64 --macos --win --linux --c.extraMetadata.main=build/electron.js -p always"
+  },
+  "devDependencies": {
+    "concurrently": "^3.6.0",
+    "cross-env": "^5.2.0",
+    "electron": "^2.0.18",
+    "electron-builder": "^20.18.0",
+    "react-scripts": "1.1.4",
+    "version-bump-prompt": "^4.1.0"
+  },
+  "build": {
+    "appId": "com.your-domain",
+    "compression": "normal",
+    "productName": "Example",
+    "directories": {
+      "buildResources": "build",
+      "output": "dist"
+    },
+    "mac": {
+      "icon": "assets/icon.icns",
+      "type": "distribution",
+      "target": [
+        "pkg",
+        "dmg",
+        "mas"
+      ],
+      "publish": {
+        "provider": "s3",
+        "bucket": "example-releases",
+        "path": "releases"
+      },
+      "category": "public.app-category.news"
+    },
+    "mas": {
+      "entitlements": "assets/entitlements.mas.plist",
+      "entitlementsInherit": "assets/entitlements.mas.inherit.plist",
+      "provisioningProfile": "assets/embedded.provisionprofile"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.ico",
+      "publish": {
+        "provider": "s3",
+        "bucket": "example-releases",
+        "path": "releases"
+      }
+    },
+    "linux": {
+      "icon": "assets/icon.png",
+      "target": [
+        "snap",
+        "AppImage"
+      ],
+      "description": "Example",
+      "category": "Network;Feed",
+      "publish": {
+        "provider": "s3",
+        "bucket": "example-releases",
+        "path": "releases"
+      }
+    }
   }
 }
