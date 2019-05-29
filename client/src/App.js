@@ -17,6 +17,7 @@ import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import MenuList from "@material-ui/core/MenuList";
 import MenuItem from "@material-ui/core/MenuItem";
 import Main from "./core/screen/Main";
+import {Link} from "react-router-dom";
 
 const styles = theme => ({
   root: {
@@ -136,8 +137,15 @@ class App extends React.Component {
                                     <Paper>
                                         <ClickAwayListener onClickAway={this.handleClose}>
                                             <MenuList>
-                                                <MenuItem onClick={this.handleClose}>Home</MenuItem>
-                                                <MenuItem onClick={this.handleClose}>Projet</MenuItem>
+                                                <MenuItem onClick={this.handleClose}>
+                                                    <Link to='/' style={{ textDecoration: 'none' }}> Home </Link>
+                                                </MenuItem>
+                                                <MenuItem onClick={this.handleClose}>
+                                                    <Link to='/newProject' style={{ textDecoration: 'none' }}> Créer </Link>
+                                                </MenuItem>
+                                                <MenuItem onClick={this.handleClose}>
+                                                    <Link to='/loadProject' style={{ textDecoration: 'none' }}> Projets </Link>
+                                                </MenuItem>
                                             </MenuList>
                                         </ClickAwayListener>
                                     </Paper>
