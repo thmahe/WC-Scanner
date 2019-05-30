@@ -106,6 +106,6 @@ def activeUSB(usbNumber):
 
 if __name__ == '__main__':
     asyncio.get_event_loop().run_until_complete(
-        websockets.serve(mainLoop, '0.0.0.0', 6789))
+        websockets.serve(mainLoop, 'localhost', 6789))
     asyncio.get_event_loop().run_forever()
 

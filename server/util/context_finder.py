@@ -1,4 +1,5 @@
 import sys
+import os
 import fake_rpi
 
 '''
@@ -8,6 +9,8 @@ In the case where python can import package RPi.GPIO and picamera, the python sc
 In the other case, we use the package fake_rpi to simulate both GPIO and picamera
 '''
 running_on_raspberry = True
+
+__BASE_PATH__ = os.environ['HOME']
 
 try :
     import RPi.GPIO
@@ -25,5 +28,5 @@ except RuntimeError as e:
         raise RuntimeError(e)
 
     running_on_raspberry = False
-
+    __BASE_PATH__ = '/home/pi'
 
