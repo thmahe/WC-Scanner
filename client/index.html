@@ -3,23 +3,20 @@
 
     <head>
         <title>WebSocket demo</title>
+
+
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="node_modules/bootstrap-material-design/dist/css/bootstrap-material-design.min.css">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+        <link rel="stylesheet" href="node_modules/material-design-icons-iconfont/dist/material-design-icons.css">
+
         <!-- Bootstrap Optional JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-        <script>
-            let $ = require('jquery');
-        </script>
-        <script>
-            require('font-awesome');
-        </script>
-        <script>
-            require('popper.js');
-        </script>
+        <script>window.$ = window.jQuery = require('jquery');</script>
+        <script>window.Popper = require('popper.js');</script>
         <script>
             require('bootstrap-material-design');
         </script>
+
     </head>
 
     <body>
@@ -30,20 +27,20 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item active">
-                        <a class="nav-link" onclick="updateConnectionStatus()" href="#">Home<span class="sr-only">(current)</span></a>
+                    <li id="menu_home" class="nav-item active">
+                        <a class="nav-link"  onclick="drawHomeContent()" href="#">Home</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" onclick="drawProjectContent()" href="#">Project</a>
+                    <li id="menu_project" class="nav-item">
+                        <a class="nav-link"   onclick="drawProjectContent()" href="#">Project</a>
                     </li>
-                    <li class="nav-item">
+                    <li id="menu_control" class="nav-item">
                         <a class="nav-link" onclick="drawControlContent()" href="#">Control</a>
                     </li>
                 </ul>
             </div>
         </nav>
-        <div class="container-fluid">
-            <div id="content">
+        <div class="container">
+            <div id="content" class="pt-2">
                 <p type="online">Offline</p>
             </div>
         </div>
@@ -69,7 +66,7 @@
             }
 
             $(document).ready(function() {
-                //$('#content').load("./core/home.html");
+                $('#content').load("./core/home.html");
 
                 //websocket = new WebSocket("ws://localhost:6789/");
 
@@ -80,13 +77,13 @@
 
                 setInterval(get_connection_status, 1000);
 
-                updateConnectionStatus();
+                drawHomeContent();
 
                 websocket.onclose = function() {
-                    updateConnectionStatus();
+                    drawHomeContent();
                 };
                 websocket.onopen = function() {
-                    updateConnectionStatus()
+                    drawHomeContent()
                 };
 
                 websocket.onmessage = function(event) {
@@ -94,7 +91,7 @@
                     console.log(data);
                     switch (data.type) {
                         case 'users':
-                            document.getElementById('users').innerText = data.count.toString() + " user" + (data.count > 1 ? "s" : "");
+                            //document.getElementById('users').innerText = data.count.toString() + " user" + (data.count > 1 ? "s" : "");
                             break;
                         case 'state':
                             //@TODO capter les changements dans les variables du scanner
@@ -148,20 +145,34 @@
                 }
             }
 
+            function drawHomeContent() {
+                var fs = require("fs");
+                var text = fs.readFileSync("./core/home.html");
+                document.getElementById('content').innerHTML = text;
+
+                document.getElementById('menu_home').classList.add("active");
+                document.getElementById('menu_project').classList.remove("active");
+                document.getElementById('menu_control').classList.remove("active");
+            }
+
             function drawControlContent() {
                 var fs = require("fs");
                 var text = fs.readFileSync("./core/control.html");
                 document.getElementById('content').innerHTML = text;
-                //$('#content').load("./core/control.html");
-                //document.getElementById("content").innerHTML='<object type="text/html" data="./core/control.html"></object>';
+
+                document.getElementById('menu_home').classList.remove("active");
+                document.getElementById('menu_project').classList.remove("active");
+                document.getElementById('menu_control').classList.add("active");
             }
 
             function drawProjectContent() {
                 var fs = require("fs");
                 var text = fs.readFileSync("./core/project.html");
                 document.getElementById('content').innerHTML = text;
-                //$('#content').load("./core/project.html");
-                //document.getElementById("content").innerHTML='<object type="text/html" data="./core/project.html"></object>';
+
+                document.getElementById('menu_home').classList.remove("active");
+                document.getElementById('menu_project').classList.add("active");
+                document.getElementById('menu_control').classList.remove("active");
             }
 
             /**
@@ -194,6 +205,64 @@
                     project_name: project_name
                 }))
             }
+
+            function update_ppr_placeholder() {
+                document.getElementById("ppr_placeholder").innerHTML = document.getElementById("project_ppr").value;
+                updateEstimatedSize();
+            }
+
+            function update_pres_placeholder(value) {
+                console.log(value * 10);
+                let new_placeholder;
+                switch (value + "") {
+                    case "1" :
+                        new_placeholder = "640x480";
+                        break;
+                    case "2" :
+                        new_placeholder = "1640x1232";
+                        break;
+                    case "3" :
+                        new_placeholder = "3280x2464";
+                        break;
+                    default :
+                        new_placeholder = "None"
+                }
+
+                console.log(new_placeholder);
+                
+                document.getElementById("pres_placeholder").innerHTML = new_placeholder;
+                updateEstimatedSize()
+            }
+
+            function updateEstimatedSize(){
+
+                let new_placeholder = "Estimated size : ";
+
+                let picture_res = document.getElementById("project_pres").value;
+                let total_pictures = 3 * document.getElementById("project_ppr").value;
+
+                let picture_size;
+                // in KB
+                switch (picture_res + "") {
+                    case "1" :
+                        picture_size = 62;
+                        break;
+                    case "2" :
+                        picture_size = 413;
+                        break;
+                    case "3" :
+                        picture_size = 1650;
+                        break;
+                    default :
+                        picture_size = 0
+                }
+
+                total_size = (picture_size * total_pictures) / 1000;
+
+                document.getElementById("estimated_size_placeholder").innerHTML = new_placeholder + total_size.toFixed(2) + "Mb / complete rotation";
+            }
+
+
         </script>
     </body>
 </html>
