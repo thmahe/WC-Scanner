@@ -3,7 +3,7 @@ python:
   - "3.6"
 
 install:
-  - pip install -r /server/requirements.txt
+  - pip install -r ./server/requirements.txt
 
 jobs:
   include:
