@@ -2,13 +2,19 @@ import unittest
 import logging
 
 from util import project_manager as pm
-
+from util import context_finder as context
 
 class TestProjectManager(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
+        context.__BASE_PATH__ = "./"
         logging.disable(logging.CRITICAL)
+
+    @classmethod
+    def tearDownClass(cls):
+        pm.__remove_base_directory__()
+
 
     def test_no_project(self):
         self.assertListEqual([], pm.list_projects())
