@@ -1,204 +1,199 @@
 <!DOCTYPE html>
-
-
 <html>
-<!-- Font Awesome -->
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
-<!-- Bootstrap core CSS -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-<!-- Material Design Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.7.6/css/mdb.min.css" rel="stylesheet">
+
     <head>
         <title>WebSocket demo</title>
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="node_modules/bootstrap-material-design/dist/css/bootstrap-material-design.min.css">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+        <!-- Bootstrap Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script>
+            let $ = require('jquery');
+        </script>
+        <script>
+            require('font-awesome');
+        </script>
+        <script>
+            require('popper.js');
+        </script>
+        <script>
+            require('bootstrap-material-design');
+        </script>
     </head>
+
     <body>
-
-
-
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <!-- JQuery -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <!-- Bootstrap tooltips -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
-    <!-- Bootstrap core JavaScript -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <!-- MDB core JavaScript -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.7.6/js/mdb.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
-
-
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-                <a class="navbar-brand" onclick="drawHomeContent()" href="#">WCScanner</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item active">
-                            <a class="nav-link" onclick="updateConnectionStatus()" href="#">Home<span class="sr-only">(current)</span></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" onclick="drawProjectContent()" href="#">Project</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" onclick="drawControlContent()" href="#">Control</a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-			
-    <div class="container-fluid" >
-        <div id="content">
-            <p type="online">Offline</p>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" onclick="drawHomeContent()" href="#">WCScanner</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item active">
+                        <a class="nav-link" onclick="updateConnectionStatus()" href="#">Home<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="drawProjectContent()" href="#">Project</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="drawControlContent()" href="#">Control</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="container-fluid">
+            <div id="content">
+                <p type="online">Offline</p>
+            </div>
         </div>
-    </div>
+        <script>
+            var users, websocket;
 
-    <script>
-        var users, websocket;
+            var retry = 0;
 
-        var retry = 0;
+            function get_connection_status() {
+                if (websocket.readyState === websocket.CLOSED) {
+                    websocket = new WebSocket("ws://localhost:6789/");
+                    websocket.onclose = function() {
+                        updateConnectionStatus();
+                    };
+                    websocket.onopen = function() {
+                        updateConnectionStatus()
+                    };
+                    retry += 1;
+                }
+                if (retry > 10) {
+                    require('electron').remote.getCurrentWindow().close();
+                }
+            }
 
+            $(document).ready(function() {
+                //$('#content').load("./core/home.html");
 
-        function get_connection_status(){
-            if (websocket.readyState === websocket.CLOSED){
+                //websocket = new WebSocket("ws://localhost:6789/");
+
+                /**
+                 * RPi address
+                 */
                 websocket = new WebSocket("ws://localhost:6789/");
-                websocket.onclose = function (){
+
+                setInterval(get_connection_status, 1000);
+
+                updateConnectionStatus();
+
+                websocket.onclose = function() {
                     updateConnectionStatus();
                 };
-                websocket.onopen = function(){
+                websocket.onopen = function() {
                     updateConnectionStatus()
                 };
-                retry += 1;
+
+                websocket.onmessage = function(event) {
+                    data = JSON.parse(event.data);
+                    console.log(data);
+                    switch (data.type) {
+                        case 'users':
+                            document.getElementById('users').innerText = data.count.toString() + " user" + (data.count > 1 ? "s" : "");
+                            break;
+                        case 'state':
+                            //@TODO capter les changements dans les variables du scanner
+                            break;
+                        default:
+                            console.error(
+                                "unsupported event", data);
+                    }
+                };
+            });
+
+            function updateConnectionStatus() {
+                if (websocket.readyState === websocket.CLOSED) {
+                    document.getElementById('content').innerHTML = '<style>\n' +
+                        '    p[type=online] {\n' +
+                        '        background-color: #b30006;\n' +
+                        '        border: none;\n' +
+                        '        border-radius: 12px;\n' +
+                        '        color: white;\n' +
+                        '        padding: 16px 16px;\n' +
+                        '        text-decoration: none;\n' +
+                        '        margin: 4px 10px;\n' +
+                        '        text-align: center;\n' +
+                        '        font-size: 250%;\n' +
+                        '        font-family: "Arial Black";\n' +
+                        '    }\n' +
+                        '</style>\n' +
+                        '<div class="state" id="on">\n' +
+                        '    <p type="online">OFFLINE</p>\n' +
+                        '</div>';
+                } else {
+                    var fs = require("fs");
+                    var text = fs.readFileSync("./core/home.html");
+                    document.getElementById('content').innerHTML = '<style>\n' +
+                        '    p[type=online] {\n' +
+                        '        background-color: #00b321;\n' +
+                        '        border: none;\n' +
+                        '        border-radius: 12px;\n' +
+                        '        color: white;\n' +
+                        '        padding: 16px 16px;\n' +
+                        '        text-decoration: none;\n' +
+                        '        margin: 4px 10px;\n' +
+                        '        text-align: center;\n' +
+                        '        font-size: 250%;\n' +
+                        '        font-family: "Arial Black";\n' +
+                        '    }\n' +
+                        '</style>\n' +
+                        '<div class="state" id="on">\n' +
+                        '    <p type="online">ONLINE</p>\n' +
+                        '</div>';
+                }
             }
-            if (retry > 10){
-                require('electron').remote.getCurrentWindow().close();
+
+            function drawControlContent() {
+                var fs = require("fs");
+                var text = fs.readFileSync("./core/control.html");
+                document.getElementById('content').innerHTML = text;
+                //$('#content').load("./core/control.html");
+                //document.getElementById("content").innerHTML='<object type="text/html" data="./core/control.html"></object>';
             }
-        }
 
-
-        $(document).ready(function(){
-            //$('#content').load("./core/home.html");
-
-            //websocket = new WebSocket("ws://localhost:6789/");
+            function drawProjectContent() {
+                var fs = require("fs");
+                var text = fs.readFileSync("./core/project.html");
+                document.getElementById('content').innerHTML = text;
+                //$('#content').load("./core/project.html");
+                //document.getElementById("content").innerHTML='<object type="text/html" data="./core/project.html"></object>';
+            }
 
             /**
-             * RPi address
+             * Turn bed clockwise
              */
-            websocket = new WebSocket("ws://localhost:6789/");
-
-            setInterval(get_connection_status, 1000);
-
-            updateConnectionStatus();
-
-            websocket.onclose = function (){
-                updateConnectionStatus();
-            };
-            websocket.onopen = function(){
-                updateConnectionStatus()
-            };
-
-            websocket.onmessage = function (event) {
-                data = JSON.parse(event.data);
-                console.log(data);
-                switch (data.type) {
-                    case 'users':
-                        document.getElementById('users').innerText = data.count.toString() + " user" + (data.count > 1 ? "s" :"");
-                        break;
-                    case 'state':
-                        //@TODO capter les changements dans les variables du scanner
-                        break;
-                    default:
-                        console.error(
-                            "unsupported event", data);
-                }
-            };
-        });
-
-        function updateConnectionStatus() {
-            if(websocket.readyState === websocket.CLOSED){
-                document.getElementById('content').innerHTML ='<style>\n' +
-                    '    p[type=online] {\n' +
-                    '        background-color: #b30006;\n' +
-                    '        border: none;\n' +
-                    '        border-radius: 12px;\n' +
-                    '        color: white;\n' +
-                    '        padding: 16px 16px;\n' +
-                    '        text-decoration: none;\n' +
-                    '        margin: 4px 10px;\n' +
-                    '        text-align: center;\n' +
-                    '        font-size: 250%;\n' +
-                    '        font-family: "Arial Black";\n' +
-                    '    }\n' +
-                    '</style>\n' +
-                    '<div class="state" id="on">\n' +
-                    '    <p type="online">OFFLINE</p>\n' +
-                    '</div>';
+            function turn_bed_CW_trigger() {
+                let angle = document.getElementById("turn_bed_value").value;
+                websocket.send(JSON.stringify({
+                    action: "turn_bed_CW",
+                    plateau_degree: angle.toString()
+                }))
             }
-            else{
-                var fs = require("fs");
-                var text = fs.readFileSync("./core/home.html");
-                document.getElementById('content').innerHTML = '<style>\n' +
-                    '    p[type=online] {\n' +
-                    '        background-color: #00b321;\n' +
-                    '        border: none;\n' +
-                    '        border-radius: 12px;\n' +
-                    '        color: white;\n' +
-                    '        padding: 16px 16px;\n' +
-                    '        text-decoration: none;\n' +
-                    '        margin: 4px 10px;\n' +
-                    '        text-align: center;\n' +
-                    '        font-size: 250%;\n' +
-                    '        font-family: "Arial Black";\n' +
-                    '    }\n' +
-                    '</style>\n' +
-                    '<div class="state" id="on">\n' +
-                    '    <p type="online">ONLINE</p>\n' +
-                    '</div>';
+
+            function turn_bed_CCW_trigger() {
+                let angle = document.getElementById("turn_bed_value").value;
+                websocket.send(JSON.stringify({
+                    action: "turn_bed_CCW",
+                    plateau_degree: angle.toString()
+                }))
             }
-        }
 
-        function drawControlContent() {
-            var fs = require("fs");
-            var text = fs.readFileSync("./core/control.html");
-            document.getElementById('content').innerHTML = text;
-            //$('#content').load("./core/control.html");
-            //document.getElementById("content").innerHTML='<object type="text/html" data="./core/control.html"></object>';
-        }
+            /**
+             * create project
+             */
 
-        function drawProjectContent() {
-            var fs = require("fs");
-            var text = fs.readFileSync("./core/project.html");
-            document.getElementById('content').innerHTML = text;
-            //$('#content').load("./core/project.html");
-            //document.getElementById("content").innerHTML='<object type="text/html" data="./core/project.html"></object>';
-        }
-
-
-        /**
-         * Turn bed clockwise
-         */
-        function turn_bed_CW_trigger() {
-            let angle = document.getElementById("turn_bed_value").value;
-            websocket.send(JSON.stringify({action : "turn_bed_CW", plateau_degree : angle.toString()}))
-        }
-
-        function turn_bed_CCW_trigger() {
-            let angle = document.getElementById("turn_bed_value").value;
-            websocket.send(JSON.stringify({action : "turn_bed_CCW", plateau_degree : angle.toString()}))
-        }
-
-        /**
-         * create project
-         */
-
-        function create_project() {
-            let project_name = document.getElementById("project_name").value;
-            websocket.send(JSON.stringify({action : "create_project", project_name : project_name}))
-        }
-
-
-    </script>
+            function create_project() {
+                let project_name = document.getElementById("project_name").value;
+                websocket.send(JSON.stringify({
+                    action: "create_project",
+                    project_name: project_name
+                }))
+            }
+        </script>
     </body>
 </html>
