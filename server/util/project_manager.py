@@ -30,7 +30,7 @@ def create_project(project_name, description="", picture_per_rotation=15, pictur
         project_data['name'] = project_name
 
     os.mkdir(wcscanner_path + '/{}'.format(project_data['name']))
-    log.info("Project %s created.", project_name)
+    log.info("Project %s created.", project_data['name'])
 
     project_data['description'] = description
     project_data['pict_per_rotation'] = picture_per_rotation
@@ -41,7 +41,6 @@ def create_project(project_name, description="", picture_per_rotation=15, pictur
     with open(wcscanner_path + '/{}/.project'.format(project_data['name']), 'w') as config_file:
         json.dump(project_data, config_file, indent=4)
         config_file.close()
-
 
 def list_projects():
     if '.wcscanner' not in os.listdir(context.__BASE_PATH__):
@@ -55,7 +54,7 @@ def get_projects_data():
     data = []
     for project in os.listdir(wcscanner_path):
         f = open('{}/{}/.project'.format(wcscanner_path, project), 'r')
-        data.append(f.read)
+        data.append(f.read())
         f.close()
 
     return data

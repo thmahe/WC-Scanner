@@ -71,7 +71,7 @@ async def mainLoop(websocket, path):
                 STATE['value'] += 1
                 await notify_state()
             elif data['action'] == 'create_project':
-                pm.create_project(data['project_name'])
+                pm.create_project(data['project_name'], data['description'], data['pict_per_rotation'], data['pict_res'])
                 await send_project_data_users()
             elif data['action'] == 'turn_bed_CW':
                 angle = float(data['plateau_degree'])
@@ -86,6 +86,10 @@ async def mainLoop(websocket, path):
                 await websocket.send(pm.get_projects_data())
             else:
                 logger.error("unsupported event: {}", data)
+
+    except Exception:
+        await unregister(websocket)
+
     finally:
         await unregister(websocket)
 

@@ -192,7 +192,6 @@
                 $("#search_input").on("keyup", function() {
                     var value = $(this).val().toLowerCase();
                     $("#projects .col-md-4").filter(function() {
-                        console.log($(this).text());
                         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
                     });
                 });
@@ -250,7 +249,10 @@
                 let project_name = document.getElementById("project_name").value;
                 websocket.send(JSON.stringify({
                     action: "create_project",
-                    project_name: project_name
+                    project_name: project_name,
+                    description: document.getElementById('project_description').value,
+                    pict_per_rotation:document.getElementById('ppr_placeholder').innerText,
+                    pict_res:document.getElementById('pres_placeholder').innerText
                 }))
             }
 
