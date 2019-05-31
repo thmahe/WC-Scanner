@@ -9,6 +9,7 @@ class TestProjectManager(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         context.__BASE_PATH__ = "./"
+        context.__PROJECTS_PATH__ = "./.wcscanner"
         logging.disable(logging.CRITICAL)
 
     @classmethod
