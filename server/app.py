@@ -67,9 +67,9 @@ async def mainLoop(websocket, path):
             if data['action'] == 'minus':
                 STATE['value'] -= 1
                 await notify_state()
-            elif data['action'] == 'plus':
-                STATE['value'] += 1
-                await notify_state()
+            elif data['action'] == 'loop_capture':
+                scanner.loop_capture(data['project_name'])
+                await send_project_data_users()
             elif data['action'] == 'create_project':
                 pm.create_project(data['project_name'], data['description'], data['pict_per_rotation'], data['pict_res'])
                 await send_project_data_users()
@@ -82,13 +82,9 @@ async def mainLoop(websocket, path):
                 scanner.turn_bed(-1 * angle)
                 await notify_state()
             elif data['action'] == 'request_project_info':
-                #@TODO check send to websocket
                 await websocket.send(pm.get_projects_data())
             else:
                 logger.error("unsupported event: {}", data)
-
-    except Exception:
-        await unregister(websocket)
 
     finally:
         await unregister(websocket)

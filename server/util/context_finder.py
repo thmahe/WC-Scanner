@@ -11,7 +11,7 @@ In the other case, we use the package fake_rpi to simulate both GPIO and picamer
 running_on_raspberry = True
 
 __BASE_PATH__ = os.environ['HOME']
-
+__PROJECTS_PATH__ = __BASE_PATH__ + "/.wcscanner"
 try :
     import RPi.GPIO
     import picamera
@@ -29,4 +29,5 @@ except RuntimeError as e:
 
     running_on_raspberry = False
     __BASE_PATH__ = '/home/pi'
+    __PROJECTS_PATH__ = __BASE_PATH__ + "/.wcscanner"
 
