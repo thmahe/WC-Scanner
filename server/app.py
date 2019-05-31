@@ -36,9 +36,14 @@ async def notify_state():
 
 async def notify_users():
     if USERS:  # asyncio.wait doesn't accept an empty list
-        message = users_event()
-        await asyncio.wait([user.send(message) for user in USERS])
+        await send_project_data_users()
 
+async def send_project_data_users():
+    if USERS:
+        wrapped_pr_data = dict()
+        wrapped_pr_data['type'] = 'projects_data'
+        wrapped_pr_data['data'] = pm.get_projects_data()
+        await asyncio.wait([user.send(json.dumps(wrapped_pr_data)) for user in USERS])
 
 async def register(websocket):
     USERS.add(websocket)
@@ -67,7 +72,7 @@ async def mainLoop(websocket, path):
                 await notify_state()
             elif data['action'] == 'create_project':
                 pm.create_project(data['project_name'])
-                await notify_state()
+                await send_project_data_users()
             elif data['action'] == 'turn_bed_CW':
                 angle = float(data['plateau_degree'])
                 scanner.turn_bed(angle)
@@ -76,6 +81,9 @@ async def mainLoop(websocket, path):
                 angle = float(data['plateau_degree'])
                 scanner.turn_bed(-1 * angle)
                 await notify_state()
+            elif data['action'] == 'request_project_info':
+                #@TODO check send to websocket
+                await websocket.send(pm.get_projects_data())
             else:
                 logger.error("unsupported event: {}", data)
     finally:
@@ -105,6 +113,7 @@ def activeUSB(usbNumber):
 
 
 if __name__ == '__main__':
+    pm.get_projects_data()
     asyncio.get_event_loop().run_until_complete(
         websockets.serve(mainLoop, 'localhost', 6789))
     asyncio.get_event_loop().run_forever()

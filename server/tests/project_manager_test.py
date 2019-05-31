@@ -43,6 +43,11 @@ class TestProjectManager(unittest.TestCase):
         self.assertListEqual(['foo', 'foo_1', 'foo_2'], pm.list_projects())
         pm.__remove_all_projects__()
 
+    def test_retrieve_projects_data(self):
+        pm.create_project("test1")
+        pm.get_projects_data()
+        pm.__remove_all_projects__()
+
 
 if __name__ == '__main__':
     unittest.main()
