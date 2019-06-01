@@ -2,18 +2,23 @@ import os
 import re
 import subprocess
 import json
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw
 import base64
 from io import BytesIO
 
 from . import context_finder as context
-from . import logger
+from .logger import logger as log
 
-
-log = logger.logger
+"""
+project_manager module, contain function to manage projects, create/modify configuration files
+"""
 
 
 def create_base_projects_folder():
+    """
+    Create the base project folder named `.wcscanner`
+    This folder will contain projects folders
+    """
     if '.wcscanner' not in os.listdir(context.__BASE_PATH__):
         os.mkdir(context.__PROJECTS_PATH__, mode=0o777)
         log.info("Base folder '.wcscanner' created in %s", context.__BASE_PATH__)
@@ -22,6 +27,14 @@ def create_base_projects_folder():
 
 
 def create_project(project_name, description="", picture_per_rotation=15, picture_res="1640x1232"):
+    """
+    Function used to create projects folder and the projects configuration files
+    In the case where the name `test` exist, project `test_1` will be created
+    :param project_name: name of the project
+    :param description: description of the project (optional)
+    :param picture_per_rotation: the number of picture per complete rotation
+    :param picture_res: pictures resolution
+    """
     create_base_projects_folder()
     folders = os.listdir(context.__PROJECTS_PATH__)
     folders_same_name_size = len(list(filter(re.compile(r'^' + project_name + '_\d+$')
@@ -60,12 +73,22 @@ def create_project(project_name, description="", picture_per_rotation=15, pictur
 
 
 def list_projects():
+    """
+    Retrieve the list of created projects
+    :return: list of projects names ex -> ['foo', 'bar']
+    """
     if '.wcscanner' not in os.listdir(context.__BASE_PATH__):
         return []
     return os.listdir(context.__PROJECTS_PATH__)
 
 
 def update_project_data(project_name):
+    """
+    Update the project configuration file when needed
+    Updated data :  - project size
+                    - project preview image
+    :param project_name: project that need an update
+    """
     project_path = context.__PROJECTS_PATH__+ '/' + project_name
     f = open(project_path+'/.project', 'r')
     project_data = json.load(f)
@@ -73,7 +96,7 @@ def update_project_data(project_name):
 
     image_count = len(os.listdir(project_path)) - 1
 
-    if image_count > 0 :
+    if image_count > 0:
 
         img = Image.open('{}/{}.jpg'.format(project_path, image_count-1))
         buffered = BytesIO()
@@ -89,6 +112,10 @@ def update_project_data(project_name):
 
 
 def get_projects_data():
+    """
+    Seek and merge configuration files of all created projects
+    :return: list of configuration files converted to json strings
+    """
     wcscanner_path = context.__BASE_PATH__ + '/.wcscanner'
 
     data = []
@@ -96,17 +123,30 @@ def get_projects_data():
         update_project_data(project)
         project_path = '{}/{}'.format(wcscanner_path, project)
         f = open('{}/.project'.format(project_path), 'r')
-        data.append(f.read())
+        data.append(json.load(f))
         f.close()
 
     return data
 
+def remove_single_project(project_name):
+    """
+    Function to remove a project entirely
+    :param project_name: name of the project to remove
+    """
+    p = subprocess.Popen('rm -rf {}/{}'.format(context.__PROJECTS_PATH__, project_name), shell=True)
+    p.wait()
 
 def __remove_all_projects__():
+    """
+    Dev function used to remove all projects
+    """
     p = subprocess.Popen('rm -rf {}/.wcscanner/*'.format(context.__BASE_PATH__), shell=True)
     p.wait()
 
 
 def __remove_base_directory__():
+    """
+    Dev method used to remove the base directory of the application
+    """
     p = subprocess.Popen('rm -rf {}/.wcscanner'.format(context.__BASE_PATH__), shell=True)
     p.wait()

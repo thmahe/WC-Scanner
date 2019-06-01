@@ -2,9 +2,6 @@
 <html>
 
     <head>
-        <title>WebSocket demo</title>
-
-
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="node_modules/bootstrap-material-design/dist/css/bootstrap-material-design.min.css">
         <link rel="stylesheet" href="node_modules/material-design-icons-iconfont/dist/material-design-icons.css">
@@ -179,7 +176,7 @@
 
                 let projects_html = "";
                 projects_data.forEach(function(element) {
-                    projects_html += generate_project_html_element(JSON.parse(element));
+                    projects_html += generate_project_html_element(element);
                 });
 
                 var fs = require("fs");
@@ -197,7 +194,6 @@
             }
 
             function generate_project_html_element(project_data) {
-                console.log(project_data);
                 return "<div class=\"col-md-4\" id='"+project_data["name"]+"'>\n" +
                 "            <div class=\"card mb-4 box-shadow\">\n" +
                 "                <img class=\"card-img-top\" src=\"data:image/jpg;base64, " + project_data["preview_data"] + "\" data-holder-rendered=\"true\">\n" +
@@ -241,7 +237,6 @@
             }
 
             function start_loop_capture(project_name){
-                console.log(project_name + "LOOP");
                 websocket.send(JSON.stringify({
                     action: "loop_capture",
                     project_name: project_name
@@ -269,7 +264,6 @@
             }
 
             function update_pres_placeholder(value) {
-                console.log(value * 10);
                 let new_placeholder;
                 switch (value + "") {
                     case "1" :
@@ -284,8 +278,6 @@
                     default :
                         new_placeholder = "None"
                 }
-
-                console.log(new_placeholder);
                 
                 document.getElementById("pres_placeholder").innerHTML = new_placeholder;
                 updateEstimatedSize()

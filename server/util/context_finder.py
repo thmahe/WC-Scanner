@@ -33,6 +33,11 @@ except RuntimeError as e:
 
 
 def set_test_mode():
+    """
+    Set the context in test mode, both project and base path are now relative to the path where tests methods starts
+    Travis friendly
+    :return:
+    """
     global __PROJECTS_PATH__, __BASE_PATH__
     __PROJECTS_PATH__ = "./.wcscanner"
     __BASE_PATH__ = "./"
