@@ -12,7 +12,7 @@ running_on_raspberry = True
 
 __BASE_PATH__ = os.environ['HOME']
 __PROJECTS_PATH__ = __BASE_PATH__ + "/.wcscanner"
-try :
+try:
     import RPi.GPIO
     import picamera
 

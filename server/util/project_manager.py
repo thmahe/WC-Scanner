@@ -12,17 +12,15 @@ from . import logger
 
 log = logger.logger
 
+if '.wcscanner' not in os.listdir(context.__BASE_PATH__):
+    os.mkdir(context.__PROJECTS_PATH__, mode=0o777)
+    log.info("Base folder '.wcscanner' created in %s", context.__BASE_PATH__)
+else:
+    log.info("Base folder '.wcscanner' already in %s", context.__BASE_PATH__)
 
 def create_project(project_name, description="", picture_per_rotation=15, picture_res="1640x1232"):
-    wcscanner_path = context.__BASE_PATH__ + '/.wcscanner'
 
-    if '.wcscanner' not in os.listdir(context.__BASE_PATH__):
-        os.mkdir(wcscanner_path, mode=0o777)
-        log.info("Base folder '.wcscanner' created in %s", context.__BASE_PATH__)
-    else:
-        log.info("Base folder '.wcscanner' already in %s", context.__BASE_PATH__)
-
-    folders = os.listdir(wcscanner_path)
+    folders = os.listdir(context.__PROJECTS_PATH__)
     folders_same_name_size = len(list(filter(re.compile(r'^' + project_name + '_\d+$')
                                              .search, folders)))
     project_data = dict()
@@ -33,7 +31,7 @@ def create_project(project_name, description="", picture_per_rotation=15, pictur
     else:
         project_data['name'] = project_name
 
-    os.mkdir(wcscanner_path + '/{}'.format(project_data['name']))
+    os.mkdir(context.__PROJECTS_PATH__ + '/{}'.format(project_data['name']))
     log.info("Project %s created.", project_data['name'])
 
     img = Image.new('RGB', (350, 225), color=(73, 109, 137))
@@ -49,11 +47,11 @@ def create_project(project_name, description="", picture_per_rotation=15, pictur
     project_data['description'] = description
     project_data['pict_per_rotation'] = picture_per_rotation
     project_data['pict_res'] = picture_res
-    project_data['size'] = round(int(subprocess.check_output(['du', wcscanner_path + '/{}'.format(project_data['name']), '-k']).split()[0]) / 1000, 2)
+    project_data['size'] = round(int(subprocess.check_output(['du', context.__PROJECTS_PATH__ + '/{}'.format(project_data['name']), '-k']).split()[0]) / 1000, 2)
 
     log.info("Saving project configuration")
 
-    with open(wcscanner_path + '/{}/.project'.format(project_data['name']), 'w') as config_file:
+    with open(context.__PROJECTS_PATH__ + '/{}/.project'.format(project_data['name']), 'w') as config_file:
         json.dump(project_data, config_file, indent=4)
         config_file.close()
 
