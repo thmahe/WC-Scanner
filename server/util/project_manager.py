@@ -12,14 +12,17 @@ from . import logger
 
 log = logger.logger
 
-if '.wcscanner' not in os.listdir(context.__BASE_PATH__):
-    os.mkdir(context.__PROJECTS_PATH__, mode=0o777)
-    log.info("Base folder '.wcscanner' created in %s", context.__BASE_PATH__)
-else:
-    log.info("Base folder '.wcscanner' already in %s", context.__BASE_PATH__)
+
+def create_base_projects_folder():
+    if '.wcscanner' not in os.listdir(context.__BASE_PATH__):
+        os.mkdir(context.__PROJECTS_PATH__, mode=0o777)
+        log.info("Base folder '.wcscanner' created in %s", context.__BASE_PATH__)
+    else:
+        log.info("Base folder '.wcscanner' already in %s", context.__BASE_PATH__)
+
 
 def create_project(project_name, description="", picture_per_rotation=15, picture_res="1640x1232"):
-
+    create_base_projects_folder()
     folders = os.listdir(context.__PROJECTS_PATH__)
     folders_same_name_size = len(list(filter(re.compile(r'^' + project_name + '_\d+$')
                                              .search, folders)))
@@ -59,7 +62,7 @@ def create_project(project_name, description="", picture_per_rotation=15, pictur
 def list_projects():
     if '.wcscanner' not in os.listdir(context.__BASE_PATH__):
         return []
-    return os.listdir(context.__BASE_PATH__+'/.wcscanner')
+    return os.listdir(context.__PROJECTS_PATH__)
 
 
 def update_project_data(project_name):

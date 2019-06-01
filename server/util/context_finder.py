@@ -31,3 +31,8 @@ except RuntimeError as e:
     __BASE_PATH__ = '/home/pi'
     __PROJECTS_PATH__ = __BASE_PATH__ + "/.wcscanner"
 
+
+def set_test_mode():
+    global __PROJECTS_PATH__, __BASE_PATH__
+    __PROJECTS_PATH__ = "./.wcscanner"
+    __BASE_PATH__ = "./"
