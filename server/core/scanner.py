@@ -101,3 +101,4 @@ class Scanner:
 if __name__ == "__main__":
     scanner = Scanner()
     scanner.on_ready()
+

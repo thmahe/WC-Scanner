@@ -49,15 +49,17 @@ class StepperMotor:
         else:
             GPIO.output(self.DIR_PIN, self.CCW)
 
-        delay = 0.005 / 64
+        delay = 0.010 / 64
         step_count = int((self.SPR / 360) * abs(degree))
         GPIO.output(self.ENABLE_PIN, GPIO.LOW)
+        sleep(delay)
         for x in range(step_count):
             GPIO.output(self.STEP_PIN, GPIO.HIGH)
             sleep(delay)
             GPIO.output(self.STEP_PIN, GPIO.LOW)
             sleep(delay)
-        GPIO.output(self.ENABLE_PIN, GPIO.LOW)
+        GPIO.output(self.ENABLE_PIN, GPIO.HIGH)
+        sleep(delay)
 
 
 if __name__ == "__main__":
