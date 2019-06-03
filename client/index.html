@@ -5,6 +5,7 @@
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="node_modules/bootstrap-material-design/dist/css/bootstrap-material-design.min.css">
         <link rel="stylesheet" href="node_modules/material-design-icons-iconfont/dist/material-design-icons.css">
+        <link href="node_modules/open-iconic/font/css/open-iconic-bootstrap.css" rel="stylesheet">
 
         <!-- Bootstrap Optional JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -17,8 +18,11 @@
     </head>
 
     <body>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" onclick="drawHomeContent()" href="#">WCScanner</a>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <a class="navbar-brand" onclick="drawHomeContent()" href="#">
+                <img src="icons/png/48x48.png" width="32" height="32" class="d-inline-block align-top" alt="">
+                WCScanner
+            </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -35,6 +39,12 @@
                     </li>
                 </ul>
             </div>
+            <div style="flex-direction: row; justify-content: space-around; width: 130px; display: flex">
+                <span class="oi oi-person text-white"></span>
+                <span class="oi oi-wifi text-white"></span>
+                <span class="oi oi-wrench text-white"></span>
+            </div>
+
         </nav>
         <div class="container">
             <div id="content" class="pt-2">
@@ -49,7 +59,7 @@
 
             function get_connection_status() {
                 if (websocket.readyState === websocket.CLOSED) {
-                    websocket = new WebSocket("ws://localhost:6789/");
+                    websocket = new WebSocket("ws://192.168.99.103:6789/");
                     websocket.onclose = function() {
                         updateConnectionStatus();
                     };
@@ -71,7 +81,7 @@
                 /**
                  * RPi address
                  */
-                websocket = new WebSocket("ws://wcscanner.local:6789/");
+                websocket = new WebSocket("ws://192.168.99.103:6789/");
 
                 setInterval(get_connection_status, 1000);
 
