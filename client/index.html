@@ -59,7 +59,8 @@
 
             function get_connection_status() {
                 if (websocket.readyState === websocket.CLOSED) {
-                    websocket = new WebSocket("ws://192.168.99.103:6789/");
+                    websocket = new WebSocket("ws://wcscanner.local:6789/");
+                    //websocket = new WebSocket("ws://192.168.99.103:6789/"); VM
                     websocket.onclose = function() {
                         updateConnectionStatus();
                     };
@@ -81,7 +82,8 @@
                 /**
                  * RPi address
                  */
-                websocket = new WebSocket("ws://192.168.99.103:6789/");
+                //websocket = new WebSocket("ws://192.168.99.103:6789/"); VM
+                websocket = new WebSocket("ws://wcscanner.local:6789/");
 
                 setInterval(get_connection_status, 1000);
 
