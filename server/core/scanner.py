@@ -97,8 +97,7 @@ class Scanner:
             self.capture(project_path, image_count, pres[0], pres[1])
             self.turn_bed(bed_step)
             image_count += 1
-
-        p = subprocess.Popen('tar ')
+        
 
 
 if __name__ == "__main__":
