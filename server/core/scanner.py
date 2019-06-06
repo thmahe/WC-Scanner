@@ -16,6 +16,7 @@ class Scanner:
     Camera from the foundation Raspberry
     Stepper motor to drive the scanning platform
     """
+
     def __init__(self):
         """
         Constructor method,
@@ -40,7 +41,7 @@ class Scanner:
         :param degrees: degrees to apply to the bed (float)
         :return: None
         """
-        if degrees > 0 :
+        if degrees > 0:
             logger.info("Rotating bed of %.2f° clockwise", degrees)
         else:
             logger.info("Rotating bed of %.2f° counter clockwise", degrees)
@@ -97,8 +98,9 @@ class Scanner:
             self.turn_bed(bed_step)
             image_count += 1
 
+        p = subprocess.Popen('tar ')
+
 
 if __name__ == "__main__":
     scanner = Scanner()
     scanner.on_ready()
-

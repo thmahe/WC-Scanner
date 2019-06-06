@@ -39,18 +39,49 @@
                     </li>
                 </ul>
             </div>
-            <div style="flex-direction: row; justify-content: space-around; width: 130px; display: flex">
-                <span class="oi oi-person text-white"></span>
-                <span class="oi oi-wifi text-white"></span>
-                <span class="oi oi-wrench text-white"></span>
+            <div style="flex-direction: row; justify-content: space-around; width: 200px; display: flex;">
+                <div class="btn-group">
+                    <button class="btn btn-secondary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="oi oi-person text-white"></span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#">0 personne connecter </a>
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-secondary" type="button" id="dropdownMenuButtonOnline" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="oi oi-wifi" type="onlineIcon" id="onlineContent" style="color: white" ></span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButtonOnline">
+                        <a class="dropdown-item" href="#">Addresse Ip :</a>
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-secondary" type="button" id="dropdownMenuButtonDownload" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="oi oi-data-transfer-download" style="color: white" ></span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButtonDownload">
+                        <a class="dropdown-item" href="#">&#x1F43C Pas de téléchargement &#x1F43C</a>
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-secondary" type="button" id="dropdownMenuButtonSetting" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="oi oi-wrench text-white"></span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButtonSetting">
+                        <a class="dropdown-item" href="#">Build en cour : </a>
+                    </div>
+                </div>
             </div>
 
         </nav>
         <div class="container">
             <div id="content" class="pt-2">
-                <p type="online">Offline</p>
+
             </div>
         </div>
+
+
         <script>
             var users, websocket;
             var projects_data;
@@ -59,8 +90,8 @@
 
             function get_connection_status() {
                 if (websocket.readyState === websocket.CLOSED) {
-                    websocket = new WebSocket("ws://wcscanner.local:6789/");
-                    //websocket = new WebSocket("ws://192.168.99.103:6789/"); VM
+                    //websocket = new WebSocket("ws://wcscanner.local:6789/");
+                    websocket = new WebSocket("ws://192.168.99.103:6789/");
                     websocket.onclose = function() {
                         updateConnectionStatus();
                     };
@@ -82,8 +113,8 @@
                 /**
                  * RPi address
                  */
-                //websocket = new WebSocket("ws://192.168.99.103:6789/"); VM
-                websocket = new WebSocket("ws://wcscanner.local:6789/");
+                websocket = new WebSocket("ws://192.168.99.103:6789/");
+                //websocket = new WebSocket("ws://wcscanner.local:6789/");
 
                 setInterval(get_connection_status, 1000);
 
@@ -120,43 +151,17 @@
 
             function updateConnectionStatus() {
                 if (websocket.readyState === websocket.CLOSED) {
-                    document.getElementById('content').innerHTML = '<style>\n' +
-                        '    p[type=online] {\n' +
-                        '        background-color: #b30006;\n' +
-                        '        border: none;\n' +
-                        '        border-radius: 12px;\n' +
-                        '        color: white;\n' +
-                        '        padding: 16px 16px;\n' +
-                        '        text-decoration: none;\n' +
-                        '        margin: 4px 10px;\n' +
-                        '        text-align: center;\n' +
-                        '        font-size: 250%;\n' +
-                        '        font-family: "Arial Black";\n' +
-                        '    }\n' +
-                        '</style>\n' +
-                        '<div class="state" id="on">\n' +
-                        '    <p type="online">OFFLINE</p>\n' +
-                        '</div>';
+                    document.getElementById('onlineContent').innerHTML = '<style>\n' +
+                        '    span[type=onlineIcon] {\n' +
+                        '        color: red; \n' +
+                        '     }\n';
                 } else {
                     var fs = require("fs");
                     var text = fs.readFileSync("./core/home.html");
-                    document.getElementById('content').innerHTML = '<style>\n' +
-                        '    p[type=online] {\n' +
-                        '        background-color: #00b321;\n' +
-                        '        border: none;\n' +
-                        '        border-radius: 12px;\n' +
-                        '        color: white;\n' +
-                        '        padding: 16px 16px;\n' +
-                        '        text-decoration: none;\n' +
-                        '        margin: 4px 10px;\n' +
-                        '        text-align: center;\n' +
-                        '        font-size: 250%;\n' +
-                        '        font-family: "Arial Black";\n' +
-                        '    }\n' +
-                        '</style>\n' +
-                        '<div class="state" id="on">\n' +
-                        '    <p type="online">ONLINE</p>\n' +
-                        '</div>';
+                    document.getElementById('onlineContent').innerHTML = '<style>\n' +
+                        '    span[type=onlineIcon] {\n' +
+                        '        color: white; \n' +
+                        '     }\n';
                 }
             }
 
@@ -209,6 +214,11 @@
                 return "<div class=\"col-md-4\" id='"+project_data["name"]+"'>\n" +
                 "            <div class=\"card mb-4 box-shadow\">\n" +
                 "                <img class=\"card-img-top\" src=\"data:image/jpg;base64, " + project_data["preview_data"] + "\" data-holder-rendered=\"true\">\n" +
+                "                <div class=\"card-img-overlay\" style=\"display: flex; width: 100%; flex-direction: row; justify-content: flex-end; align-items: flex-start;\">\n" +
+                "                    <button class=\"btn btn-secondary\" type=\"button\" onclick='download_zipfile_handler(\"" + project_data["name"] + "\")'>\n" +
+                "                       <span class=\"oi oi-cloud-download m\" style=\"color: white; font-size:25px;\"/>\n" +
+                "                     </button>\n" +
+                "                </div>\n" +
                 "                <div class=\"card-body\">\n" +
                 "                    <h5 className=\"card-title\">"+ project_data["name"] + "</h5>\n" +
                 "                    <p class=\"card-text\">"+ project_data["description"] + "</p>\n" +
@@ -321,6 +331,13 @@
                 total_size = (picture_size * total_pictures) / 1000;
 
                 document.getElementById("estimated_size_placeholder").innerHTML = new_placeholder + total_size.toFixed(2) + "Mb / complete rotation";
+            }
+
+            function download_zipfile_handler(project_name){
+                websocket.send(JSON.stringify({
+                    action: "download-data",
+                    project_name: project_name
+                }))
             }
 
         </script>
