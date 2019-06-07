@@ -78,6 +78,10 @@ async def mainLoop(websocket, path):
 
             elif data['action'] == 'request_project_info':
                 await websocket.send(pm.get_projects_data())
+            elif data['action'] == 'camera_preview' :
+                data = scanner.get_preview_capture()
+                msg = {'type': 'camera_preview', 'data' : data}
+                await websocket.send(json.dumps(msg))
 
             else:
                 logger.error("unsupported event: {}", data)

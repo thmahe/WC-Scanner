@@ -6,6 +6,7 @@
         <link rel="stylesheet" href="node_modules/bootstrap-material-design/dist/css/bootstrap-material-design.min.css">
         <link rel="stylesheet" href="node_modules/material-design-icons-iconfont/dist/material-design-icons.css">
         <link href="node_modules/open-iconic/font/css/open-iconic-bootstrap.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 
         <!-- Bootstrap Optional JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -75,28 +76,27 @@
             </div>
 
         </nav>
-        <div class="container">
-            <div id="content" class="pt-2">
+        <div class="container-fluid" id="content">
 
-            </div>
         </div>
 
 
         <script>
             var users, websocket;
             var projects_data;
+            var camera_preview = "data:image/jpg;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+            var remote_server_address = "ws://127.0.0.1:6789";
 
             var retry = 0;
 
             function get_connection_status() {
                 if (websocket.readyState === websocket.CLOSED) {
-                    //websocket = new WebSocket("ws://wcscanner.local:6789/");
-                    websocket = new WebSocket("ws://192.168.99.103:6789/");
+                    websocket = new WebSocket(remote_server_address);
                     websocket.onclose = function() {
                         updateConnectionStatus();
                     };
                     websocket.onopen = function() {
-                        updateConnectionStatus()
+                        updateConnectionStatus();
                     };
                     retry += 1;
                 }
@@ -108,13 +108,10 @@
             $(document).ready(function() {
                 $('#content').load("./core/home.html");
 
-                //websocket = new WebSocket("ws://localhost:6789/");
-
                 /**
                  * RPi address
                  */
-                websocket = new WebSocket("ws://192.168.99.103:6789/");
-                //websocket = new WebSocket("ws://wcscanner.local:6789/");
+                websocket = new WebSocket(remote_server_address);
 
                 setInterval(get_connection_status, 1000);
 
@@ -124,7 +121,9 @@
                     drawHomeContent();
                 };
                 websocket.onopen = function() {
-                    drawHomeContent()
+                    drawHomeContent();
+
+                    request_camera_capture();
                 };
 
                 websocket.onmessage = function(event) {
@@ -140,6 +139,12 @@
                             projects_data = data.data;
                             if (document.getElementById('menu_project').classList.contains('active')){
                                 drawProjectContent();
+                            }
+                            break;
+                        case 'camera_preview':
+                            camera_preview = data.data;
+                            if (document.getElementById('menu_control').classList.contains('active')){
+                                drawControlContent();
                             }
                             break;
                         default:
@@ -177,7 +182,10 @@
 
             function drawControlContent() {
                 var fs = require("fs");
-                var text = fs.readFileSync("./core/control.html");
+                var text = fs.readFileSync("./core/control.html") + "";
+
+                text = text.replace("{{PREVIEW_DATA}}", camera_preview);
+                text = text.replace("{{PREVIEW_DATA}}", camera_preview);
                 document.getElementById('content').innerHTML = text;
 
                 document.getElementById('menu_home').classList.remove("active");
@@ -237,8 +245,6 @@
                 "        </div>"
             }
 
-
-
             /**
              * Turn bed clockwise
              */
@@ -255,6 +261,12 @@
                 websocket.send(JSON.stringify({
                     action: "turn_bed_CCW",
                     plateau_degree: angle.toString()
+                }))
+            }
+
+            function request_camera_capture(){
+                websocket.send(JSON.stringify({
+                    action: "camera_preview"
                 }))
             }
 

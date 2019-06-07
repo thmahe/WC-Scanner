@@ -1,4 +1,7 @@
 # Faking RPi Board /!\
+import base64
+from io import BytesIO
+
 from util import context_finder as context
 from util.logger import logger
 
@@ -97,6 +100,18 @@ class Scanner:
             self.capture(project_path, image_count, pres[0], pres[1])
             self.turn_bed(bed_step)
             image_count += 1
+
+    def get_preview_capture(self):
+        """
+        Make a preview capture, image is save in base application folder
+        :return: image encoded in base 64 string
+        """
+        self.capture(context.__BASE_PATH__, ".preview")
+
+        img = Image.open('{}/{}.jpg'.format(context.__BASE_PATH__, ".preview"))
+        buffered = BytesIO()
+        img.save(buffered, format="JPEG")
+        return "data:image/jpg;base64, " + base64.b64encode(buffered.getvalue()).decode('ascii')
         
 
 

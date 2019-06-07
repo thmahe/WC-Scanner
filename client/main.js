@@ -14,7 +14,7 @@ function createWindow () {
       nodeIntegration: true
     },
     title: "WCS - Client",
-    autoHideMenuBar:true,
+    //autoHideMenuBar:true,
     frame: true,
     resizable: false,
     icon: path.join(__dirname, 'icons/png/256x256.png')
