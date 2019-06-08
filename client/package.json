@@ -1,10 +1,16 @@
 {
-  "name": "electron-quick-start",
+  "name": "wcscanner",
   "version": "1.0.0",
   "description": "A minimal Electron application",
   "main": "main.js",
+  "files": [
+    "core",
+    "*.js",
+    "assets"
+  ],
   "scripts": {
-    "start": "electron ."
+    "start": "npm install && electron .",
+    "dist" : "electron-packager . wcscanner --platform=linux --overwrite"
   },
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
@@ -17,17 +23,15 @@
   "author": "GitHub",
   "license": "CC0-1.0",
   "devDependencies": {
-    "@fortawesome/fontawesome-free": "^5.9.0",
-    "electron": "^4.1.1"
+    "electron": "^4.1.1",
+    "electron-packager": "^13.1.1",
+    "electron-builder": "^20.43.0"
   },
   "dependencies": {
     "bootstrap-material-design": "^4.1.2",
     "font-awesome": "^4.7.0",
     "jquery": "^3.4.1",
-    "material-design-icons": "^3.0.1",
-    "material-design-icons-iconfont": "^5.0.1",
-    "npm": "^6.9.0",
-    "open-iconic": "^1.1.1",
+    "npm": "6.9.0",
     "popper.js": "^1.15.0",
     "yarn": "^1.15.2"
   }
