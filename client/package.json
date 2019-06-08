@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "start": "npm install && electron .",
-    "dist" : "electron-packager . wcscanner --platform=linux --overwrite"
+    "dist": "electron-packager . wcscanner --platform=linux --overwrite"
   },
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
