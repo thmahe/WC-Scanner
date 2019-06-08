@@ -1,12 +1,13 @@
 import React from 'react';
 import {StyleSheet, View, Text} from "react-native";
 import {Icon} from "react-native-elements";
+import Colors from "../assets/color/Colors";
 export default class controlScreen extends React.Component{
 
     static navigationOptions = {
         tabBarIcon: ({ focused}) => {
             const iconName = 'gamepad';
-            return <Icon name={iconName} size={focused ? 40 : 30} color={focused ? '#fff' : '#d6d7da'} type='material-community'/>;
+            return <Icon name={iconName} size={focused ? 40 : 30} color={focused ? '#fff' : Colors.grayColor} type='material-community'/>;
         },
     };
 
@@ -17,7 +18,7 @@ export default class controlScreen extends React.Component{
     render(){
         return(
             <View style={styleControl.container}>
-                <Text>ControlScreen</Text>
+
             </View>
         );
     }

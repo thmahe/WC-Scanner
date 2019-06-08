@@ -7,7 +7,7 @@ export default class homeScreen extends React.Component{
     static navigationOptions = {
         tabBarIcon: ({ focused}) => {
             const iconName = 'home';
-            return <Icon name={iconName} size={focused ? 40 : 30} color={focused ? '#fff' : '#d6d7da'} type='font-awesome'/>;
+            return <Icon name={iconName} size={focused ? 40 : 30} color={focused ? '#fff' : Colors.grayColor} type='font-awesome'/>;
         },
     };
 
