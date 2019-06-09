@@ -5,6 +5,9 @@ var remote_server_address = "ws://127.0.0.1:6789";
 
 var retry = 0;
 
+const $ = require("jquery");
+const fs = require("fs");
+
 function get_connection_status() {
     if (websocket.readyState === websocket.CLOSED) {
         websocket = new WebSocket(remote_server_address);
@@ -71,9 +74,11 @@ $(document).ready(function() {
     };
 });
 
+const path = require('path');
+
 function draw_navbar(){
-    let fs = require("fs");
-    document.getElementById('navbar').innerHTML = fs.readFileSync("./core/navbar.html");
+    let navbar_path = path.join(__dirname, 'core/navbar.html');
+    document.getElementById('navbar').innerHTML = fs.readFileSync(navbar_path);
 }
 
 function updateConnectionStatus() {
@@ -83,7 +88,7 @@ function updateConnectionStatus() {
             '        color: red; \n' +
             '     }\n';
     } else {
-        var fs = require("fs");
+
         var text = fs.readFileSync("./core/home.html");
         document.getElementById('onlineContent').innerHTML = '<style>\n' +
             '    span[type=onlineIcon] {\n' +
@@ -93,8 +98,9 @@ function updateConnectionStatus() {
 }
 
 function drawHomeContent() {
-    var fs = require("fs");
-    var text = fs.readFileSync("./core/home.html");
+
+    let home_path = path.join(__dirname, 'core/home.html');
+    let text = fs.readFileSync(home_path);
     document.getElementById('content').innerHTML = text;
 
     document.getElementById('menu_home').classList.add("active");
@@ -103,8 +109,9 @@ function drawHomeContent() {
 }
 
 function drawControlContent() {
-    var fs = require("fs");
-    var text = fs.readFileSync("./core/control.html") + "";
+
+    let control_path = path.join(__dirname, 'core/control.html');
+    var text = fs.readFileSync(control_path) + "";
 
     text = text.replace("{{PREVIEW_DATA}}", camera_preview);
     text = text.replace("{{PREVIEW_DATA}}", camera_preview);
@@ -126,8 +133,10 @@ function drawProjectContent() {
         projects_html += generate_project_html_element(element);
     });
 
-    var fs = require("fs");
-    var content = fs.readFileSync("./core/project.html") + "";
+
+
+    let project_path = path.join(__dirname, 'core/project.html');
+    var content = fs.readFileSync(project_path) + "";
     content = content.replace("{{PROJECT_PLACEHOLDER}}", projects_html);
     document.getElementById('content').innerHTML = content;
 
@@ -160,7 +169,6 @@ function generate_project_html_element(project_data) {
         "                            <button type=\"button\" class=\"btn btn-sm btn-outline-secondary\">Edit</button>\n" +
         "                        </div>\n" +
         "                        <small class=\"text-muted\">"+ project_data['size'] +" Mb</small>\n" +
-        //@TODO project size
         "                    </div>\n" +
         "                </div>\n" +
         "            </div>\n" +

@@ -4,13 +4,30 @@
   "description": "A minimal Electron application",
   "main": "main.js",
   "files": [
-    "core",
-    "*.js",
-    "assets"
+    "/**/*",
+    "*.js"
   ],
+  "build": {
+    "appId": "com.example.electron-cra",
+    "asar": true,
+    "asarUnpack": [
+      "core/**/*",
+      "assets/**/*"
+    ],
+    "files": [
+      "core/**/*",
+      "assets/**/*",
+      "node_modules/**/*",
+      "*.js",
+      "index.html"
+    ],
+    "directories":{
+      "buildResources": "build"
+    }
+  },
   "scripts": {
     "start": "npm install && electron .",
-    "dist": "electron-packager . wcscanner --platform=linux --overwrite"
+    "dist": "build --dir"
   },
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
@@ -23,16 +40,14 @@
   "author": "GitHub",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^4.1.1",
-    "electron-packager": "^13.1.1",
-    "electron-builder": "^20.43.0"
+    "electron": "^5.0.3",
+    "electron-builder": "^20.43.0",
+    "electron-packager": "^13.1.1"
   },
   "dependencies": {
     "bootstrap-material-design": "^4.1.2",
     "font-awesome": "^4.7.0",
     "jquery": "^3.4.1",
-    "npm": "6.9.0",
-    "popper.js": "^1.15.0",
-    "yarn": "^1.15.2"
+    "popper.js": "^1.15.0"
   }
 }

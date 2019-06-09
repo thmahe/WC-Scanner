@@ -20,3 +20,7 @@ node_modules/
 **/__pycache__/**
 
 *.log
+
+client/wcscanner-linux-x64/
+
+client/dist/
