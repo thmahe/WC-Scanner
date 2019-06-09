@@ -1,33 +1,40 @@
 {
   "name": "wcscanner",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "description": "Client application for the WCScanner\nTER 2019 - Université Nice Côte Azur",
   "main": "main.js",
+  "icon": "build/icon.png",
   "files": [
     "/**/*",
     "*.js"
   ],
   "build": {
-    "appId": "com.example.electron-cra",
+    "appId": "org.unice.ter2019.wcscanner",
     "asar": true,
     "asarUnpack": [
       "core/**/*",
       "assets/**/*"
     ],
+    "linux": {
+      "icon": "./assets/images/icons/png/256x256.png",
+      "category": "Utility"
+    },
     "files": [
       "core/**/*",
       "assets/**/*",
       "node_modules/**/*",
       "*.js",
-      "index.html"
+      "index.html",
+      "icon.png"
     ],
-    "directories":{
+    "directories": {
       "buildResources": "build"
     }
   },
   "scripts": {
-    "start": "npm install && electron .",
-    "dist": "build --dir"
+    "pack": "build --dir",
+    "start": "electron .",
+    "dist": "electron-builder"
   },
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
@@ -40,8 +47,9 @@
   "author": "GitHub",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^5.0.3",
+    "electron": "^4.2.4",
     "electron-builder": "^20.43.0",
+    "electron-installer-snap": "^3.2.0",
     "electron-packager": "^13.1.1"
   },
   "dependencies": {

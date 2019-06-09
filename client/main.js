@@ -8,6 +8,12 @@ const url = require('url');
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 
+const iconUrl = url.format({
+  pathname: path.join(__dirname, "assets/images/icons/png/256x256.png"),
+protocol: "file:",
+slashes: true
+});
+
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({
@@ -17,10 +23,10 @@ function createWindow () {
       nodeIntegration: true
     },
     title: "WCS - Client",
-    autoHideMenuBar:false,
+    autoHideMenuBar:true,
     frame: true,
     resizable: false,
-    icon: path.join(__dirname, 'icons/png/256x256.png')
+    icon : iconUrl
   });
 
   // and load the index.html of the app.

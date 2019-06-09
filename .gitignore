@@ -24,3 +24,5 @@ node_modules/
 client/wcscanner-linux-x64/
 
 client/dist/
+
+client/out/wcscanner-linux-x64/
