@@ -1,7 +1,9 @@
 import React from "react";
-import {StyleSheet, View, Text, Image} from "react-native";
-import {Header, Icon} from "react-native-elements";
+import {StyleSheet, View, Text, Image, FlatList, ImageBackground} from "react-native";
+import {Divider, Header, Icon} from "react-native-elements";
 import Colors from "../assets/color/Colors";
+import {styleProject} from "./projectScreen";
+import projectJson from "../devEnv/dev_data/projectJson";
 
 export default class homeScreen extends React.Component{
     static navigationOptions = {
@@ -14,6 +16,7 @@ export default class homeScreen extends React.Component{
     constructor(props){
         super(props);
     }
+
 
     render(){
         const icon256 = require('../assets/icons/png/256x256.png');
@@ -28,7 +31,6 @@ export default class homeScreen extends React.Component{
                     <Text style={styleHome.body_text_h1}>Bienvenue sur WC-Scanner</Text>
                     <Image source={icon256}/>
                 </View>
-
             </View>
         );
     }
