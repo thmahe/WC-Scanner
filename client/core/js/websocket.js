@@ -154,7 +154,7 @@ function generate_project_html_element(project_data) {
         "            <div class=\"card mb-4 box-shadow\">\n" +
         "                <img class=\"card-img-top\" src=\"data:image/jpg;base64, " + project_data["preview_data"] + "\" data-holder-rendered=\"true\">\n" +
         "                <div class=\"card-img-overlay\" style=\"display: flex; width: 100%; flex-direction: row; justify-content: flex-end; align-items: flex-start;\">\n" +
-        "                    <button class=\"btn btn-secondary\" type=\"button\" onclick='download_zipfile_handler(\"" + project_data["name"] + "\")'>\n" +
+        "                    <button class=\"btn btn-secondary\" type=\"button\" onclick='upload_email_project(\"" + project_data["name"] + "\")'>\n" +
         "                       <span class=\"oi oi-cloud-download m\" style=\"color: white; font-size:25px;\"/>\n" +
         "                     </button>\n" +
         "                </div>\n" +
@@ -275,9 +275,9 @@ function updateEstimatedSize(){
     document.getElementById("estimated_size_placeholder").innerHTML = new_placeholder + total_size.toFixed(2) + "Mb / complete rotation";
 }
 
-function download_zipfile_handler(project_name){
+function upload_email_project(project_name){
     websocket.send(JSON.stringify({
-        action: "download-data",
-        project_name: project_name
+        action: "request_upload_email_project",
+        project_name: project_name,
     }))
 }

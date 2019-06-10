@@ -8,6 +8,7 @@ import subprocess
 from util import logger
 from core.scanner import Scanner
 from util import project_manager as pm
+from util import upload as upload
 
 APP_PATH = '/home/pi/.wcscanner'
 USERS = set()
@@ -78,10 +79,11 @@ async def mainLoop(websocket, path):
 
             elif data['action'] == 'request_project_info':
                 await websocket.send(pm.get_projects_data())
-            elif data['action'] == 'camera_preview' :
-                data = scanner.get_preview_capture()
-                msg = {'type': 'camera_preview', 'data' : data}
-                await websocket.send(json.dumps(msg))
+
+            elif data['action'] == 'request_upload_email_project':
+                project_name = data['project_name']
+                upload.send_email_zip_project(project_name)
+                await send_project_data_users()
 
             else:
                 logger.error("unsupported event: {}", data)
