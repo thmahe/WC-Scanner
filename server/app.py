@@ -82,7 +82,8 @@ async def mainLoop(websocket, path):
 
             elif data['action'] == 'request_upload_email_project':
                 project_name = data['project_name']
-                upload.send_email_zip_project(project_name)
+                email_to = data['email_to']
+                upload.send_email_zip_project(project_name, email_to)
                 await send_project_data_users()
 
             else:

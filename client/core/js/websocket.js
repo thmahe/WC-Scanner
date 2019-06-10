@@ -154,9 +154,41 @@ function generate_project_html_element(project_data) {
         "            <div class=\"card mb-4 box-shadow\">\n" +
         "                <img class=\"card-img-top\" src=\"data:image/jpg;base64, " + project_data["preview_data"] + "\" data-holder-rendered=\"true\">\n" +
         "                <div class=\"card-img-overlay\" style=\"display: flex; width: 100%; flex-direction: row; justify-content: flex-end; align-items: flex-start;\">\n" +
-        "                    <button class=\"btn btn-secondary\" type=\"button\" onclick='upload_email_project(\"" + project_data["name"] + "\")'>\n" +
-        "                       <span class=\"oi oi-cloud-download m\" style=\"color: white; font-size:25px;\"/>\n" +
+        "                    <button class=\"btn btn-secondary\" type=\"button\" data-toggle=\"modal\" data-target=\"#updateChoixModal\">\n" +
+        "                       <span class=\"fas fa-file-download fa-2x text-white\"/>\n" +
         "                     </button>\n" +
+                                "<div class=\"modal fade\" id=\"updateChoixModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"modalLabel\" aria-hidden=\"true\">\n" +
+                                "  <div class=\"modal-dialog\" role=\"document\">\n" +
+                                "    <div class=\"modal-content\">\n" +
+                                "      <div class=\"modal-header\">\n" +
+                                "        <h5 class=\"modal-title\" id=\"modalLabel\">Telechargement du projet</h5>\n" +
+                                "        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n" +
+                                "          <span aria-hidden=\"true\">&times;</span>\n" +
+                                "        </button>\n" +
+                                "      </div>\n" +
+                                "      <div class=\"modal-body\">\n" +
+                                        "<div class=\"list-group\">\n" +
+                                            "<div class=\"input-group mb-3\">\n" +
+                                            "  <div class=\"input-group-prepend\">\n" +
+                                            "    <span class=\"input-group-text\">@</span>\n" +
+                                            "  </div>\n" +
+                                            "  <input type=\"text\" class=\"form-control\" placeholder=\"Email\" aria-label=\"Email\" aria-describedby=\"emailTo\" id=\"emailTo\">\n" +
+                                            "</div>\n" +
+                                            "<button type=\"button\" class=\"btn btn-primary\" data-dismiss=\"modal\" onclick='upload_email_project(\"" + project_data["name"] + "\")'>EMAIL</button>\n" +
+                                            "<div class=\"dropdown-divider\"></div>\n" +
+                                            "  <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">USB 1</button>\n" +
+                                            "  <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">USB 2</button>\n" +
+                                            "  <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">USB 3</button>\n" +
+                                            "  <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">USB 4</button>\n" +
+                                        "</div>\n" +
+                                "      </div>\n" +
+                                "      <div class=\"modal-footer\">\n" +
+                                "        <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Annuler</button>\n" +
+                                "        <button type=\"button\" class=\"btn btn-primary\">Save changes</button>\n" +
+                                "      </div>\n" +
+                                "    </div>\n" +
+                                "  </div>\n" +
+                                "</div>\n" +
         "                </div>\n" +
         "                <div class=\"card-body\">\n" +
         "                    <h5 className=\"card-title\">"+ project_data["name"] + "</h5>\n" +
@@ -279,5 +311,6 @@ function upload_email_project(project_name){
     websocket.send(JSON.stringify({
         action: "request_upload_email_project",
         project_name: project_name,
-    }))
+        email_to: document.getElementById("emailTo").value,
+    }));
 }
