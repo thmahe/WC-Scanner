@@ -94,7 +94,7 @@ def update_project_data(project_name):
     project_data = json.load(f)
     f.close()
 
-    image_count = len(os.listdir(project_path)) - 1
+    image_count = len(os.listdir(project_path)) - 2
 
     if image_count > 0:
 
@@ -120,12 +120,12 @@ def get_projects_data():
 
     data = []
     for project in os.listdir(wcscanner_path):
-        update_project_data(project)
-        project_path = '{}/{}'.format(wcscanner_path, project)
-        f = open('{}/.project'.format(project_path), 'r')
-        data.append(json.load(f))
-        f.close()
-
+        if (os.path.isdir(os.path.join(wcscanner_path, project))):
+            update_project_data(project)
+            project_path = '{}/{}'.format(wcscanner_path, project)
+            f = open('{}/.project'.format(project_path), 'r')
+            data.append(json.load(f))
+            f.close()
     return data
 
 def remove_single_project(project_name):
@@ -150,3 +150,11 @@ def __remove_base_directory__():
     """
     p = subprocess.Popen('rm -rf {}/.wcscanner'.format(context.__BASE_PATH__), shell=True)
     p.wait()
+
+def zip_project(project_name):
+    wcscanner_path = context.__BASE_PATH__ + '/.wcscanner'
+    if os.listdir(wcscanner_path).__contains__(project_name):
+        p1 = subprocess.Popen('zip -r {}/{}/{}.zip {}/{}'.format(context.__PROJECTS_PATH__, project_name, project_name, context.__PROJECTS_PATH__, project_name), shell=True)
+        p1.wait()
+    else:
+        print('no folder {} found'.format(project_name))
