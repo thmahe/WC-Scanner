@@ -8,6 +8,8 @@ var retry = 0;
 const $ = require("jquery");
 const fs = require("fs");
 
+var currentProjectDownloading = null;
+
 function get_connection_status() {
     if (websocket.readyState === websocket.CLOSED) {
         websocket = new WebSocket(remote_server_address);
@@ -66,6 +68,10 @@ $(document).ready(function() {
                 if (document.getElementById('menu_control').classList.contains('active')){
                     drawControlContent();
                 }
+                break;
+            case 'download_ready':
+                project_name = data.project_name;
+                $(project_name + '_download').show();
                 break;
             default:
                 console.error(
@@ -150,61 +156,15 @@ function drawProjectContent() {
 }
 
 function generate_project_html_element(project_data) {
-    return "<div class=\"col-md-4\" id='"+project_data["name"]+"'>\n" +
-        "            <div class=\"card mb-4 box-shadow\">\n" +
-        "                <img class=\"card-img-top\" src=\"data:image/jpg;base64, " + project_data["preview_data"] + "\" data-holder-rendered=\"true\">\n" +
-        "                <div class=\"card-img-overlay\" style=\"display: flex; width: 100%; flex-direction: row; justify-content: flex-end; align-items: flex-start;\">\n" +
-        "                    <button class=\"btn btn-secondary\" type=\"button\" data-toggle=\"modal\" data-target=\"#updateChoixModal\">\n" +
-        "                       <span class=\"fas fa-file-download fa-2x text-white\"/>\n" +
-        "                     </button>\n" +
-                                "<div class=\"modal fade\" id=\"updateChoixModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"modalLabel\" aria-hidden=\"true\">\n" +
-                                "  <div class=\"modal-dialog\" role=\"document\">\n" +
-                                "    <div class=\"modal-content\">\n" +
-                                "      <div class=\"modal-header\">\n" +
-                                "        <h5 class=\"modal-title\" id=\"modalLabel\">Telechargement du projet</h5>\n" +
-                                "        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n" +
-                                "          <span aria-hidden=\"true\">&times;</span>\n" +
-                                "        </button>\n" +
-                                "      </div>\n" +
-                                "      <div class=\"modal-body\">\n" +
-                                        "<div class=\"list-group\">\n" +
-                                            "<div class=\"input-group mb-3\">\n" +
-                                            "  <div class=\"input-group-prepend\">\n" +
-                                            "    <span class=\"input-group-text\">@</span>\n" +
-                                            "  </div>\n" +
-                                            "  <input type=\"text\" class=\"form-control\" placeholder=\"Email\" aria-label=\"Email\" aria-describedby=\"emailTo\" id=\"emailTo\">\n" +
-                                            "</div>\n" +
-                                            "<button type=\"button\" class=\"btn btn-primary\" data-dismiss=\"modal\" onclick='upload_email_project(\"" + project_data["name"] + "\")'>EMAIL</button>\n" +
-                                            "<div class=\"dropdown-divider\"></div>\n" +
-                                            "  <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">USB 1</button>\n" +
-                                            "  <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">USB 2</button>\n" +
-                                            "  <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">USB 3</button>\n" +
-                                            "  <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">USB 4</button>\n" +
-                                        "</div>\n" +
-                                "      </div>\n" +
-                                "      <div class=\"modal-footer\">\n" +
-                                "        <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Annuler</button>\n" +
-                                "        <button type=\"button\" class=\"btn btn-primary\">Save changes</button>\n" +
-                                "      </div>\n" +
-                                "    </div>\n" +
-                                "  </div>\n" +
-                                "</div>\n" +
-        "                </div>\n" +
-        "                <div class=\"card-body\">\n" +
-        "                    <h5 className=\"card-title\">"+ project_data["name"] + "</h5>\n" +
-        "                    <p class=\"card-text\">"+ project_data["description"] + "</p>\n" +
-        "                    <p class=\"card-text\">Pictures per revolution : "+ project_data["pict_per_rotation"] + "</p>\n" +
-        "                    <p class=\"card-text\">Pictures resolution : "+ project_data["pict_res"] + "</p>\n" +
-        "                    <div class=\"d-flex justify-content-between align-items-center\">\n" +
-        "                        <div class=\"btn-group\">\n" +
-        "                            <button type=\"button\" class=\"btn btn-sm btn-outline-secondary\" onclick='start_loop_capture(\""+ project_data["name"] +"\")'>Start loop capture</button>\n" +
-        "                            <button type=\"button\" class=\"btn btn-sm btn-outline-secondary\" onclick='request_remove_project(\""+ project_data["name"] +"\")'>Delete</button>\n" +
-        "                        </div>\n" +
-        "                        <small class=\"text-muted\">"+ project_data['size'] +" Mb</small>\n" +
-        "                    </div>\n" +
-        "                </div>\n" +
-        "            </div>\n" +
-        "        </div>"
+    let project_path = path.join(__dirname, 'core/project_element.html');
+    var content = fs.readFileSync(project_path) + "";
+    content = content.replace(/{{project_name}}/g, project_data["name"]);
+    content = content.replace(/{{preview_data}}/g, project_data["preview_data"]);
+    content = content.replace(/{{project_description}}/g, project_data["description"]);
+    content = content.replace(/{{project_pict_per_rotation}}/g, project_data["pict_per_rotation"]);
+    content = content.replace(/{{project_pict_res}}/g, project_data["pict_res"]);
+    content = content.replace(/{{project_size}}/g, project_data["size"]);
+    return content;
 }
 
 /**
@@ -243,6 +203,21 @@ function request_remove_project(project_name){
     websocket.send(JSON.stringify(
         {action: "request_remove_project", project_name: project_name}
     ))
+}
+
+function request_export_project(project_name){
+    var loader = "<div class=\"d-flex justify-content-center\">\n" +
+        "<div class=\"spinner-border text-primary\" role=\"status\">\n" +
+                   "<span class=\"sr-only\">Loading...</span>\n"+
+                "</div>\n"+
+        "</div>\n";
+    document.getElementById('loader').innerHTML = loader;
+
+    websocket.send(JSON.stringify(
+        {action: "request_zip_project", project_name: project_name}
+    ))
+
+    currentProjectDownloading = project_name;
 }
 
 /**

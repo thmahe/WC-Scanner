@@ -27,6 +27,13 @@ async def send_project_data_users():
         await asyncio.wait([user.send(json.dumps(wrapped_pr_data)) for user in USERS])
 
 
+async def send_download_ready(project_name) :
+
+    if USERS:
+        data = {'type': "download_ready", 'project_name': project_name}
+        await asyncio.wait([user.send(json.dumps(data)) for user in USERS])
+
+
 async def register(websocket):
     """
     Register a new client using his websocket
@@ -92,6 +99,11 @@ async def mainLoop(websocket, path):
                 project_name = data['project_name']
                 pm.remove_single_project(project_name)
                 await send_project_data_users()
+
+            elif data['action'] == 'request_zip_data':
+                project_name = data["project_name"]
+                pm.zip_project(project_name)
+                await send_download_ready(project_name)
 
             elif data['action'] == 'camera_preview':
                 data = scanner.get_preview_capture()

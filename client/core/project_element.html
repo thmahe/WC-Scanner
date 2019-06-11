@@ -1,0 +1,55 @@
+<div class="col-md-4" id="{{project_name}}">
+            <div class="card mb-4 box-shadow">
+                <img class="card-img-top" src="data:image/jpg;base64, {{preview_data}}"data-holder-rendered="true">
+                <div class="card-img-overlay" style="display: flex; width: 100%; flex-direction: row; justify-content: flex-end; align-items: flex-start;">
+                    <button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#updateChoixModal">
+                       <span class="fas fa-file-download fa-2x text-white">
+                     </span></button>
+<div class="modal fade" id="updateChoixModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalLabel">Telechargement du projet</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+<div class="list-group">
+<div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text">@</span>
+  </div>
+  <input type="text" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="emailTo" id="emailTo">
+</div>
+<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="upload_email_project('{{project_name}}')">EMAIL</button>
+<div class="dropdown-divider"></div>
+  <button type="button" class="btn btn-secondary" onclick="request_export_project('{{project_name}}')">Export...</button>
+<div id="loader"> </div></div>
+          <a id="{{project_name}}_download" style="visibility: hidden" href="http://wcscanner.local/{{project_name}}.zip" >
+    <button type="button">Download</button>
+</a>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+                </div>
+                <div class="card-body">
+                    <h5 classname="card-title">{{project_name}}</h5>
+                    <p class="card-text">{{project_description}}</p>
+                    <p class="card-text">Pictures per revolution : {{project_pict_per_rotation}}</p>
+                    <p class="card-text">Pictures resolution : {{project_pict_res}}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="start_loop_capture('{{project_name}}')">Start loop capture</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="request_remove_project('{{project_name}}')">Delete</button>
+                        </div>
+                        <small class="text-muted">{{project_size}}Mb</small>
+                    </div>
+                </div>
+            </div>
+        </div>

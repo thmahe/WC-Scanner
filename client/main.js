@@ -23,7 +23,7 @@ function createWindow () {
       nodeIntegration: true
     },
     title: "WCS - Client",
-    autoHideMenuBar:true,
+    autoHideMenuBar:false,
     frame: true,
     resizable: false,
     icon : iconUrl
