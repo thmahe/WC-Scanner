@@ -2,14 +2,14 @@
             <div class="card mb-4 box-shadow">
                 <img class="card-img-top" src="data:image/jpg;base64, {{preview_data}}"data-holder-rendered="true">
                 <div class="card-img-overlay" style="display: flex; width: 100%; flex-direction: row; justify-content: flex-end; align-items: flex-start;">
-                    <button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#updateChoixModal">
+                    <button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#{{project_name}}_modal">
                        <span class="fas fa-file-download fa-2x text-white">
                      </span></button>
-<div class="modal fade" id="updateChoixModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+<div class="modal fade" id="{{project_name}}_modal" tabindex="-1" role="dialog" aria-labelledby="{{project_name}}_modalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalLabel">Telechargement du projet</h5>
+        <h5 class="modal-title" id="{{project_name}}_modalLabel">Telechargement du projet</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">×</span>
         </button>
@@ -24,11 +24,14 @@
 </div>
 <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="upload_email_project('{{project_name}}')">EMAIL</button>
 <div class="dropdown-divider"></div>
-  <button type="button" class="btn btn-secondary" onclick="request_export_project('{{project_name}}')">Export...</button>
-<div id="loader"> </div></div>
-          <a id="{{project_name}}_download" style="visibility: hidden" href="http://wcscanner.local/{{project_name}}.zip" >
-    <button type="button">Download</button>
-</a>
+  <button type="button" id="{{project_name}}_export_button" class="btn btn-secondary" onclick="request_export_project('{{project_name}}')">Export...</button>
+<div id="{{project_name}}_loader"> </div>
+    <div class="d-flex justify-content-center">
+<a id="{{project_name}}_download" href="http://wcscanner.local/{{project_name}}.zip" >
+
+</a></div>
+</div>
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>

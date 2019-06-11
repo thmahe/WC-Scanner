@@ -45,11 +45,11 @@ $(document).ready(function() {
     websocket.onopen = function() {
         drawHomeContent();
         request_camera_capture();
-        $('#loading').hide();
     };
 
     websocket.onmessage = function(event) {
         data = JSON.parse(event.data);
+        console.log(data);
         switch (data.type) {
             case 'users':
                 //document.getElementById('users').innerText = data.count.toString() + " user" + (data.count > 1 ? "s" : "");
@@ -68,10 +68,14 @@ $(document).ready(function() {
                 if (document.getElementById('menu_control').classList.contains('active')){
                     drawControlContent();
                 }
+                $('#loading').hide();
                 break;
             case 'download_ready':
                 project_name = data.project_name;
-                $(project_name + '_download').show();
+                $("#" + project_name + '_loader').hide();
+                var button_download = "<button type=\"button\" class=\"btn btn-secondary\">Download</button>"
+                document.getElementById(project_name +'_download').innerHTML = button_download;
+                $("#" + project_name + '_export_button').hide();
                 break;
             default:
                 console.error(
@@ -211,13 +215,14 @@ function request_export_project(project_name){
                    "<span class=\"sr-only\">Loading...</span>\n"+
                 "</div>\n"+
         "</div>\n";
-    document.getElementById('loader').innerHTML = loader;
+    document.getElementById(project_name +'_loader').innerHTML = loader;
 
     websocket.send(JSON.stringify(
-        {action: "request_zip_project", project_name: project_name}
+        {action: "request_zip_data", project_name: project_name}
     ))
 
     currentProjectDownloading = project_name;
+
 }
 
 /**
