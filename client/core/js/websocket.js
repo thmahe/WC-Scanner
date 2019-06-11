@@ -241,7 +241,7 @@ function start_loop_capture(project_name){
 
 function request_remove_project(project_name){
     websocket.send(JSON.stringify(
-        {action: "delete_project", project_name: project_name}
+        {action: "request_remove_project", project_name: project_name}
     ))
 }
 
