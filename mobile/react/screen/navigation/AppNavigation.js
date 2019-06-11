@@ -9,10 +9,12 @@ import projectScreen from "../projectScreen";
 import homeScreen from "../homeScreen";
 import controlScreen from "../controlScreen";
 import Colors from "../../assets/color/Colors";
+import NewProjectScreen from "../NewProjectScreen";
+import ProjectNavigation from "./ProjectNavigation";
 
 const BottomNavigation = createBottomTabNavigator({
     HomeScreen:{screen: homeScreen},
-    ProjectScreen:{screen: projectScreen},
+    ProjectScreen:{screen: ProjectNavigation},
     ControlScreen:{screen: controlScreen},
 },{
     initialRouteName: "HomeScreen",
@@ -31,6 +33,7 @@ const BottomNavigation = createBottomTabNavigator({
 const NavigationStack = createStackNavigator(
     {
         Base: BottomNavigation,
+
 
     },
     {initialRouteName: 'Base', headerMode: 'true', defaultNavigationOptions:{

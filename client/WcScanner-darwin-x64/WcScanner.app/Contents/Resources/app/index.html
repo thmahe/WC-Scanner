@@ -1,0 +1,27 @@
+<html lang="en">
+    <head>
+        <link href="./node_modules/bootstrap-material-design/dist/css/bootstrap-material-design.min.css" rel="stylesheet">
+        <link href="./assets/css/app.css" rel="stylesheet">
+        <link href="./assets/css/all.css" rel="stylesheet">
+        <script>
+            window.$ = window.jQuery = require('jquery');
+            window.Popper = require('popper.js');
+            require('bootstrap-material-design');
+        </script>
+    </head>
+    <body>
+        <!-- Page loader -->
+        <div id="loading">
+            <img alt="Loading..." id="loading-image" src="assets/images/loading.gif"/>
+        </div>
+
+        <!-- Navbar code injected from /core/navbar.html -->
+        <div id="navbar"></div>
+
+
+        <!-- Main content container (projects, control ...) -->
+        <div class="container-fluid" id="content"></div>
+
+        <script src="./core/js/websocket.js" type="text/javascript"></script>
+    </body>
+</html>

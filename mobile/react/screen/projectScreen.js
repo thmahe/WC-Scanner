@@ -6,14 +6,6 @@ import projectJson from "../devEnv/dev_data/projectJson";
 
 export default class homeScreen extends React.Component{
 
-    static navigationOptions = {
-        tabBarIcon: ({ focused}) => {
-            const iconName = 'folder';
-            return <Icon name={iconName} size={focused ? 40 : 30} color={focused ? '#fff' : Colors.grayColor} type='font-awesome'/>;
-        },
-    };
-
-
     constructor(){
         super();
 
@@ -81,9 +73,10 @@ export default class homeScreen extends React.Component{
         return(
             <View style={styleProject.container}>
                 <Header
-                    centerComponent={{text: 'Project', style: {color: '#fff', fontSize: 25, fontWeight: '700'}}}
+                    centerComponent={{text: 'Projet', style: {color: '#fff', fontSize: 25, fontWeight: '700'}}}
                     backgroundColor={Colors.colorPrincipal}
-                    rightComponent={<Icon name={"plus"} size={25} color={'#fff'} type='font-awesome'/>}
+                    rightComponent={<Icon name={"plus"} size={25} color={'#fff'} type='font-awesome'
+                                          onPress={() => this.props.navigation.navigate({routeName: 'NewProject'} )}/>}
                 />
                 <View style={styleProject.body}>
                     <FlatList

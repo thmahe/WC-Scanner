@@ -1,7 +1,8 @@
 import React from 'react';
 import {StyleSheet, View, Image} from "react-native";
-import {Header, Icon} from "react-native-elements";
+import {Button, Header, Icon} from "react-native-elements";
 import Colors from "../assets/color/Colors";
+import websocketUtil from "../utils/websocket";
 export default class controlScreen extends React.Component{
 
     static navigationOptions = {
@@ -13,6 +14,7 @@ export default class controlScreen extends React.Component{
 
     constructor(){
         super();
+        this.ws = new websocketUtil;
     }
 
     render(){
@@ -26,7 +28,17 @@ export default class controlScreen extends React.Component{
                 />
 
                 <View style={styleControl.containerControl}>
-                    <Image source={scannerbg}/>
+                    <Button
+                        title="left"
+                        type="outline"
+                        onPress={() => this.ws.turn_bed_CCW_trigger(60)}
+                    />
+
+                    <Button
+                        title="right"
+                        type="outline"
+                    />
+
                 </View>
             </View>
         );
