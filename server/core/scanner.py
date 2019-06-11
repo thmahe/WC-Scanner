@@ -107,7 +107,7 @@ class Scanner:
         Make a preview capture, image is save in base application folder
         :return: image encoded in base 64 string
         """
-        self.capture(context.__BASE_PATH__, ".preview")
+        self.capture(context.__BASE_PATH__, ".preview", width=800, height=600)
 
         img = Image.open('{}/{}.jpg'.format(context.__BASE_PATH__, ".preview"))
         buffered = BytesIO()
