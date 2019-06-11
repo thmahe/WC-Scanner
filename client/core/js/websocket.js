@@ -198,7 +198,7 @@ function generate_project_html_element(project_data) {
         "                    <div class=\"d-flex justify-content-between align-items-center\">\n" +
         "                        <div class=\"btn-group\">\n" +
         "                            <button type=\"button\" class=\"btn btn-sm btn-outline-secondary\" onclick='start_loop_capture(\""+ project_data["name"] +"\")'>Start loop capture</button>\n" +
-        "                            <button type=\"button\" class=\"btn btn-sm btn-outline-secondary\">Edit</button>\n" +
+        "                            <button type=\"button\" class=\"btn btn-sm btn-outline-secondary\" onclick='request_remove_project(\""+ project_data["name"] +"\")'>Delete</button>\n" +
         "                        </div>\n" +
         "                        <small class=\"text-muted\">"+ project_data['size'] +" Mb</small>\n" +
         "                    </div>\n" +
@@ -237,6 +237,12 @@ function start_loop_capture(project_name){
         action: "loop_capture",
         project_name: project_name
     }))
+}
+
+function request_remove_project(project_name){
+    websocket.send(JSON.stringify(
+        {action: "delete_project", project_name: project_name}
+    ))
 }
 
 /**
