@@ -53,7 +53,6 @@ export default class controlScreen extends React.Component{
                             labelProps={{style: styleControl.input_label}}
                             value={this.state.angle}
                         />
-
                     </View>
                 </View>
                 <Overlay

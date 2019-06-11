@@ -1,5 +1,5 @@
 import Colors from "../assets/color/Colors";
-import {Header, Icon, Input, Slider} from "react-native-elements";
+import {Button, Header, Icon, Input, Slider} from "react-native-elements";
 import React from "react";
 import {StyleSheet, View, Text} from 'react-native';
 
@@ -10,13 +10,44 @@ export default class NewProjectScreen extends React.Component{
         this.state = {
             project_name: "",
             project_description: "",
-            project_ppr: "",
-            project_picture_resolution: 0
+            project_ppr: 1,
+            project_picture_resolution: 1
         };
+    }
+
+    evaluation_size(){
+        let new_placeholder = "Estimated size : ";
+
+        let picture_res = this.state.project_picture_resolution;
+        let total_pictures = 3 * this.state.project_ppr;
+
+        let picture_size;
+        // in KB
+        switch (picture_res + "") {
+            case "1" :
+                picture_size = 62;
+                break;
+            case "2" :
+                picture_size = 413;
+                break;
+            case "3" :
+                picture_size = 1650;
+                break;
+            default :
+                picture_size = 0
+        }
+
+        return new_placeholder + " " + (picture_size * total_pictures) / 1000;
     }
 
     render(){
         const { goBack } = this.props.navigation;
+
+        let textResolutionPicture;
+        if (this.state.project_picture_resolution === 1){textResolutionPicture = <Text> 640x480 </Text>}
+        else if (this.state.project_picture_resolution === 2){textResolutionPicture = <Text> 1640x1232 </Text>}
+        else if (this.state.project_picture_resolution === 3){textResolutionPicture = <Text> 3280x2464 </Text>}
+
         return(
             <View style={styleControl.container}>
                 <Header
@@ -46,15 +77,46 @@ export default class NewProjectScreen extends React.Component{
                         value={this.state.project_description}
                     />
 
-                    <Text style={styleControl.input_label_text}> Picture resolution </Text>
-                    <Slider
-                        value={this.state.value}
-                        maximumValue={2}
-                        minimumValue={0}
-                        step={1}
-                        style={{width: '90%'}}
-                        thumbTintColor={Colors.colorPrincipal}
-                        onValueChange={value => this.setState({ project_picture_resolution: value })}
+                    <View style={{width: "90%",  margin: 10, alignItems: 'center'}}>
+                        <Text style={styleControl.input_label_text}> Picture resolution </Text>
+                        <Slider
+                            value={this.state.project_picture_resolution}
+                            maximumValue={3}
+                            minimumValue={1}
+                            step={1}
+                            style={{width: '90%'}}
+                            thumbTintColor={Colors.colorPrincipal}
+                            onValueChange={value => this.setState({ project_picture_resolution: value })}
+                        />
+                        <Text style={styleControl.input_label_text}> {textResolutionPicture} </Text>
+                    </View>
+
+                    <View style={{width: "90%",  margin: 10, alignItems: 'center'}}>
+                        <Text style={styleControl.input_label_text}> Picture per resolution </Text>
+                        <Slider
+                            value={this.state.project_ppr}
+                            maximumValue={36}
+                            minimumValue={1}
+                            step={1}
+                            style={{width: '90%'}}
+                            thumbTintColor={Colors.colorPrincipal}
+                            onValueChange={value => this.setState({ project_ppr: value })}
+                        />
+                        <Text style={styleControl.input_label_text}> {this.state.project_ppr} </Text>
+                    </View>
+
+                    <Text> {this.evaluation_size()} </Text>
+
+                    <Button
+                        containerStyle={{width: '80%', backgroundColor: Colors.colorPrincipal}}
+                        icon={
+                            <Icon
+                                name="arrow-right"
+                                size={15}
+                                color="white"
+                            />
+                        }
+                        title="Crée un projet"
                     />
                 </View>
             </View>
@@ -77,12 +139,14 @@ export const styleControl = StyleSheet.create({
         fontSize: 20,
         fontWeight: '700',
         fontStyle: 'italic',
+        color:Colors.grayTextColor
     },
     input_label_text:{
         fontSize: 20,
         fontWeight: '700',
         fontStyle: 'italic',
         alignSelf: 'flex-start',
+        color: Colors.grayTextColor
     },
     input_container:{
         borderRadius: 15,
