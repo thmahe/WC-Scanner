@@ -9,6 +9,8 @@ import picamera
 import subprocess
 import json
 import os
+import base64
+from io import BytesIO
 
 
 class Scanner:
@@ -99,6 +101,18 @@ class Scanner:
             image_count += 1
 
         pm.zip_project(project_name)
+
+    def get_preview_capture(self):
+        """
+        Make a preview capture, image is save in base application folder
+        :return: image encoded in base 64 string
+        """
+        self.capture(context.__BASE_PATH__, ".preview")
+
+        img = Image.open('{}/{}.jpg'.format(context.__BASE_PATH__, ".preview"))
+        buffered = BytesIO()
+        img.save(buffered, format="JPEG")
+        return "data:image/jpg;base64, " + base64.b64encode(buffered.getvalue()).decode('ascii')
 
 if __name__ == "__main__":
     scanner = Scanner()

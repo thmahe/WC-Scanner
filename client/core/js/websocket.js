@@ -1,7 +1,7 @@
 var users, websocket;
 var projects_data;
 var camera_preview = "data:image/jpg;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
-var remote_server_address = "ws://192.168.99.103:6789";
+var remote_server_address = "ws://wcscanner.local:6789";
 
 var retry = 0;
 

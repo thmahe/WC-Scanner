@@ -86,6 +86,11 @@ async def mainLoop(websocket, path):
                 upload.send_email_zip_project(project_name, email_to)
                 await send_project_data_users()
 
+            elif data['action'] == 'camera_preview':
+                data = scanner.get_preview_capture()
+                msg = {'type': 'camera_preview', 'data': data}
+                await websocket.send(json.dumps(msg))
+
             else:
                 logger.error("unsupported event: {}", data)
 
