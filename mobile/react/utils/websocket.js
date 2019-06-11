@@ -20,6 +20,13 @@ export default class websocketUtil {
         }))
     }
 
+    turn_bed_CW_trigger(angle) {
+        websocket.send(JSON.stringify({
+            action: "turn_bed_CW",
+            plateau_degree: angle
+        }))
+    }
+
     updateConnectionStatus() {
         if (websocket.readyState === websocket.CLOSED) {
 
