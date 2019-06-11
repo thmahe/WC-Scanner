@@ -11,6 +11,9 @@ running_on_raspberry = True
 
 __BASE_PATH__ = os.environ['HOME']
 __PROJECTS_PATH__ = __BASE_PATH__ + "/.wcscanner"
+
+__EXPORT_FOLDER__ = "/var/www/html/"
+
 try:
     import RPi.GPIO
     import picamera

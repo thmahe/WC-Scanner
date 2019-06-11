@@ -154,7 +154,7 @@ def __remove_base_directory__():
 def zip_project(project_name):
     wcscanner_path = context.__BASE_PATH__ + '/.wcscanner'
     if os.listdir(wcscanner_path).__contains__(project_name):
-        p1 = subprocess.Popen('zip -r {}/{}/{}.zip {}/{}'.format(context.__PROJECTS_PATH__, project_name, project_name, context.__PROJECTS_PATH__, project_name), shell=True)
+        p1 = subprocess.Popen('cd {} && zip {}/{}.zip ./{}/*'.format( context.__PROJECTS_PATH__, context.__EXPORT_FOLDER__, project_name, project_name), shell=True)
         p1.wait()
     else:
         print('no folder {} found'.format(project_name))
