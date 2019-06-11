@@ -100,8 +100,6 @@ class Scanner:
             self.turn_bed(bed_step)
             image_count += 1
 
-        pm.zip_project(project_name)
-
     def get_preview_capture(self):
         """
         Make a preview capture, image is save in base application folder
