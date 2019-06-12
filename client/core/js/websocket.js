@@ -109,11 +109,14 @@ function drawControlContent() {
     text = text.replace("{{PREVIEW_DATA}}", camera_preview);
     text = text.replace("{{PREVIEW_DATA}}", camera_preview);
 
-    if ($('.modal.in').length) {
-        $('body').removeClass('modal-open');
+    var logModal = document.getElementById("modal_big_preview");
+    
+    if (logModal == null || !logModal.classList.contains('show')) {
         document.getElementById('content').innerHTML = text;
-    }else {
+    }else{
+        $('#modal_big_preview').modal('hide');
         document.getElementById('content').innerHTML = text;
+        $('#modal_big_preview').modal('show');
     }
 
 
@@ -141,6 +144,7 @@ function drawProjectContent() {
         content = content.replace("{{PROJECT_PLACEHOLDER}}", projects_html);
         document.getElementById('content').innerHTML = content;
     }
+
     $("#search_input").on("keyup", function() {
         var value = $(this).val().toLowerCase();
         $("#projects .col-md-4").filter(function() {
