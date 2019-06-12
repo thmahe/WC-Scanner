@@ -99,6 +99,7 @@ def update_project_data(project_name):
     if image_count > 0:
 
         img = Image.open('{}/{}.jpg'.format(project_path, image_count-1))
+        img = img.resize((640,480))
         buffered = BytesIO()
         img.save(buffered, format="JPEG")
         img_str = base64.b64encode(buffered.getvalue()).decode('ascii')
