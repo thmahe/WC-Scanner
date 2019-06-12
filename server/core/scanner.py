@@ -49,7 +49,7 @@ class Scanner:
             logger.info("Rotating bed of %.2f° counter clockwise", degrees)
         self.bed_motor.turn(degrees)
 
-    def capture(self, path, name, width=3280, height=2464):
+    def capture(self, path, name, width=3280, height=2464, extra_args=''):
         """
         Can capture an image from the raspberry pi camera
         :param path: path where save the image
@@ -59,7 +59,7 @@ class Scanner:
         :return: None
         """
         if context.running_on_raspberry:
-            p = subprocess.Popen('raspistill -w {} -h {} -o {}/{}.jpg'.format(width, height, path, name), shell=True)
+            p = subprocess.Popen('raspistill -w {} -h {} {} -o {}/{}.jpg'.format(width, height,extra_args, path, name), shell=True)
             p.wait()
 
         else:
@@ -105,7 +105,7 @@ class Scanner:
         Make a preview capture, image is save in base application folder
         :return: image encoded in base 64 string
         """
-        self.capture(context.__BASE_PATH__, ".preview", width=800, height=600)
+        self.capture(context.__BASE_PATH__, ".preview", width=640, height=480, extra_args='-q 60')
 
         img = Image.open('{}/{}.jpg'.format(context.__BASE_PATH__, ".preview"))
         buffered = BytesIO()

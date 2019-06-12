@@ -60,7 +60,7 @@ async def mainLoop(websocket, path):
     """
     await register(websocket)
     try:
-        await send_project_data_users()
+        #await send_project_data_users()
 
         async for message in websocket:
             data = json.loads(message)
