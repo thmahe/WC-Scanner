@@ -6,21 +6,21 @@ html {
     width: 0;
 }
 ::-webkit-scrollbar-thumb {
-    background: #FF0000;
+    background: #ffffff;
 }
 
 .scanner_background {
     background-size: cover;
     background: url('../images/scanner_bg.png') no-repeat center center;
     height: 720px;
-    margin-top: -102px;"
+    margin-top: -109px;
 }
 
 .scanner_background_2 {
     background-size: cover;
     background: url('../images/scanner_bg_2.png') no-repeat center center;
     height: 720px;
-    margin-top: -150px;"
+    margin-top: -150px;
 }
 
 #loading {

@@ -19,9 +19,8 @@ function connectWebsocket() {
 
     websocket = new WebSocket(remote_server_address);
 
-
     websocket.onmessage = function(event) {
-        data = JSON.parse(event.data);
+        let data = JSON.parse(event.data);
         console.log(data);
         switch (data.type) {
             case 'users':

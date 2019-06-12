@@ -147,7 +147,10 @@ def activeUSB(usbNumber):
 if __name__ == '__main__':
     pm.create_base_projects_folder()
     pm.get_projects_data()
+
     asyncio.get_event_loop().run_until_complete(
         websockets.serve(mainLoop, '0.0.0.0', 6789))
+    scanner.on_ready()
     asyncio.get_event_loop().run_forever()
+
 
