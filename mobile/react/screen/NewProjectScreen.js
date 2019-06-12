@@ -117,18 +117,14 @@ export default class NewProjectScreen extends React.Component{
                         <Text style={styleControl.input_label_text}> {this.state.project_ppr} </Text>
                     </View>
 
-                    <Text> {this.evaluation_size()} </Text>
+                    <Text style={{
+                        fontSize: 20,
+                        fontWeight: '600',
+                        color:Colors.grayTextColor}}> {this.evaluation_size()} </Text>
 
                     <Button
-                        containerStyle={{width: '80%', color: Colors.colorPrincipal}}
-                        icon={
-                            <Icon
-                                name="arrow-right"
-                                size={15}
-                                color="white"
-                                type="material-community"
-                            />
-                        }
+                        containerStyle={{width: '80%', marginTop: 50}}
+                        buttonStyle={{backgroundColor: Colors.colorPrincipal}}
                         onPress={() => ws.create_project(this.jsonCreateProject()) }
                         title="Crée un projet"
                     />

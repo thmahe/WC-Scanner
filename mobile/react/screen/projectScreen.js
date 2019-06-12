@@ -42,7 +42,8 @@ class projectScreen extends React.Component{
                             <Text style={{fontSize: 18, color: '#fff'}}> {project.description} </Text>
                         </View>
                         <View>
-                            <Icon name={'ios-arrow-forward'} size={30} color={Colors.colorPrincipal} type='ionicon'/>
+                            <Icon name={'ios-arrow-forward'} size={30} color={Colors.colorPrincipal} type='ionicon'
+                            onPress={() => this.props.navigation.navigate('ProjectDetail', {data: project} )}/>
                         </View>
                     </View>
                 </ImageBackground>

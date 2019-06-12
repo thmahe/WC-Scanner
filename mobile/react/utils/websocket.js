@@ -4,7 +4,7 @@ let instance = null;
 export default class websocketUtil {
 
     constructor(props){
-        this.remote_server_address = "ws://192.168.99.103:6789";
+        this.remote_server_address = "ws://wcscanner.local:6789";
         this.props = props;
 
         websocket = new WebSocket(this.remote_server_address);
@@ -63,7 +63,20 @@ export default class websocketUtil {
         }))
     }
 
+    request_remove_project(project_name){
+        websocket.send(JSON.stringify(
+            {action: "request_remove_project", project_name: project_name}
+        ))
+    }
 
+    start_loop_capture(project_name){
+        websocket.send(JSON.stringify({
+            action: "loop_capture",
+            project_name: project_name
+        }))
+    }
+
+    //REDUX
     _stateConnectionFalse() {
         const action = { type: "STATE_CHANGE", value: false };
         this.props.dispatch(action)

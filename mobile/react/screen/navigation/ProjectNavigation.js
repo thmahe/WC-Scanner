@@ -4,11 +4,13 @@ import NewProjectScreen from "../NewProjectScreen";
 import {Icon} from "react-native-elements";
 import Colors from "../../assets/color/Colors";
 import React from "react";
+import projectDetail from "../projectDetail";
 
 const NavigationStack = createStackNavigator(
     {
         ProjectScreen: projectScreen,
         NewProject: NewProjectScreen,
+        ProjectDetail: projectDetail,
     },
     {initialRouteName: 'ProjectScreen', headerMode: 'none'}
 );
