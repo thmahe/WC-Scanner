@@ -1,7 +1,8 @@
 import Colors from "../assets/color/Colors";
 import {Button, Header, Icon, Input, Slider} from "react-native-elements";
 import React from "react";
-import {StyleSheet, View, Text} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
+import websocketUtil from "../utils/websocket";
 
 export default class NewProjectScreen extends React.Component{
 
@@ -40,8 +41,19 @@ export default class NewProjectScreen extends React.Component{
         return new_placeholder + " " + (picture_size * total_pictures) / 1000;
     }
 
+    jsonCreateProject(){
+        return {
+            project_name: this.state.project_name,
+            project_description: this.state.project_description,
+            project_ppr: this.state.project_ppr,
+            project_picture_resolution: this.state.project_picture_resolution
+        }
+    }
+
     render(){
         const { goBack } = this.props.navigation;
+        const {state} = this.props.navigation;
+        const ws = state.params.ws;
 
         let textResolutionPicture;
         if (this.state.project_picture_resolution === 1){textResolutionPicture = <Text> 640x480 </Text>}
@@ -105,17 +117,15 @@ export default class NewProjectScreen extends React.Component{
                         <Text style={styleControl.input_label_text}> {this.state.project_ppr} </Text>
                     </View>
 
-                    <Text> {this.evaluation_size()} </Text>
+                    <Text style={{
+                        fontSize: 20,
+                        fontWeight: '600',
+                        color:Colors.grayTextColor}}> {this.evaluation_size()} </Text>
 
                     <Button
-                        containerStyle={{width: '80%', backgroundColor: Colors.colorPrincipal}}
-                        icon={
-                            <Icon
-                                name="arrow-right"
-                                size={15}
-                                color="white"
-                            />
-                        }
+                        containerStyle={{width: '80%', marginTop: 50}}
+                        buttonStyle={{backgroundColor: Colors.colorPrincipal}}
+                        onPress={() => ws.create_project(this.jsonCreateProject()) }
                         title="Crée un projet"
                     />
                 </View>

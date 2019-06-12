@@ -3,6 +3,8 @@ import {StyleSheet, View, Image, Text} from "react-native";
 import {Button, Header, Icon, Input, Overlay} from "react-native-elements";
 import Colors from "../assets/color/Colors";
 import websocketUtil from "../utils/websocket";
+
+
 export default class controlScreen extends React.Component{
 
     static navigationOptions = {
@@ -12,13 +14,13 @@ export default class controlScreen extends React.Component{
         },
     };
 
-    constructor(){
-        super();
-        this.ws = new websocketUtil;
+    constructor(props){
+        super(props);
         this.state = {
             angle: "0",
             modalView: false
-        }
+        };
+        this.ws = this.props.screenProps.ws;
     }
 
     render(){

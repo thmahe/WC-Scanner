@@ -55,7 +55,7 @@
                 <button class="btn btn-outline-primary" onclick="request_camera_capture()">Capture <i class="fas fa-camera mr-1"></i></button>
 
                 <img class="card-img-top" src="{{PREVIEW_DATA}}" data-holder-rendered="true" >
-                <button type="button" class="btn btn-primary btn-outline-primary btn-lg btn-block" data-toggle="modal" data-target="#exampleModalCenter">
+                <button type="button" href="#myModal" class="btn btn-primary btn-outline-primary btn-lg btn-block" data-toggle="modal" data-target="#modal_big_preview">
                     Expand view
                 </button>
             </div>
@@ -64,7 +64,7 @@
         <!-- Card -->
 
         <!-- Modal -->
-        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal fade" id="modal_big_preview" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">

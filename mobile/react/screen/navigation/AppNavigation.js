@@ -1,4 +1,3 @@
-
 import {
     createAppContainer,
     createBottomTabNavigator,
@@ -33,8 +32,6 @@ const BottomNavigation = createBottomTabNavigator({
 const NavigationStack = createStackNavigator(
     {
         Base: BottomNavigation,
-
-
     },
     {initialRouteName: 'Base', headerMode: 'true', defaultNavigationOptions:{
             gesturesEnabled: true

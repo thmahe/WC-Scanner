@@ -1,11 +1,18 @@
 import React from "react";
 import {StyleSheet, View, Text, Image, FlatList, ImageBackground} from "react-native";
-import {Divider, Header, Icon} from "react-native-elements";
+import {Button, Divider, Header, Icon} from "react-native-elements";
 import Colors from "../assets/color/Colors";
+
+import { connect } from 'react-redux'
 import websocketUtil from "../utils/websocket";
 
+const mapStateToProps = (state) => {
+    return {
+        stateConnection : state.stateCo,
+    }
+};
 
-export default class homeScreen extends React.Component{
+class homeScreen extends React.Component{
     static navigationOptions = {
         tabBarIcon: ({ focused}) => {
             const iconName = 'home';
@@ -15,12 +22,9 @@ export default class homeScreen extends React.Component{
 
     constructor(props){
         super(props);
-        this.ws = new websocketUtil();
+        this.ws = this.props.screenProps.ws;
     }
 
-    componentDidMount(): void {
-        this.ws.get_connection_status();
-    }
 
     render(){
         const icon256 = require('../assets/icons/png/256x256.png');
@@ -29,7 +33,8 @@ export default class homeScreen extends React.Component{
                 <Header
                     centerComponent={{text: 'WC Scanner', style: {color: '#fff', fontSize: 25, fontWeight: '700'}}}
                     backgroundColor={Colors.colorPrincipal}
-                    rightComponent={<Icon name={"wifi"} size={25} color={'#fff'} type='font-awesome'/>}
+                    rightComponent={<Icon name={"wifi"} size={25} color={this.props.stateConnection ? '#fff' : Colors.redColor} type='font-awesome'
+                                          onPress={() => this.ws.get_connection_status}/>}
                 />
                 <View style={styleHome.body}>
                     <Text style={styleHome.body_text_h1}>Bienvenue sur WC-Scanner</Text>
@@ -54,3 +59,5 @@ export const styleHome = StyleSheet.create({
         fontSize: 25
     },
 });
+
+export default connect(mapStateToProps)(homeScreen)
