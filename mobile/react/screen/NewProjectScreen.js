@@ -11,8 +11,8 @@ export default class NewProjectScreen extends React.Component{
         this.state = {
             project_name: "",
             project_description: "",
-            project_ppr: 1,
-            project_picture_resolution: 1
+            project_ppr: "1",
+            project_picture_resolution: "1"
         };
     }
 
@@ -42,13 +42,19 @@ export default class NewProjectScreen extends React.Component{
     }
 
     jsonCreateProject(){
+
+        let project_picture_res_TO_string = "";
+        if (this.state.project_picture_resolution === "1"){project_picture_res_TO_string = '640x480'}
+        else if (this.state.project_picture_resolution === "2"){project_picture_res_TO_string = '1640x1232' }
+        else if (this.state.project_picture_resolution === "3"){project_picture_res_TO_string = '3280x2464' }
+
         return {
             project_name: this.state.project_name,
             project_description: this.state.project_description,
             project_ppr: this.state.project_ppr,
-            project_picture_resolution: this.state.project_picture_resolution
+            project_picture_resolution: project_picture_res_TO_string
         }
-    }
+    };
 
     render(){
         const { goBack } = this.props.navigation;
@@ -56,9 +62,9 @@ export default class NewProjectScreen extends React.Component{
         const ws = state.params.ws;
 
         let textResolutionPicture;
-        if (this.state.project_picture_resolution === 1){textResolutionPicture = <Text> 640x480 </Text>}
-        else if (this.state.project_picture_resolution === 2){textResolutionPicture = <Text> 1640x1232 </Text>}
-        else if (this.state.project_picture_resolution === 3){textResolutionPicture = <Text> 3280x2464 </Text>}
+        if (this.state.project_picture_resolution === "1"){textResolutionPicture = <Text> 640x480 </Text>}
+        else if (this.state.project_picture_resolution === "2"){textResolutionPicture = <Text> 1640x1232 </Text>}
+        else if (this.state.project_picture_resolution === "3"){textResolutionPicture = <Text> 3280x2464 </Text>}
 
         return(
             <View style={styleControl.container}>
@@ -92,13 +98,13 @@ export default class NewProjectScreen extends React.Component{
                     <View style={{width: "90%",  margin: 10, alignItems: 'center'}}>
                         <Text style={styleControl.input_label_text}> Picture resolution </Text>
                         <Slider
-                            value={this.state.project_picture_resolution}
+                            value={parseInt(this.state.project_picture_resolution)}
                             maximumValue={3}
                             minimumValue={1}
                             step={1}
                             style={{width: '90%'}}
                             thumbTintColor={Colors.colorPrincipal}
-                            onValueChange={value => this.setState({ project_picture_resolution: value })}
+                            onValueChange={value => this.setState({ project_picture_resolution: value.toString() })}
                         />
                         <Text style={styleControl.input_label_text}> {textResolutionPicture} </Text>
                     </View>
@@ -106,13 +112,13 @@ export default class NewProjectScreen extends React.Component{
                     <View style={{width: "90%",  margin: 10, alignItems: 'center'}}>
                         <Text style={styleControl.input_label_text}> Picture per resolution </Text>
                         <Slider
-                            value={this.state.project_ppr}
+                            value={parseInt(this.state.project_ppr)}
                             maximumValue={36}
                             minimumValue={1}
                             step={1}
                             style={{width: '90%'}}
                             thumbTintColor={Colors.colorPrincipal}
-                            onValueChange={value => this.setState({ project_ppr: value })}
+                            onValueChange={value => this.setState({ project_ppr: value.toString() })}
                         />
                         <Text style={styleControl.input_label_text}> {this.state.project_ppr} </Text>
                     </View>
@@ -125,7 +131,7 @@ export default class NewProjectScreen extends React.Component{
                     <Button
                         containerStyle={{width: '80%', marginTop: 50}}
                         buttonStyle={{backgroundColor: Colors.colorPrincipal}}
-                        onPress={() => ws.create_project(this.jsonCreateProject()) }
+                        onPress={() => ws.create_project(this.jsonCreateProject())}
                         title="Crée un projet"
                     />
                 </View>

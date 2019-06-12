@@ -4,14 +4,17 @@ let instance = null;
 export default class websocketUtil {
 
     constructor(props){
-        this.remote_server_address = "ws://wcscanner.local:6789";
+        this.remote_server_address = "ws://192.168.99.103:6789";
         this.props = props;
+        this.connectionStatue();
+    }
 
+    connectionStatue() {
+        let that = this;
         websocket = new WebSocket(this.remote_server_address);
-        let that= this;
+
         websocket.onmessage = function(event) {
             let data = JSON.parse(event.data);
-            console.log(data);
             switch (data.type) {
                 case 'projects_data':
                     that._stateListProject(data.data);
@@ -21,14 +24,15 @@ export default class websocketUtil {
                         "unsupported event", data);
             }
         };
-    }
 
-    get_connection_status() {
-        if (websocket.readyState === websocket.CLOSED) {
-            this.updateConnectionStatus();
-        }else{
-            this.updateConnectionStatus();
-        }
+        websocket.onopen = () => {
+            that._stateConnectionTrue();
+        };
+
+        websocket.onclose = () => {
+            that._stateConnectionFalse();
+        };
+
     }
 
     turn_bed_CCW_trigger(angle) {
@@ -43,14 +47,6 @@ export default class websocketUtil {
             action: "turn_bed_CW",
             plateau_degree: angle
         }))
-    }
-
-    updateConnectionStatus() {
-        if (websocket.readyState === websocket.CLOSED) {
-            this._stateConnectionFalse()
-        } else {
-            this._stateConnectionTrue()
-        }
     }
 
     create_project(project) {
@@ -78,17 +74,17 @@ export default class websocketUtil {
 
     //REDUX
     _stateConnectionFalse() {
-        const action = { type: "STATE_CHANGE", value: false };
+        let action = { type: "STATE_CHANGE", value: false };
         this.props.dispatch(action)
     }
 
     _stateConnectionTrue() {
-        const action = { type: "STATE_CHANGE", value: true };
+        let action = { type: "STATE_CHANGE", value: true };
         this.props.dispatch(action)
     }
 
     _stateListProject(data){
-        const action = { type: "STATE_RELOAD_LISTPROJECT", value: data};
+        let action = { type: "STATE_RELOAD_LISTPROJECT", value: data};
         this.props.dispatch(action);
     }
 

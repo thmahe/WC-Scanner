@@ -59,6 +59,7 @@ class projectScreen extends React.Component{
                     lightTheme
                     round
                     onChangeText={text => this.searchFilterFunction(text)}
+
                     autoCorrect={false}
                     containerStyle={{backgroundColor: '#fff'}}
                     value={this.state.valueSearch}

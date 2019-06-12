@@ -34,7 +34,7 @@ class homeScreen extends React.Component{
                     centerComponent={{text: 'WC Scanner', style: {color: '#fff', fontSize: 25, fontWeight: '700'}}}
                     backgroundColor={Colors.colorPrincipal}
                     rightComponent={<Icon name={"wifi"} size={25} color={this.props.stateConnection ? '#fff' : Colors.redColor} type='font-awesome'
-                                          onPress={() => this.ws.get_connection_status}/>}
+                                          onPress={() => this.ws.connectionStatue()}/>}
                 />
                 <View style={styleHome.body}>
                     <Text style={styleHome.body_text_h1}>Bienvenue sur WC-Scanner</Text>

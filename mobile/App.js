@@ -17,7 +17,7 @@ type Props = {};
 export default class App extends Component<Props> {
   render() {
       let ws = new websocketUtil(Store);
-      ws.get_connection_status();
+      ws.connectionStatue();
     return (
         <Provider store={Store}>
           <AppNavigation screenProps={{ws: ws}}/>
