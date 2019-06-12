@@ -19,6 +19,9 @@
       "icon": "./assets/images/icons/png/256x256.png",
       "category": "Utility"
     },
+    "win": {
+      "icon": "./assets/images/icons/256x256.ico"
+    },
     "files": [
       "core/**/*",
       "assets/**/*",

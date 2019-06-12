@@ -1,11 +1,60 @@
-<div class="container">
+<div class="wrapper"; style="display: flex; flex-flow: row wrap; align-items: center; text-align: center;"; >
 
 
-    <div style="display: flex; justify-items: center; align-items: center; flex-direction: column;">
-        <h1> Bienvenu sur WC Scanner</h1>
+    <div class="main"; style="order: 2; flex: 2 0px;">
+        <h1> Welcome on WC-Scanner</h1>
         <img src="assets/images/icons/png/512x512.png"/>
+
         <div>
             <img src="assets/images/google-play-badge.png" width="140" height="65"/>
+        </div>
+    </div>
+
+    <aside class="aside aside-1" style=" order: 1; flex: 1 auto; flex-direction: column; line-height: 6em">
+        <div>
+            <a href="/assets/WC-Scanner.pdf" download>
+                <i class="far fa-file-pdf" style="font-size: 2em"></i> Assembly
+            </a>
+        </div>
+
+        <div>
+            <a href="/assets/WC-Scanner.pdf" download>
+                <i class="fas fa-book" style="font-size: 2em"></i> How to
+            </a>
+        </div>
+    </aside>
+
+    <aside class="aside aside-2" style="order: 3; flex: 1 auto; flex-direction: column; line-height: 6em">
+
+        <div data-toggle="modal" data-target="#myModal" style="color: lightseagreen">
+            <i class="fas fa-question-circle fa-1x" style="font-size: 1.8em"></i> About us
+        </div>
+
+        <div>
+            <a href="https://github.com/Mahe-Thomas/WC-Scanner">
+                <i class="fab fa-github" style="font-size: 2em"></i> GitHub
+            </a>
+        </div>
+
+    </aside>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" style="float: right">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Some text in the modal.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
         </div>
     </div>
 
