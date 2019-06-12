@@ -3,18 +3,25 @@ import {StyleSheet, View, FlatList, Text, ImageBackground} from "react-native";
 import {Divider, Header, Icon, SearchBar} from "react-native-elements";
 import Colors from "../assets/color/Colors";
 import projectJson from "../devEnv/dev_data/projectJson";
+import {connect} from "react-redux";
+import websocketUtil from "../utils/websocket";
 
-export default class homeScreen extends React.Component{
+const mapStateToProps = (state) => {
+    return {
+        stateConnection : state.listProject,
+    }
+};
 
-    constructor(){
-        super();
+class projectScreen extends React.Component{
 
+    constructor(props){
+        super(props);
         this.state = {
-            projectList: projectJson.projectData,
+            projectList: this.props.stateConnection,
             valueSearch: ''
         };
-
-        this.arrayholder = projectJson.projectData;
+        this.ws = new websocketUtil(props);
+        this.arrayholder = this.props.stateConnection
     }
 
     renderItemProjectList(project){
@@ -76,11 +83,11 @@ export default class homeScreen extends React.Component{
                     centerComponent={{text: 'Projet', style: {color: '#fff', fontSize: 25, fontWeight: '700'}}}
                     backgroundColor={Colors.colorPrincipal}
                     rightComponent={<Icon name={"plus"} size={25} color={'#fff'} type='font-awesome'
-                                          onPress={() => this.props.navigation.navigate({routeName: 'NewProject'} )}/>}
+                                          onPress={() => this.props.navigation.navigate('NewProject', {ws: this.ws} )}/>}
                 />
                 <View style={styleProject.body}>
                     <FlatList
-                        data={this.state.projectList}
+                        data={this.props.stateConnection}
                         renderItem={({item}) => this.renderItemProjectList(item)}
                         ItemSeparatorComponent={() => <Divider style={styleProject.projectSeparatorItem} />}
                         ListHeaderComponent={() => this.renderHeaderProjectList()}
@@ -127,3 +134,5 @@ export const styleProject = StyleSheet.create({
         borderRadius: 15,
     }
 });
+
+export default connect(mapStateToProps)(projectScreen)
