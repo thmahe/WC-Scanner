@@ -119,16 +119,24 @@ function drawControlContent() {
         $('#modal_big_preview').modal('show');
     }
 
-
-
-
     document.getElementById('menu_home').classList.remove("active");
     document.getElementById('menu_project').classList.remove("active");
     document.getElementById('menu_control').classList.add("active");
 }
 
 function drawProjectContent() {
-    if (!$('.modal.in').length) {
+    var bool = 0;
+    var logModalProject;
+    projects_data.forEach(function(element){
+        logModalProject = document.getElementById(element["name"]+"_modal");
+        if(logModalProject != null) {
+            if (logModalProject.classList.contains('show')) {
+                bool += 1;
+            }
+        }
+    })
+    var logModal = document.getElementById("ModalProject");
+    if ((bool == 0) && (logModal == null || !logModal.classList.contains('show'))) {
         document.getElementById('menu_home').classList.remove("active");
         document.getElementById('menu_project').classList.add("active");
         document.getElementById('menu_control').classList.remove("active");
@@ -144,6 +152,8 @@ function drawProjectContent() {
         content = content.replace("{{PROJECT_PLACEHOLDER}}", projects_html);
         document.getElementById('content').innerHTML = content;
     }
+
+
 
     $("#search_input").on("keyup", function() {
         var value = $(this).val().toLowerCase();
