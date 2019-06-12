@@ -16,9 +16,11 @@ import websocketUtil from "./react/utils/websocket";
 type Props = {};
 export default class App extends Component<Props> {
   render() {
+      let ws = new websocketUtil(Store);
+      ws.get_connection_status();
     return (
         <Provider store={Store}>
-          <AppNavigation/>
+          <AppNavigation screenProps={{ws: ws}}/>
         </Provider>
     );
   }

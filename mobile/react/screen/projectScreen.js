@@ -20,8 +20,8 @@ class projectScreen extends React.Component{
             projectList: this.props.stateConnection,
             valueSearch: ''
         };
-        this.ws = new websocketUtil(props);
-        this.arrayholder = this.props.stateConnection
+        this.arrayholder = this.props.stateConnection;
+        this.ws = this.props.screenProps.ws;
     }
 
     renderItemProjectList(project){

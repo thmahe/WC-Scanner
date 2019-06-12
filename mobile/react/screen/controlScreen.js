@@ -19,8 +19,8 @@ export default class controlScreen extends React.Component{
         this.state = {
             angle: "0",
             modalView: false
-        }
-        this.ws = new websocketUtil(props);
+        };
+        this.ws = this.props.screenProps.ws;
     }
 
     render(){

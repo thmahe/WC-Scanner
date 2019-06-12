@@ -1,6 +1,5 @@
-
-
 let websocket;
+let instance = null;
 
 export default class websocketUtil {
 

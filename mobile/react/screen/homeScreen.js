@@ -22,13 +22,9 @@ class homeScreen extends React.Component{
 
     constructor(props){
         super(props);
-        this.ws = new websocketUtil(props)
+        this.ws = this.props.screenProps.ws;
     }
 
-
-    componentDidMount(): void {
-        this.ws.get_connection_status();
-    }
 
     render(){
         const icon256 = require('../assets/icons/png/256x256.png');

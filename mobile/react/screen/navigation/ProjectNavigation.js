@@ -27,7 +27,7 @@ export default class ProjectNavigation extends React.Component{
     };
     render() {
         return(
-            <AppContainer />
+            <AppContainer screenProps={{ws: this.props.screenProps.ws}}/>
         )
     }
 
