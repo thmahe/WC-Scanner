@@ -50,14 +50,9 @@ def create_project(project_name, description="", picture_per_rotation=15, pictur
     os.mkdir(context.__PROJECTS_PATH__ + '/{}'.format(project_data['name']))
     log.info("Project %s created.", project_data['name'])
 
-    img = Image.new('RGB', (350, 225), color=(73, 109, 137))
-
-    d = ImageDraw.Draw(img)
-    d.text((100, 100), "No preview", fill=(255, 255, 0))
-
-    buffered = BytesIO()
-    img.save(buffered, format="JPEG")
-    img_str = base64.b64encode(buffered.getvalue()).decode('ascii')
+    f = open("./util/no_preview_b64", 'r')
+    img_str = f.read()
+    f.close()
 
     project_data['preview_data'] = img_str
     project_data['description'] = description
