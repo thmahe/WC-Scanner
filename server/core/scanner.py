@@ -32,8 +32,8 @@ class Scanner:
         Method use to notify users that the scanner is ready
         :return: None
         """
-        self.turn_bed(360)
-        self.turn_bed(-360)
+        self.turn_bed(180)
+        self.turn_bed(-180)
 
     def turn_bed(self, degrees):
         """

@@ -2,6 +2,9 @@
 # Faking RPi Board /!\
 from util import context_finder
 
+import scipy.integrate as integrate
+from math import sin,pi
+import numpy as np
 import RPi.GPIO as GPIO
 from time import sleep
 
@@ -49,17 +52,34 @@ class StepperMotor:
         else:
             GPIO.output(self.DIR_PIN, self.CCW)
 
-        delay = 0.010 / 64
         step_count = int((self.SPR / 360) * abs(degree))
+
+        range_val = list(map(lambda x: round(x, 5), np.linspace(0.1, pi-0.1, num=40)))
+
+        tab_res = [round(step_count * abs(integrate.quad(lambda x: sin(x), 0, range_val[0])[0] / 2))]
+
+        for i in range(0, len(range_val) - 1):
+            tab_res.append(
+                round(step_count * abs(integrate.quad(lambda x: sin(x), range_val[i], range_val[i + 1])[0] / 2)))
+
+        missing_steps = step_count - sum(tab_res)
+        tab_res[19] += int(missing_steps)
+
+        speed_per_range = list(map(lambda x : 2*sin(x), range_val))
+
+        base_delay = 0.01 / 64
         GPIO.output(self.ENABLE_PIN, GPIO.LOW)
-        sleep(delay)
-        for x in range(step_count):
-            GPIO.output(self.STEP_PIN, GPIO.HIGH)
-            sleep(delay)
-            GPIO.output(self.STEP_PIN, GPIO.LOW)
-            sleep(delay)
+        sleep(base_delay / 10)
+        for i in range(len(speed_per_range)):
+            delay = base_delay / speed_per_range[i]
+
+            for x in range(tab_res[i]):
+                GPIO.output(self.STEP_PIN, GPIO.HIGH)
+                sleep(delay)
+                GPIO.output(self.STEP_PIN, GPIO.LOW)
+                sleep(delay)
         GPIO.output(self.ENABLE_PIN, GPIO.HIGH)
-        sleep(delay)
+        sleep(base_delay/10)
 
 
 if __name__ == "__main__":
