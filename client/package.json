@@ -35,7 +35,6 @@
     "files": [
       "core/**/*",
       "assets/**/*",
-      "node_modules/**/*",
       "*.js",
       "index.html",
       "icon.png"
@@ -63,14 +62,14 @@
     "electron": "^4.2.4",
     "electron-builder": "^20.43.0",
     "electron-installer-snap": "^3.2.0",
-    "electron-packager": "^13.1.1"
+    "electron-packager": "^13.1.1",
+    "npm": "^6.9.0"
   },
   "dependencies": {
     "bootstrap-material-design": "^4.1.2",
     "chart.js": "^2.7.2",
     "font-awesome": "^4.7.0",
     "jquery": "^3.4.1",
-    "npm": "^6.9.0",
     "popper.js": "^1.15.0",
     "mdns-js": "^1.0.3"
   }
