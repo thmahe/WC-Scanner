@@ -5,6 +5,8 @@ require('chart.js');
 var mdns = require('mdns-js');
 mdns.excludeInterface('0.0.0.0');
 
+var host_url;
+
 var websocket;
 var projects_data;
 var disk_usage;
@@ -83,6 +85,7 @@ async function resolve_ip_adress(){
 
                 if (response === data.addresses[0]){
                     remote_server_address = "ws://" + data.addresses[0] + ":6789";
+                    host_url = data.addresses[0];
                     connectWebsocket()
                 }
             });
@@ -208,6 +211,7 @@ function drawProjectContent() {
 function generate_project_html_element(project_data) {
     let project_path = path.join(__dirname, 'core/project_element.html');
     var content = fs.readFileSync(project_path) + "";
+    content = content.replace(/{{HOST_URL}}/g, host_url);
     content = content.replace(/{{project_name}}/g, project_data["name"]);
     content = content.replace(/{{preview_data}}/g, project_data["preview_data"]);
     content = content.replace(/{{project_description}}/g, project_data["description"]);
