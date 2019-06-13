@@ -2,17 +2,15 @@ const path = require('path');
 const $ = require("jquery");
 const fs = require("fs");
 require('chart.js');
+var mdns = require('mdns-js');
+mdns.excludeInterface('0.0.0.0');
 
 var websocket;
 var projects_data;
 var disk_usage;
-
-var camera_preview = fs.readFileSync(path.join(__dirname, 'assets/images/no_preview.b64')) + "";
-
-var remote_server_address = "ws://wcscanner.local:6789";
-
 var currentProjectDownloading = null;
-
+var camera_preview = fs.readFileSync(path.join(__dirname, 'assets/images/no_preview.b64')) + "";
+var remote_server_address;
 
 
 
@@ -27,13 +25,9 @@ function connectWebsocket() {
             case 'users':
                 //document.getElementById('users').innerText = data.count.toString() + " user" + (data.count > 1 ? "s" : "");
                 break;
-            case 'state':
-                //@TODO capter les changements dans les variables du scanner
-                break;
             case 'state_data':
                 projects_data = data.project_data;
                 disk_usage = data.disk_usage_data;
-                console.log(disk_usage);
                 if (document.getElementById('menu_project').classList.contains('active')){
                     drawProjectContent();
                 }
@@ -74,6 +68,32 @@ function connectWebsocket() {
 }
 
 
+async function resolve_ip_adress(){
+    var browser = mdns.createBrowser();
+
+    browser.on('ready', function () {
+        browser.discover();
+    });
+
+    browser.on('update', function (data) {
+
+        let addr = "http://" + data.addresses[0] + "/ip.php";
+        let data2;
+            data2 = $.getJSON(addr).always(function(response){
+
+                if (response === data.addresses[0]){
+                    remote_server_address = "ws://" + data.addresses[0] + ":6789";
+                    connectWebsocket()
+                }
+            });
+    });
+}
+
+function wait(){
+
+}
+
+
 $(document).ready(function() {
     /**
      * RPi address
@@ -82,10 +102,7 @@ $(document).ready(function() {
     $('#content').load(path.join(__dirname, 'core/home.html'));
     drawHomeContent();
 
-    connectWebsocket()
-
-
-
+    resolve_ip_adress();
 });
 
 

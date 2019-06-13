@@ -16,7 +16,18 @@
     ],
     "linux": {
       "icon": "./assets/images/icons/png/256x256.png",
-      "category": "Utility"
+      "category": "Utility",
+      "target": [
+        "snap"
+      ]
+    },
+    "snap": {
+      "confinement": "strict",
+      "plugs": [
+        "default",
+        "avahi-observe",
+        "avahi-control"
+      ]
     },
     "win": {
       "icon": "./assets/images/icons/256x256.ico"
@@ -59,7 +70,8 @@
     "chart.js": "^2.7.2",
     "font-awesome": "^4.7.0",
     "jquery": "^3.4.1",
+    "npm": "^6.9.0",
     "popper.js": "^1.15.0",
-    "npm": "^6.9.0"
+    "mdns-js": "^1.0.3"
   }
 }
