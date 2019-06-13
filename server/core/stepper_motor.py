@@ -67,9 +67,9 @@ class StepperMotor:
 
         speed_per_range = list(map(lambda x : 2*sin(x), range_val))
 
-        base_delay = 0.01 / 64
+        base_delay = 0.1 / 64
         GPIO.output(self.ENABLE_PIN, GPIO.LOW)
-        sleep(base_delay / 10)
+        sleep(base_delay)
         for i in range(len(speed_per_range)):
             delay = base_delay / speed_per_range[i]
 
@@ -77,9 +77,9 @@ class StepperMotor:
                 GPIO.output(self.STEP_PIN, GPIO.HIGH)
                 sleep(delay)
                 GPIO.output(self.STEP_PIN, GPIO.LOW)
-                sleep(delay)
+                #sleep(delay)
         GPIO.output(self.ENABLE_PIN, GPIO.HIGH)
-        sleep(base_delay/10)
+        sleep(base_delay)
 
 
 if __name__ == "__main__":
