@@ -9,6 +9,7 @@ from util import logger
 from core.scanner import Scanner
 from util import project_manager as pm
 from util import upload as upload
+from util import raspi_state as raspi
 
 APP_PATH = '/home/pi/.wcscanner'
 USERS = set()
@@ -16,15 +17,16 @@ scanner = Scanner()
 logger = logger.logger
 
 
-async def send_project_data_users():
+async def send_state_data():
     """
     Send complete list of projects data
     """
     if USERS:
-        wrapped_pr_data = dict()
-        wrapped_pr_data['type'] = 'projects_data'
-        wrapped_pr_data['data'] = pm.get_projects_data()
-        await asyncio.wait([user.send(json.dumps(wrapped_pr_data)) for user in USERS])
+        data = dict()
+        data['type'] = 'state_data'
+        data['project_data'] = pm.get_projects_data()
+        data['disk_usage_data'] = raspi.get_disk_info()
+        await asyncio.wait([user.send(json.dumps(data)) for user in USERS])
 
 
 async def send_download_ready(project_name) :
@@ -40,7 +42,8 @@ async def register(websocket):
     :param websocket: websocket of the client
     """
     USERS.add(websocket)
-    await send_project_data_users()
+    logger.info('New client connected')
+    await send_state_data()
 
 
 async def unregister(websocket):
@@ -49,7 +52,7 @@ async def unregister(websocket):
     :param websocket: client to remove
     """
     USERS.remove(websocket)
-    await send_project_data_users()
+    await send_state_data()
 
 
 async def mainLoop(websocket, path):
@@ -68,21 +71,21 @@ async def mainLoop(websocket, path):
 
             if data['action'] == 'loop_capture':
                 scanner.loop_capture(data['project_name'])
-                await send_project_data_users()
+                await send_state_data()
 
             elif data['action'] == 'create_project':
                 pm.create_project(data['project_name'], data['description'], data['pict_per_rotation'], data['pict_res'])
-                await send_project_data_users()
+                await send_state_data()
 
             elif data['action'] == 'turn_bed_CW':
                 angle = float(data['plateau_degree'])
                 scanner.turn_bed(angle)
-                await send_project_data_users()
+                await send_state_data()
 
             elif data['action'] == 'turn_bed_CCW':
                 angle = float(data['plateau_degree'])
                 scanner.turn_bed(-1 * angle)
-                await send_project_data_users()
+                await send_state_data()
 
             elif data['action'] == 'request_project_info':
                 await websocket.send(pm.get_projects_data())
@@ -93,12 +96,12 @@ async def mainLoop(websocket, path):
                 pm.zip_project(project_name)
 
                 upload.send_email_zip_project(project_name, email_to)
-                await send_project_data_users()
+                await send_state_data()
 
             elif data['action'] == 'request_remove_project':
                 project_name = data['project_name']
                 pm.remove_single_project(project_name)
-                await send_project_data_users()
+                await send_state_data()
 
             elif data['action'] == 'request_zip_data':
                 project_name = data["project_name"]

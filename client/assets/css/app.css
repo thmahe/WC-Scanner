@@ -11,14 +11,17 @@ html {
 
 .scanner_background {
     background-size: cover;
-    background: url('../images/scanner_bg.png') no-repeat center center;
+    content: url(../images/scanner_bg.png);
     height: 720px;
-    margin-top: -109px;
+    left: 0;
+    top: 0;
+    position: fixed;
+    z-index: -1;
 }
 
 .scanner_background_2 {
     background-size: cover;
-    background: url('../images/scanner_bg_2.png') no-repeat center center;
+    background: url(../images/scanner_bg_2.png) no-repeat center center;
     height: 720px;
     margin-top: -150px;
 }

@@ -36,6 +36,7 @@ def create_project(project_name, description="", picture_per_rotation=15, pictur
     :param picture_res: pictures resolution
     """
     create_base_projects_folder()
+    project_name = project_name.replace(' ', '_')
     folders = os.listdir(context.__PROJECTS_PATH__)
     folders_same_name_size = len(list(filter(re.compile(r'^' + project_name + '_\d+$')
                                              .search, folders)))

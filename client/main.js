@@ -9,7 +9,7 @@ const url = require('url');
 let mainWindow;
 
 const iconUrl = url.format({
-  pathname: path.join(__dirname, "assets/images/icons/png/256x256.png"),
+  pathname: path.join(__dirname, "assets/images/icons/png/512x512.png"),
 protocol: "file:",
 slashes: true
 });
@@ -20,10 +20,10 @@ function createWindow () {
     width: 1280,
     height: 720,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
     },
     title: "WCS - Client",
-    autoHideMenuBar:false,
+    autoHideMenuBar:true,
     frame: true,
     resizable: false,
     icon : iconUrl
@@ -37,6 +37,8 @@ function createWindow () {
     protocol: 'file:',
     slashes: true
   }));
+
+  mainWindow.webContents.openDevTools();
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()

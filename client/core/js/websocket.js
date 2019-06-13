@@ -1,17 +1,18 @@
 const path = require('path');
 const $ = require("jquery");
 const fs = require("fs");
+require('chart.js');
 
-var users, websocket;
+var websocket;
 var projects_data;
+var disk_usage;
 
 var camera_preview = fs.readFileSync(path.join(__dirname, 'assets/images/no_preview.b64')) + "";
 
 var remote_server_address = "ws://wcscanner.local:6789";
 
-
-
 var currentProjectDownloading = null;
+
 
 
 
@@ -29,8 +30,10 @@ function connectWebsocket() {
             case 'state':
                 //@TODO capter les changements dans les variables du scanner
                 break;
-            case 'projects_data':
-                projects_data = data.data;
+            case 'state_data':
+                projects_data = data.project_data;
+                disk_usage = data.disk_usage_data;
+                console.log(disk_usage);
                 if (document.getElementById('menu_project').classList.contains('active')){
                     drawProjectContent();
                 }
@@ -76,10 +79,12 @@ $(document).ready(function() {
      * RPi address
      */
     draw_navbar();
-    $('#content').load("./core/home.html");
+    $('#content').load(path.join(__dirname, 'core/home.html'));
     drawHomeContent();
 
     connectWebsocket()
+
+
 
 });
 
@@ -105,8 +110,10 @@ function drawControlContent() {
     let control_path = path.join(__dirname, 'core/control.html');
     var text = fs.readFileSync(control_path) + "";
 
-    text = text.replace("{{PREVIEW_DATA}}", camera_preview);
-    text = text.replace("{{PREVIEW_DATA}}", camera_preview);
+    text = text.replace(/{{PREVIEW_DATA}}/g, camera_preview);
+    text = text.replace(/{{DISK_USED}}/g, disk_usage.disk_used);
+    text = text.replace(/{{DISK_TOTAL}}/g, disk_usage.disk_size);
+
 
     var logModal = document.getElementById("modal_big_preview");
     
@@ -117,6 +124,23 @@ function drawControlContent() {
         document.getElementById('content').innerHTML = text;
         $('#modal_big_preview').modal('show');
     }
+
+    //doughnut
+    var ctxD = document.getElementById("doughnutChart").getContext('2d');
+    var myLineChart = new Chart(ctxD, {
+        type: 'doughnut',
+        data: {
+            labels: ["Available", "Used"],
+            datasets: [{
+                data: [parseFloat(disk_usage.disk_avail),parseFloat(disk_usage.disk_used)],
+                backgroundColor: ["#46BFBD","#F7464A"],
+                hoverBackgroundColor: ["#5AD3D1","#FF5A5E"]
+            }]
+        },
+        options: {
+            responsive: true
+        }
+    });
 
     document.getElementById('menu_home').classList.remove("active");
     document.getElementById('menu_project').classList.remove("active");
@@ -135,7 +159,7 @@ function drawProjectContent() {
         }
     })
     var logModal = document.getElementById("ModalProject");
-    if ((bool == 0) && (logModal == null || !logModal.classList.contains('show'))) {
+    if ((bool === 0) && (logModal == null || !logModal.classList.contains('show'))) {
         document.getElementById('menu_home').classList.remove("active");
         document.getElementById('menu_project').classList.add("active");
         document.getElementById('menu_control').classList.remove("active");
