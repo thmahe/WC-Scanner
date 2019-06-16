@@ -4,6 +4,7 @@ import {Button, Header, Icon, Input, Overlay} from "react-native-elements";
 import Colors from "../assets/color/Colors";
 import websocketUtil from "../utils/websocket";
 import {connect} from "react-redux";
+import { StatusBar } from 'react-native';
 
 const mapStateToProps = (state) => {
     return {
@@ -38,6 +39,7 @@ class controlScreen extends React.Component{
                     backgroundColor={Colors.colorPrincipal}
                     rightComponent={<Icon name={"video-camera"} size={25} color={'#fff'} type='font-awesome'
                                           onPress={() => {this.setState({modalView: true})}}/>}
+                    containerStyle={{ marginTop: ((StatusBar.currentHeight || 0) * -1) }}
                 />
 
                 <View style={styleControl.containerControl}>

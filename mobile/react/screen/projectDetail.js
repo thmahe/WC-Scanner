@@ -1,7 +1,7 @@
 import Colors from "../assets/color/Colors";
 import {Button, Header, Icon, Image} from "react-native-elements";
 import React from "react";
-import {View, StyleSheet, Text, ImageBackground} from 'react-native';
+import {View, StyleSheet, Text, ImageBackground, StatusBar} from 'react-native';
 
 export default class projectDetail extends React.Component{
 
@@ -28,7 +28,6 @@ export default class projectDetail extends React.Component{
         const {state} = this.props.navigation;
         const project_data = state.params.data;
 
-        const imageBackgroundUri = require('../devEnv/dev_data/assets/white-noise.jpg');
         return(
             <View style={style_projectDetail.container}>
                 <Header
@@ -38,10 +37,11 @@ export default class projectDetail extends React.Component{
                                          onPress={() => goBack()}/>}
                     rightComponent={<Icon name={"delete-forever"} size={27} color={'#fff'} type='material-community'
                                           onPress={() => this.ws.request_remove_project(project_data.name)}/>}
+                    containerStyle={{ marginTop: ((StatusBar.currentHeight || 0) * -1) }}
                 />
 
                 <View style={style_projectDetail.body}>
-                    <Image source={{uri: "data:image/jpg;base64, " + project.preview_data}} style={{width: '100%', height: 220}}/>
+                    <Image source={{uri: "data:image/jpg;base64, " + project_data.preview_data}} style={{width: '100%', height: 220}}/>
                     <View style={{flex:1, padding: 5}}>
                         <View style={style_projectDetail.bloc}>
                             <Text style={style_projectDetail.input_label}> Description : </Text>

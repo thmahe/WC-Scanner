@@ -5,6 +5,7 @@ import Colors from "../assets/color/Colors";
 import projectJson from "../devEnv/dev_data/projectJson";
 import {connect} from "react-redux";
 import websocketUtil from "../utils/websocket";
+import { StatusBar } from 'react-native';
 
 const mapStateToProps = (state) => {
     return {
@@ -86,6 +87,7 @@ class projectScreen extends React.Component{
                     backgroundColor={Colors.colorPrincipal}
                     rightComponent={<Icon name={"plus"} size={25} color={'#fff'} type='font-awesome'
                                           onPress={() => this.props.navigation.navigate('NewProject', {ws: this.ws} )}/>}
+                    containerStyle={{ marginTop: ((StatusBar.currentHeight || 0) * -1) }}
                 />
                 <View style={styleProject.body}>
                     <FlatList

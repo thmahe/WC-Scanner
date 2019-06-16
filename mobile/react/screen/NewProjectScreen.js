@@ -1,7 +1,8 @@
 import Colors from "../assets/color/Colors";
 import {Button, Header, Icon, Input, Slider} from "react-native-elements";
 import React from "react";
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, ScrollView, Platform} from 'react-native';
+import { StatusBar } from 'react-native';
 import websocketUtil from "../utils/websocket";
 
 export default class NewProjectScreen extends React.Component{
@@ -74,68 +75,72 @@ export default class NewProjectScreen extends React.Component{
                     backgroundColor={Colors.colorPrincipal}
                     leftComponent={<Icon name={"arrow-left"} size={25} color={'#fff'} type='font-awesome'
                                          onPress={() => goBack()}/>}
+                    containerStyle={{ marginTop: ((StatusBar.currentHeight || 0) * -1) }}
                 />
 
-                <View style={{flex:1, alignItems:'center'}}>
-                    <Input
-                        label='Nom de projet'
-                        inputContainerStyle={this.state.project_name === '' ? styleControl.input_container : styleControl.input_container_focus}
-                        containerStyle={{width: "90%",  margin: 10}}
-                        onChangeText={name => this.setState({ project_name: name })}
-                        labelProps={{style: styleControl.input_label}}
-                        value={this.state.project_name}
-                    />
 
-                    <Input
-                        label='Description'
-                        inputContainerStyle={this.state.project_description === '' ? styleControl.input_container : styleControl.input_container_focus}
-                        containerStyle={{width: "90%",  margin: 10}}
-                        multiline={true}
-                        onChangeText={name => this.setState({ project_description: name })}
-                        labelProps={{style: styleControl.input_label}}
-                        value={this.state.project_description}
-                    />
-
-                    <View style={{width: "90%",  margin: 10, alignItems: 'center'}}>
-                        <Text style={styleControl.input_label_text}> Picture resolution </Text>
-                        <Slider
-                            value={parseInt(this.state.project_picture_resolution)}
-                            maximumValue={3}
-                            minimumValue={1}
-                            step={1}
-                            style={{width: '90%'}}
-                            thumbTintColor={Colors.colorPrincipal}
-                            onValueChange={value => this.setState({ project_picture_resolution: value.toString() })}
+                <ScrollView>
+                    <View style={{alignItems:'center', height: '100%'}}>
+                        <Input
+                            label='Nom de projet'
+                            inputContainerStyle={this.state.project_name === '' ? styleControl.input_container : styleControl.input_container_focus}
+                            containerStyle={{width: "90%",  margin: 10}}
+                            onChangeText={name => this.setState({ project_name: name })}
+                            labelProps={{style: styleControl.input_label}}
+                            value={this.state.project_name}
                         />
-                        <Text style={styleControl.input_label_text}> {textResolutionPicture} </Text>
-                    </View>
 
-                    <View style={{width: "90%",  margin: 10, alignItems: 'center'}}>
-                        <Text style={styleControl.input_label_text}> Picture per resolution </Text>
-                        <Slider
-                            value={parseInt(this.state.project_ppr)}
-                            maximumValue={36}
-                            minimumValue={1}
-                            step={1}
-                            style={{width: '90%'}}
-                            thumbTintColor={Colors.colorPrincipal}
-                            onValueChange={value => this.setState({ project_ppr: value.toString() })}
+                        <Input
+                            label='Description'
+                            inputContainerStyle={this.state.project_description === '' ? styleControl.input_container : styleControl.input_container_focus}
+                            containerStyle={{width: "90%",  margin: 10}}
+                            multiline={true}
+                            onChangeText={name => this.setState({ project_description: name })}
+                            labelProps={{style: styleControl.input_label}}
+                            value={this.state.project_description}
                         />
-                        <Text style={styleControl.input_label_text}> {this.state.project_ppr} </Text>
+
+                        <View style={{width: "90%",  margin: 10, alignItems: 'center'}}>
+                            <Text style={styleControl.input_label_text}> Picture resolution </Text>
+                            <Slider
+                                value={parseInt(this.state.project_picture_resolution)}
+                                maximumValue={3}
+                                minimumValue={1}
+                                step={1}
+                                style={{width: '90%'}}
+                                thumbTintColor={Colors.colorPrincipal}
+                                onValueChange={value => this.setState({ project_picture_resolution: value.toString() })}
+                            />
+                            <Text style={styleControl.input_label_text}> {textResolutionPicture} </Text>
+                        </View>
+
+                        <View style={{width: "90%",  margin: 10, alignItems: 'center'}}>
+                            <Text style={styleControl.input_label_text}> Picture per resolution </Text>
+                            <Slider
+                                value={parseInt(this.state.project_ppr)}
+                                maximumValue={36}
+                                minimumValue={1}
+                                step={1}
+                                style={{width: '90%'}}
+                                thumbTintColor={Colors.colorPrincipal}
+                                onValueChange={value => this.setState({ project_ppr: value.toString() })}
+                            />
+                            <Text style={styleControl.input_label_text}> {this.state.project_ppr} </Text>
+                        </View>
+
+                        <Text style={{
+                            fontSize: 20,
+                            fontWeight: '600',
+                            color:Colors.grayTextColor}}> {this.evaluation_size()} </Text>
+
+                        <Button
+                            containerStyle={{width: '80%', marginTop: 20}}
+                            buttonStyle={{backgroundColor: Colors.colorPrincipal}}
+                            onPress={() => this.ws.create_project(this.jsonCreateProject())}
+                            title="Crée un projet"
+                        />
                     </View>
-
-                    <Text style={{
-                        fontSize: 20,
-                        fontWeight: '600',
-                        color:Colors.grayTextColor}}> {this.evaluation_size()} </Text>
-
-                    <Button
-                        containerStyle={{width: '80%', marginTop: 50}}
-                        buttonStyle={{backgroundColor: Colors.colorPrincipal}}
-                        onPress={() => this.ws.create_project(this.jsonCreateProject())}
-                        title="Crée un projet"
-                    />
-                </View>
+                </ScrollView>
             </View>
 
 

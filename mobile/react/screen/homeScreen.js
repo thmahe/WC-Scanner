@@ -1,5 +1,5 @@
 import React from "react";
-import {StyleSheet, View, Text, Image, FlatList, ImageBackground} from "react-native";
+import {StyleSheet, View, Text, Image, FlatList, ImageBackground, StatusBar} from "react-native";
 import {Button, Divider, Header, Icon} from "react-native-elements";
 import Colors from "../assets/color/Colors";
 
@@ -35,6 +35,7 @@ class homeScreen extends React.Component{
                     backgroundColor={Colors.colorPrincipal}
                     rightComponent={<Icon name={"wifi"} size={25} color={this.props.stateConnection ? '#fff' : Colors.redColor} type='font-awesome'
                                           onPress={() => this.ws.connectionStatue()}/>}
+                    containerStyle={{ marginTop: ((StatusBar.currentHeight || 0) * -1) }}
                 />
                 <View style={styleHome.body}>
                     <Text style={styleHome.body_text_h1}>Bienvenue sur WC-Scanner</Text>
