@@ -136,7 +136,9 @@ export default class NewProjectScreen extends React.Component{
                         <Button
                             containerStyle={{width: '80%', marginTop: 20}}
                             buttonStyle={{backgroundColor: Colors.colorPrincipal}}
-                            onPress={() => this.ws.create_project(this.jsonCreateProject())}
+                            onPress={() => {
+                                goBack();
+                                this.ws.create_project(this.jsonCreateProject())}}
                             title="Crée un projet"
                         />
                     </View>

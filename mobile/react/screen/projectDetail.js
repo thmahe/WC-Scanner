@@ -36,7 +36,9 @@ export default class projectDetail extends React.Component{
                     leftComponent={<Icon name={"arrow-left"} size={25} color={'#fff'} type='font-awesome'
                                          onPress={() => goBack()}/>}
                     rightComponent={<Icon name={"delete-forever"} size={27} color={'#fff'} type='material-community'
-                                          onPress={() => this.ws.request_remove_project(project_data.name)}/>}
+                                          onPress={() => {
+                                              goBack();
+                                              this.ws.request_remove_project(project_data.name)}}/>}
                     containerStyle={{ marginTop: ((StatusBar.currentHeight || 0) * -1) }}
                 />
 
