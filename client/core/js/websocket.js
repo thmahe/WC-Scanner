@@ -1,25 +1,18 @@
 const path = require('path');
 const $ = require("jquery");
 const fs = require("fs");
+
 require('chart.js');
-var mdns = require('mdns-js');
-mdns.excludeInterface('0.0.0.0');
 
-var host_url;
-
+var host_url = "wcscanner.local";
 var websocket;
 var projects_data;
 var disk_usage;
 var currentProjectDownloading = null;
 var camera_preview = fs.readFileSync(path.join(__dirname, 'assets/images/no_preview.b64')) + "";
-var remote_server_address;
-
-
 
 function connectWebsocket() {
-
-    websocket = new WebSocket(remote_server_address);
-
+    websocket = new WebSocket("ws://wcscanner.local:6789");
     websocket.onmessage = function(event) {
         let data = JSON.parse(event.data);
         console.log(data);
@@ -70,33 +63,6 @@ function connectWebsocket() {
 }
 
 
-async function resolve_ip_adress(){
-    var browser = mdns.createBrowser();
-
-    browser.on('ready', function () {
-        browser.discover();
-    });
-
-    browser.on('update', function (data) {
-
-        let addr = "http://" + data.addresses[0] + "/ip.php";
-        let data2;
-            data2 = $.getJSON(addr).always(function(response){
-
-                if (response === data.addresses[0]){
-                    remote_server_address = "ws://" + data.addresses[0] + ":6789";
-                    host_url = data.addresses[0];
-                    connectWebsocket()
-                }
-            });
-    });
-}
-
-function wait(){
-
-}
-
-
 $(document).ready(function() {
     /**
      * RPi address
@@ -105,7 +71,7 @@ $(document).ready(function() {
     $('#content').load(path.join(__dirname, 'core/home.html'));
     drawHomeContent();
 
-    resolve_ip_adress();
+    connectWebsocket();
 });
 
 

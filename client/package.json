@@ -18,16 +18,12 @@
       "icon": "./assets/images/icons/png/256x256.png",
       "category": "Utility",
       "target": [
-        "snap"
+        "snap",
+        "AppImage"
       ]
     },
     "snap": {
-      "confinement": "strict",
-      "plugs": [
-        "default",
-        "avahi-observe",
-        "avahi-control"
-      ]
+      "confinement": "classic"
     },
     "win": {
       "icon": "./assets/images/icons/256x256.ico"
@@ -70,7 +66,6 @@
     "chart.js": "^2.7.2",
     "font-awesome": "^4.7.0",
     "jquery": "^3.4.1",
-    "popper.js": "^1.15.0",
-    "mdns-js": "^1.0.3"
+    "popper.js": "^1.15.0"
   }
 }

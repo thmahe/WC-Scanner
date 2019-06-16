@@ -51,6 +51,7 @@ async def unregister(websocket):
     Remove a websocket of the client list when the websocket connection is closed
     :param websocket: client to remove
     """
+    logger.info("One client disconnected")
     USERS.remove(websocket)
     await send_state_data()
 
