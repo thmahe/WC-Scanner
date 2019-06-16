@@ -1,7 +1,7 @@
 import Colors from "../assets/color/Colors";
 import {Button, Header, Icon, Image} from "react-native-elements";
 import React from "react";
-import {View, StyleSheet, Text, ImageBackground, StatusBar} from 'react-native';
+import {View, StyleSheet, Text, ImageBackground, StatusBar, ScrollView} from 'react-native';
 
 export default class projectDetail extends React.Component{
 
@@ -40,39 +40,41 @@ export default class projectDetail extends React.Component{
                     containerStyle={{ marginTop: ((StatusBar.currentHeight || 0) * -1) }}
                 />
 
-                <View style={style_projectDetail.body}>
-                    <Image source={{uri: "data:image/jpg;base64, " + project_data.preview_data}} style={{width: '100%', height: 220}}/>
-                    <View style={{flex:1, padding: 5}}>
-                        <View style={style_projectDetail.bloc}>
-                            <Text style={style_projectDetail.input_label}> Description : </Text>
-                            <Text style={style_projectDetail.input_label_sec}> {project_data.description} </Text>
-                        </View>
+                <ScrollView>
+                    <View style={style_projectDetail.body}>
+                        <Image source={{uri: "data:image/jpg;base64, " + project_data.preview_data}} style={{width: '100%', height: 220}}/>
+                        <View style={{flex:1, padding: 5}}>
+                            <View style={style_projectDetail.bloc}>
+                                <Text style={style_projectDetail.input_label}> Description : </Text>
+                                <Text style={style_projectDetail.input_label_sec}> {project_data.description} </Text>
+                            </View>
 
-                        <View style={style_projectDetail.bloc}>
-                            <Text style={style_projectDetail.input_label}> Picture per rotation : </Text>
-                            <Text style={style_projectDetail.input_label_sec}> {project_data.pict_per_rotation} </Text>
-                        </View>
+                            <View style={style_projectDetail.bloc}>
+                                <Text style={style_projectDetail.input_label}> Picture per rotation : </Text>
+                                <Text style={style_projectDetail.input_label_sec}> {project_data.pict_per_rotation} </Text>
+                            </View>
 
-                        <View style={style_projectDetail.bloc}>
-                            <Text style={style_projectDetail.input_label}> Picture resolution : </Text>
-                            <Text style={style_projectDetail.input_label_sec}> {projectDetail.valueToResolution(project_data.pict_res)} </Text>
-                        </View>
+                            <View style={style_projectDetail.bloc}>
+                                <Text style={style_projectDetail.input_label}> Picture resolution : </Text>
+                                <Text style={style_projectDetail.input_label_sec}> {project_data.pict_res} </Text>
+                            </View>
 
-                        <View style={style_projectDetail.bloc}>
-                            <Text style={style_projectDetail.input_label}> Size : </Text>
-                            <Text style={style_projectDetail.input_label_sec}> {project_data.size} mb </Text>
-                        </View>
+                            <View style={style_projectDetail.bloc}>
+                                <Text style={style_projectDetail.input_label}> Size : </Text>
+                                <Text style={style_projectDetail.input_label_sec}> {project_data.size} mb </Text>
+                            </View>
 
-                        <View style={style_projectDetail.bloc_center}>
-                            <Button
-                                containerStyle={{width: '80%', marginTop: 50}}
-                                buttonStyle={{backgroundColor: Colors.colorPrincipal}}
-                                onPress={() => {this.ws.start_loop_capture(project_data.name)}}
-                                title="start loop"
-                            />
+                            <View style={style_projectDetail.bloc_center}>
+                                <Button
+                                    containerStyle={{width: '80%', marginTop: 20}}
+                                    buttonStyle={{backgroundColor: Colors.colorPrincipal}}
+                                    onPress={() => {this.ws.start_loop_capture(project_data.name)}}
+                                    title="start loop"
+                                />
+                            </View>
                         </View>
                     </View>
-                </View>
+                </ScrollView>
             </View>
 
 

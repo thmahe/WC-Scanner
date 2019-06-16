@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View, Image, Text} from "react-native";
+import {StyleSheet, View, Image, Text, KeyboardAvoidingView, Platform, ScrollView} from "react-native";
 import {Button, Header, Icon, Input, Overlay} from "react-native-elements";
 import Colors from "../assets/color/Colors";
 import websocketUtil from "../utils/websocket";
@@ -33,52 +33,60 @@ class controlScreen extends React.Component{
     render(){
         const scannerbg = require('../assets/scanner_bg.png');
         return(
-            <View style={styleControl.container}>
-                <Header
-                    centerComponent={{text: 'Controle', style: {color: '#fff', fontSize: 25, fontWeight: '700'}}}
-                    backgroundColor={Colors.colorPrincipal}
-                    rightComponent={<Icon name={"video-camera"} size={25} color={'#fff'} type='font-awesome'
-                                          onPress={() => {this.setState({modalView: true})}}/>}
-                    containerStyle={{ marginTop: ((StatusBar.currentHeight || 0) * -1) }}
-                />
-
-                <View style={styleControl.containerControl}>
-                    <View style={{width: '100%', flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'center', marginVertical: 10}}>
-                        <Icon name={"rotate-right"} size={50} color={Colors.colorPrincipal} type='material-community'
-                              onPress={() => this.ws.turn_bed_CCW_trigger(this.state.angle)}/>
-                        <Image source={scannerbg} style={{width: 250, height: 350}}/>
-                        <Icon name={"rotate-left"} size={50} color={Colors.colorPrincipal} type='material-community'
-                              onPress={() => this.ws.turn_bed_CW_trigger(this.state.angle)}/>
-                    </View>
-
-                    <View style={{alignItems: 'center'}}>
-                        <Input
-                            label='Angle de rotation'
-                            inputContainerStyle={styleControl.input_container}
-                            containerStyle={{width: "90%",  margin: 10}}
-                            onChangeText={angle => this.setState({ angle: angle })}
-                            labelProps={{style: styleControl.input_label}}
-                            value={this.state.angle}
-                        />
-                    </View>
-                </View>
-                <Overlay
-                    isVisible={this.state.modalView}
-                    width={'98%'}
-                    overlayBackgroundColor={'#fff'}
-                    windowBackgroundColor={'#00000088'}
-                    onBackdropPress={() => this.setState({ modalView: false })}
-                >
-                    <Image source={{uri: "data:image/jpg;base64, " + this.props.stateConnection}} style={{width: '100%', height: '90%'}}/>
-                    <Button
-                        containerStyle={{width: '80%', alignSelf: 'center'}}
-                        buttonStyle={{backgroundColor: Colors.colorPrincipal}}
-                        title="camera preview"
+                <View style={styleControl.container}>
+                    <Header
+                        centerComponent={{text: 'Controle', style: {color: '#fff', fontSize: 25, fontWeight: '700'}}}
+                        backgroundColor={Colors.colorPrincipal}
+                        rightComponent={<Icon name={"video-camera"} size={25} color={'#fff'} type='font-awesome'
+                                              onPress={() => {this.setState({modalView: true})}}/>}
+                        containerStyle={{ marginTop: ((StatusBar.currentHeight || 0) * -1) }}
                     />
-                </Overlay>
-            </View>
+
+                    <KeyboardAvoidingView
+                        style = {{ flex: 1 }}
+                        behavior= {(Platform.OS === 'ios')? "padding" : null}>
+                        <View style={styleControl.containerControl}>
+                            <ScrollView>
+                                <View style={{width: '100%', flexDirection: 'row',
+                                    alignItems: 'center',
+                                    justifyContent: 'center', marginVertical: 10}}>
+                                    <Icon name={"rotate-right"} size={50} color={Colors.colorPrincipal} type='material-community'
+                                          onPress={() => this.ws.turn_bed_CCW_trigger(this.state.angle)}/>
+                                    <Image source={scannerbg} style={{width: 250, height: 350}}/>
+                                    <Icon name={"rotate-left"} size={50} color={Colors.colorPrincipal} type='material-community'
+                                          onPress={() => this.ws.turn_bed_CW_trigger(this.state.angle)}/>
+                                </View>
+
+                                <View style={{alignItems: 'center'}}>
+                                    <Input
+                                        label='Angle de rotation'
+                                        inputContainerStyle={styleControl.input_container}
+                                        containerStyle={{width: "90%",  margin: 10}}
+                                        onChangeText={angle => this.setState({ angle: angle })}
+                                        labelProps={{style: styleControl.input_label}}
+                                        value={this.state.angle}
+                                    />
+                                </View>
+                            </ScrollView>
+                        </View>
+                    </KeyboardAvoidingView>
+
+                    <Overlay
+                        isVisible={this.state.modalView}
+                        width={'98%'}
+                        overlayBackgroundColor={'#fff'}
+                        windowBackgroundColor={'#00000088'}
+                        onBackdropPress={() => this.setState({ modalView: false })}
+                    >
+                        <Image source={{uri: "data:image/jpg;base64, " + this.props.stateConnection}} style={{width: '100%', height: '90%'}}/>
+                        <Button
+                            containerStyle={{width: '80%', alignSelf: 'center'}}
+                            buttonStyle={{backgroundColor: Colors.colorPrincipal}}
+                            title="camera preview"
+                        />
+                    </Overlay>
+                </View>
+
         );
     }
 
@@ -89,8 +97,7 @@ export const styleControl = StyleSheet.create({
         flex: 1,
     },
     containerControl: {
-        width: '100%',
-        height: 400,
+        flex:1,
         flexDirection: 'column'
     },
     input_label_text:{
