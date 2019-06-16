@@ -41,7 +41,7 @@ export default class projectDetail extends React.Component{
                 />
 
                 <View style={style_projectDetail.body}>
-                    <Image source={imageBackgroundUri} style={{width: '100%', height: 220}}/>
+                    <Image source={{uri: "data:image/jpg;base64, " + project.preview_data}} style={{width: '100%', height: 220}}/>
                     <View style={{flex:1, padding: 5}}>
                         <View style={style_projectDetail.bloc}>
                             <Text style={style_projectDetail.input_label}> Description : </Text>

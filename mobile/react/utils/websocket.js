@@ -19,6 +19,9 @@ export default class websocketUtil {
                 case 'projects_data':
                     that._stateListProject(data.data);
                     break;
+                case 'camera_preview':
+                    that._stateImagePreview(data.data);
+                    break;
                 default:
                     console.error(
                         "unsupported event", data);
@@ -72,6 +75,12 @@ export default class websocketUtil {
         }))
     }
 
+    request_camera_capture(){
+        websocket.send(JSON.stringify({
+            action: "camera_preview"
+        }))
+    }
+
     //REDUX
     _stateConnectionFalse() {
         let action = { type: "STATE_CHANGE", value: false };
@@ -86,6 +95,11 @@ export default class websocketUtil {
     _stateListProject(data){
         let action = { type: "STATE_RELOAD_LISTPROJECT", value: data};
         this.props.dispatch(action);
+    }
+
+    _stateImagePreview(data){
+        let action = {type: "STATE_IMAGE_PREVIEW", value: data};
+        this.props.disabled(action);
     }
 
 }

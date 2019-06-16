@@ -14,6 +14,8 @@ export default class NewProjectScreen extends React.Component{
             project_ppr: "1",
             project_picture_resolution: "1"
         };
+
+        this.ws = this.props.screenProps.ws;
     }
 
     evaluation_size(){
@@ -59,7 +61,6 @@ export default class NewProjectScreen extends React.Component{
     render(){
         const { goBack } = this.props.navigation;
         const {state} = this.props.navigation;
-        const ws = state.params.ws;
 
         let textResolutionPicture;
         if (this.state.project_picture_resolution === "1"){textResolutionPicture = <Text> 640x480 </Text>}
@@ -131,7 +132,7 @@ export default class NewProjectScreen extends React.Component{
                     <Button
                         containerStyle={{width: '80%', marginTop: 50}}
                         buttonStyle={{backgroundColor: Colors.colorPrincipal}}
-                        onPress={() => ws.create_project(this.jsonCreateProject())}
+                        onPress={() => this.ws.create_project(this.jsonCreateProject())}
                         title="Crée un projet"
                     />
                 </View>

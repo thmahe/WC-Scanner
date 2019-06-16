@@ -28,7 +28,7 @@ class projectScreen extends React.Component{
         const imageBackgroundUri = require('../devEnv/dev_data/assets/white-noise.jpg');
         return(
             <View style={styleProject.projectItemContainer}>
-                <ImageBackground source={imageBackgroundUri} style={styleProject.projectItemImageBackground} imageStyle={styleProject.projectItemImageBackground}>
+                <ImageBackground source={{uri: "data:image/jpg;base64, " + project.preview_data}} style={styleProject.projectItemImageBackground} imageStyle={styleProject.projectItemImageBackground}>
                     <View style={{backgroundColor: "#00000099", alignItems: 'center', justifyContent: 'center', height: 30,
                         borderTopRightRadius: 15, borderTopLeftRadius: 15}}>
                         <Text style={{fontSize: 25, color: '#fff'}}> {project.name} </Text>

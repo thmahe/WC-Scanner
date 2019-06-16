@@ -1,6 +1,6 @@
 import websocketUtil from "../../utils/websocket";
 
-const initialStateConnection = {stateCo : false, listProject : []};
+const initialStateConnection = {stateCo : false, listProject : [], image_preview: ''};
 
 function stateConnection(state = initialStateConnection, action) {
     let nextState;
@@ -10,6 +10,9 @@ function stateConnection(state = initialStateConnection, action) {
             return nextState || state;
         case 'STATE_RELOAD_LISTPROJECT':
             nextState = {...state, listProject: action.value};
+            return nextState || state;
+        case 'STATE_IMAGE_PREVIEW':
+            nextState = {...state, image_preview: action.value};
             return nextState || state;
         default:
             return state;

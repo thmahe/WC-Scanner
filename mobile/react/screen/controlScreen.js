@@ -3,9 +3,15 @@ import {StyleSheet, View, Image, Text} from "react-native";
 import {Button, Header, Icon, Input, Overlay} from "react-native-elements";
 import Colors from "../assets/color/Colors";
 import websocketUtil from "../utils/websocket";
+import {connect} from "react-redux";
 
+const mapStateToProps = (state) => {
+    return {
+        image_preview : state.image_preview,
+    }
+};
 
-export default class controlScreen extends React.Component{
+class controlScreen extends React.Component{
 
     static navigationOptions = {
         tabBarIcon: ({ focused}) => {
@@ -25,7 +31,6 @@ export default class controlScreen extends React.Component{
 
     render(){
         const scannerbg = require('../assets/scanner_bg.png');
-        const img_noise = require('../devEnv/dev_data/assets/white-noise.jpg');
         return(
             <View style={styleControl.container}>
                 <Header
@@ -64,7 +69,12 @@ export default class controlScreen extends React.Component{
                     windowBackgroundColor={'#00000088'}
                     onBackdropPress={() => this.setState({ modalView: false })}
                 >
-                    <Image source={img_noise} style={{width: '100%', height: '90%'}}/>
+                    <Image source={{uri: "data:image/jpg;base64, " + this.props.stateConnection}} style={{width: '100%', height: '90%'}}/>
+                    <Button
+                        containerStyle={{width: '80%', alignSelf: 'center'}}
+                        buttonStyle={{backgroundColor: Colors.colorPrincipal}}
+                        title="camera preview"
+                    />
                 </Overlay>
             </View>
         );
@@ -100,3 +110,5 @@ export const styleControl = StyleSheet.create({
         paddingLeft: 10
     },
 });
+
+export default connect(mapStateToProps)(controlScreen)
