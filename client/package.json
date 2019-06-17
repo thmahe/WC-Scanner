@@ -26,7 +26,7 @@
       "confinement": "classic"
     },
     "win": {
-      "icon": "./assets/images/icons/256x256.ico"
+      "icon": "./assets/images/icons/icon.ico"
     },
     "files": [
       "core/**/*",

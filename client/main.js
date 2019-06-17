@@ -20,7 +20,7 @@ function createWindow () {
     width: 1280,
     height: 720,
     webPreferences: {
-      nodeIntegration: true,
+      nodeIntegration: true
     },
     title: "WCS - Client",
     autoHideMenuBar:true,
@@ -39,7 +39,7 @@ function createWindow () {
   }));
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  //mainWindow.webContents.openDevTools();
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
