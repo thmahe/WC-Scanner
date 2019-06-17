@@ -4,7 +4,7 @@ let instance = null;
 export default class websocketUtil {
 
     constructor(props){
-        this.remote_server_address = "ws://192.168.99.103:6789";
+        this.remote_server_address = "ws://wcscanner.local:6789";
         this.props = props;
         this.connectionStatue();
     }
@@ -16,14 +16,14 @@ export default class websocketUtil {
         websocket.onmessage = function(event) {
             let data = JSON.parse(event.data);
             switch (data.type) {
-                case 'projects_data':
-                    that._stateListProject(data.data);
+                case 'state_data':
+                    that._stateListProject(data.project_data);
                     break;
                 case 'camera_preview':
                     that._stateImagePreview(data.data);
                     break;
                 default:
-                    console.error(
+                    console.log(
                         "unsupported event", data);
             }
         };
@@ -99,7 +99,7 @@ export default class websocketUtil {
 
     _stateImagePreview(data){
         let action = {type: "STATE_IMAGE_PREVIEW", value: data};
-        this.props.disabled(action);
+        this.props.dispatch(action);
     }
 
 }

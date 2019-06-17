@@ -8,7 +8,7 @@ import { StatusBar } from 'react-native';
 
 const mapStateToProps = (state) => {
     return {
-        image_preview : state.image_preview,
+        stateConnection : state.image_preview,
     }
 };
 
@@ -78,11 +78,14 @@ class controlScreen extends React.Component{
                         windowBackgroundColor={'#00000088'}
                         onBackdropPress={() => this.setState({ modalView: false })}
                     >
-                        <Image source={{uri: "data:image/jpg;base64, " + this.props.stateConnection}} style={{width: '100%', height: '90%'}}/>
+                        <Image source={{uri: this.props.stateConnection}} style={{width: '100%', height: '90%'}}/>
                         <Button
                             containerStyle={{width: '80%', alignSelf: 'center'}}
                             buttonStyle={{backgroundColor: Colors.colorPrincipal}}
                             title="camera preview"
+                            onPress={() => {
+                                console.log(this.props.stateConnection);
+                                this.ws.request_camera_capture()}}
                         />
                     </Overlay>
                 </View>
