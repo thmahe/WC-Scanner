@@ -28,6 +28,9 @@
     "win": {
       "icon": "./assets/images/icons/icon.ico"
     },
+    "mac": {
+      "type": "development"
+    },
     "files": [
       "core/**/*",
       "assets/**/*",
