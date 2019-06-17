@@ -1,122 +1,132 @@
 #!/usr/bin/env python3
 
-# WS server example that synchronizes state across clients
-
 import asyncio
 import json
-import logging
-import os
-import re
 import websockets
-from scanner.scanner import Scanner
 import subprocess
 
-logging.basicConfig()
+from util import logger
+from core.scanner import Scanner
+from util import project_manager as pm
+from util import upload as upload
+from util import raspi_state as raspi
 
 APP_PATH = '/home/pi/.wcscanner'
-
-STATE = {'value': 0}
-
 USERS = set()
-
 scanner = Scanner()
-
-def state_event():
-    return json.dumps({'type': 'state', **STATE})
+logger = logger.logger
 
 
-def users_event():
-    return json.dumps({'type': 'users', 'count': len(USERS)})
+async def send_state_data():
+    """
+    Send complete list of projects data
+    """
+    if USERS:
+        data = dict()
+        data['type'] = 'state_data'
+        data['project_data'] = pm.get_projects_data()
+        data['disk_usage_data'] = raspi.get_disk_info()
+        await asyncio.wait([user.send(json.dumps(data)) for user in USERS])
 
 
-async def notify_state():
-    print(USERS)
-    if USERS:  # asyncio.wait doesn't accept an empty list
-        message = state_event()
-        await asyncio.wait([user.send(message) for user in USERS])
+async def send_download_ready(project_name) :
 
-
-async def notify_users():
-    print(USERS)
-    if USERS:  # asyncio.wait doesn't accept an empty list
-        message = users_event()
-        await asyncio.wait([user.send(message) for user in USERS])
+    if USERS:
+        data = {'type': "download_ready", 'project_name': project_name}
+        await asyncio.wait([user.send(json.dumps(data)) for user in USERS])
 
 
 async def register(websocket):
+    """
+    Register a new client using his websocket
+    :param websocket: websocket of the client
+    """
     USERS.add(websocket)
-    await notify_users()
+    logger.info('New client connected')
+    await send_state_data()
 
 
 async def unregister(websocket):
+    """
+    Remove a websocket of the client list when the websocket connection is closed
+    :param websocket: client to remove
+    """
+    logger.info("One client disconnected")
     USERS.remove(websocket)
-    await notify_users()
+    await send_state_data()
 
 
-async def counter(websocket, path):
-    # register(websocket) sends user_event() to websocket
+async def mainLoop(websocket, path):
+    """
+    Main loop that catch entry message given by users
+    Send back a response, ex after a scan loop we send projects data
+    :param websocket: websocket used for external communication (client)
+    """
     await register(websocket)
     try:
-        await websocket.send(state_event())
+        #await send_project_data_users()
 
         async for message in websocket:
             data = json.loads(message)
-            if data['action'] == 'minus':
-                STATE['value'] -= 1
-                await notify_state()
-            elif data['action'] == 'plus':
-                STATE['value'] += 1
-                await notify_state()
+            logger.info("Message received : %s", str(data))
+
+            if data['action'] == 'loop_capture':
+                scanner.loop_capture(data['project_name'])
+                await send_state_data()
+
             elif data['action'] == 'create_project':
-                print(data)
-                await createProject(data['name_project'])
+                pm.create_project(data['project_name'], data['description'], data['pict_per_rotation'], data['pict_res'])
+                await send_state_data()
+
             elif data['action'] == 'turn_bed_CW':
-                angle = int(data['plateau_degree'])
+                angle = float(data['plateau_degree'])
                 scanner.turn_bed(angle)
-                await notify_state()
+                await send_state_data()
+
             elif data['action'] == 'turn_bed_CCW':
-                print(data)
-                angle = int(data['plateau_degree'])
+                angle = float(data['plateau_degree'])
                 scanner.turn_bed(-1 * angle)
-                await notify_state()
+                await send_state_data()
+
+            elif data['action'] == 'request_project_info':
+                await websocket.send(pm.get_projects_data())
+
+            elif data['action'] == 'request_upload_email_project':
+                project_name = data['project_name']
+                email_to = data['email_to']
+                pm.zip_project(project_name)
+
+                upload.send_email_zip_project(project_name, email_to)
+                await send_state_data()
+
+            elif data['action'] == 'request_remove_project':
+                project_name = data['project_name']
+                pm.remove_single_project(project_name)
+                await send_state_data()
+
+            elif data['action'] == 'request_zip_data':
+                project_name = data["project_name"]
+                pm.zip_project(project_name)
+                await send_download_ready(project_name)
+
+            elif data['action'] == 'camera_preview':
+                data = scanner.get_preview_capture()
+                msg = {'type': 'camera_preview', 'data': data}
+                await websocket.send(json.dumps(msg))
+
             else:
-                logging.error(
-                    "unsupported event: {}", data)
+                logger.error("unsupported event: {}", data)
+
     finally:
         await unregister(websocket)
 
 
-def createProject(message):
-    home_dir = os.environ['HOME']
-    print(home_dir)
-    folders = os.listdir(home_dir)
-    wcscanner_path = home_dir + '/.wcscanner'
-    if '.wcscanner' not in folders :
-        os.mkdir(wcscanner_path)
-    else :
-        print(".wscanner already created")
-    folders = os.listdir(wcscanner_path)
-    print(folders)
-
-    regex = re.compile(r'^'+ message +'_\d+$')
-    folders_same_name_size = len(list(filter(regex.search, folders)))
-    print(folders_same_name_size)
-    if folders_same_name_size > 0 or message in folders:
-        os.mkdir(wcscanner_path + '/{}_{}'.format(message, folders_same_name_size + 1))
-    else :
-        os.mkdir(wcscanner_path + '/{}'.format(message))
-
-
-def takePhoto(projectName, degre):
-    home_dir = os.environ['HOME']
-    wcscanner_path = home_dir + '/.wcscanner'
-    a=360/degre
-    for id in range(0, a) :
-        os.system('raspistill -vf -hf -o {}/{}/{}.jpg'.format(wcscanner_path, projectName, id))
-        scanner.turn_bed(degre)
-    return 1
-
 def activeUSB(usbNumber):
+    """
+    Show active usb devices connected to the host running this script
+    :param usbNumber:
+    :return:
+    """
     usb = subprocess.check_output('lsusb')
     usb = usb.decode()
     liste = []
@@ -138,12 +148,13 @@ def activeUSB(usbNumber):
         i = i.split(" ")
 
 
-
-
 if __name__ == '__main__':
-    scanner.turn_bed(720)
-    scanner.turn_bed(-720)
+    pm.create_base_projects_folder()
+    pm.get_projects_data()
+
     asyncio.get_event_loop().run_until_complete(
-        websockets.serve(counter, '0.0.0.0', 6789))
+        websockets.serve(mainLoop, '0.0.0.0', 6789))
+    scanner.on_ready()
     asyncio.get_event_loop().run_forever()
+
 

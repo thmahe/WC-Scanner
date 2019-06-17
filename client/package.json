@@ -1,29 +1,13 @@
 {
-  "name": "client_wc-scanner",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@material-ui/core": "^3.9.3",
-    "@material-ui/icons": "^3.0.2",
-    "@material-ui/lab": "^3.0.0-alpha.30",
-    "classnames": "latest",
-    "clsx": "^1.0.4",
-    "electron-is-dev": "^0.3.0",
-    "electron-publisher-s3": "^20.17.2",
-    "immutable": "^4.0.0-rc.12",
-    "prop-types": "latest",
-    "react": "^16.4.1",
-    "react-dev-utils": "^5.0.1",
-    "react-dom": "^16.8.6",
-    "react-router-dom": "^5.0.0",
-    "wait-on": "^3.2.0"
-  },
-  "main": "public/electron.js",
-  "keywords": [
-    "Example",
-    "React",
-    "Electron"
+  "name": "wcscanner",
+  "version": "1.0.0",
+  "description": "Client application for the WCScanner\nTER 2019 - Université Nice Côte Azur",
+  "main": "main.js",
+  "files": [
+    "/**/*",
+    "*.js"
   ],
+<<<<<<< HEAD
   "scripts": {
     "dev": "yarn react-scripts start",
     "build": "react-scripts build",
@@ -39,56 +23,70 @@
     "react-scripts": "1.1.4",
     "version-bump-prompt": "^4.1.0"
   },
+=======
+>>>>>>> 0.2
   "build": {
-    "appId": "com.your-domain",
-    "compression": "normal",
-    "productName": "Example",
-    "directories": {
-      "buildResources": "build",
-      "output": "dist"
-    },
-    "mac": {
-      "icon": "assets/icon.icns",
-      "type": "distribution",
-      "target": [
-        "pkg",
-        "dmg",
-        "mas"
-      ],
-      "publish": {
-        "provider": "s3",
-        "bucket": "example-releases",
-        "path": "releases"
-      },
-      "category": "public.app-category.news"
-    },
-    "mas": {
-      "entitlements": "assets/entitlements.mas.plist",
-      "entitlementsInherit": "assets/entitlements.mas.inherit.plist",
-      "provisioningProfile": "assets/embedded.provisionprofile"
-    },
-    "win": {
-      "target": "nsis",
-      "icon": "assets/icon.ico",
-      "publish": {
-        "provider": "s3",
-        "bucket": "example-releases",
-        "path": "releases"
-      }
-    },
+    "appId": "org.unice.ter2019.wcscanner",
+    "asar": true,
+    "asarUnpack": [
+      "core/**/*",
+      "assets/**/*"
+    ],
     "linux": {
-      "icon": "assets/icon.png",
+      "icon": "./assets/images/icons/png/256x256.png",
+      "category": "Utility",
       "target": [
         "snap",
         "AppImage"
-      ],
-      "description": "Example",
-      "category": "Network;Feed",
-      "publish": {
-        "provider": "s3",
-        "bucket": "example-releases",
-        "path": "releases"
-      }
+      ]
+    },
+    "snap": {
+      "confinement": "classic"
+    },
+    "win": {
+      "icon": "./assets/images/icons/icon.ico"
+    },
+    "mac": {
+      "type": "development"
+    },
+    "files": [
+      "core/**/*",
+      "assets/**/*",
+      "*.js",
+      "index.html",
+      "icon.png"
+    ],
+    "directories": {
+      "buildResources": "build"
     }
+  },
+  "scripts": {
+    "pack": "build --dir",
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "repository": "https://github.com/electron/electron-quick-start",
+  "keywords": [
+    "Electron",
+    "quick",
+    "start",
+    "tutorial",
+    "demo"
+  ],
+  "author": "GitHub",
+  "license": "CC0-1.0",
+  "devDependencies": {
+    "electron": "^4.2.4",
+    "electron-builder": "^20.43.0",
+    "electron-installer-snap": "^3.2.0",
+    "electron-packager": "^13.1.1",
+    "npm": "^6.9.0"
+  },
+  "dependencies": {
+    "bootstrap-material-design": "^4.1.2",
+    "chart.js": "^2.7.2",
+    "font-awesome": "^4.7.0",
+    "jquery": "^3.4.1",
+    "popper.js": "^1.15.0"
   }
 }

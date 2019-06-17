@@ -1,0 +1,47 @@
+html {
+    overflow: scroll;
+    overflow-x: hidden;
+}
+::-webkit-scrollbar {
+    width: 0;
+}
+::-webkit-scrollbar-thumb {
+    background: #ffffff;
+}
+
+.scanner_background {
+    background-size: cover;
+    content: url(../images/scanner_bg.png);
+    height: 720px;
+    left: 0;
+    top: 0;
+    position: fixed;
+    z-index: -1;
+}
+
+.scanner_background_2 {
+    background-size: cover;
+    background: url(../images/scanner_bg_2.png) no-repeat center center;
+    height: 720px;
+    margin-top: -150px;
+}
+
+#loading {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: fixed;
+    display: block;
+    background-color: #fff;
+    z-index: 99;
+    text-align: center;
+}
+
+#loading-image {
+    position: absolute;
+    top: 100px;
+    left: 240px;
+    z-index: 100;
+}
+

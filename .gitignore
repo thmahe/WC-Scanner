@@ -16,3 +16,17 @@ server/venv/
 \.idea/
 
 node_modules/
+
+**/__pycache__/**
+
+*.log
+
+client/wcscanner-linux-x64/
+
+client/dist/
+
+client/out/wcscanner-linux-x64/
+
+client/WcScanner-darwin-x64/**/*
+
+client/release-builds/

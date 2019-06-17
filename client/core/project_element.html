@@ -1,0 +1,71 @@
+<div class="col-md-4 animated zoomIn" id="{{project_name}}">
+    <div class="card mb-4 box-shadow">
+        <img class="card-img-top" data-holder-rendered="true" src="data:image/jpg;base64, {{preview_data}}">
+        <div class="card-img-overlay"
+             style="display: flex; width: 100%; flex-direction: row; justify-content: flex-end; align-items: flex-start;">
+            <button class="btn btn-secondary" data-target="#{{project_name}}_modal" data-toggle="modal" type="button">
+                       <span class="fas fa-file-download fa-2x text-white">
+                     </span></button>
+
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">{{project_name}}</h5>
+            <p class="card-text">{{project_description}}</p>
+            <p class="card-text">Pictures per revolution : {{project_pict_per_rotation}}</p>
+            <p class="card-text">Pictures resolution : {{project_pict_res}}</p>
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                    <button class="btn btn-sm btn-outline-secondary" onclick="start_loop_capture('{{project_name}}')"
+                            type="button">Start loop capture
+                    </button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="request_remove_project('{{project_name}}')"
+                            type="button">Delete
+                    </button>
+                </div>
+                <small class="text-muted">{{project_size}}Mb</small>
+            </div>
+        </div>
+    </div>
+</div>
+<div aria-hidden="true" aria-labelledby="{{project_name}}_modalLabel" class="modal fade" id="{{project_name}}_modal"
+     role="dialog" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="{{project_name}}_modalLabel">Download project</h5>
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="list-group">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">@</span>
+                        </div>
+                        <input aria-describedby="emailTo" aria-label="Email" class="form-control" id="emailTo"
+                               placeholder="Email" type="text">
+                    </div>
+                    <button class="btn btn-primary" data-dismiss="modal" onclick="upload_email_project('{{project_name}}')"
+                            type="button">EMAIL
+                    </button>
+                    <div class="dropdown-divider"></div>
+                    <button class="btn btn-secondary" id="{{project_name}}_export_button" onclick="request_export_project('{{project_name}}')"
+                            type="button">Export...
+                    </button>
+                    <div id="{{project_name}}_loader"></div>
+                    <div class="d-flex justify-content-center">
+                        <a href="http://wcscanner.local/{{project_name}}.zip"
+                           id="{{project_name}}_download">
+
+                        </a></div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal" type="button">Cancel</button>
+                <button class="btn btn-primary" type="button">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

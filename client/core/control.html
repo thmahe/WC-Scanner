@@ -1,0 +1,99 @@
+<img class="scanner_background animated fadeInUp"/>
+
+<div class="row pt-3">
+    <div class="col-md-4 animated fadeInLeft">
+
+        <!-- Card -->
+        <div class="card">
+            <!-- Card content -->
+            <div class="card-body">
+
+                <!-- Title -->
+                <h4 class="card-title"><a>Turn Bed</a></h4>
+                <!-- Text -->
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <button class="btn btn-outline-primary" onclick="turn_bed_CW_trigger()"><i
+                                    class="fas fa-redo mr-1 fa-flip-horizontal"></i></button>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="md-form input-group mb-4">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text md-addon" id="material-addon1">°</span>
+                                </div>
+                                <input aria-describedby="degrees_placeholder" aria-label="degrees" class="form-control" id="turn_bed_value"
+                                       placeholder="60" type="number" value="60">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-outline-primary" onclick="turn_bed_CCW_trigger()"><i
+                                    class="fas fa-redo mr-1"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- Card -->
+        <div class="card mt-3">
+            <!-- Card content -->
+            <div class="card-body">
+
+                <!-- Title -->
+                <h4 class="card-title"><a>Disk Usage</a></h4>
+                <!-- Text -->
+
+                <canvas id="doughnutChart"></canvas>
+                <h3 class="text-center">{{DISK_USED}}/{{DISK_TOTAL}}G</h3>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4 offset-4 animated fadeInRight">
+
+        <!-- Card -->
+        <div class="card">
+            <!-- Card content -->
+            <div class="card-body">
+
+                <!-- Title -->
+                <h4 class="card-title"><a>Camera preview</a></h4>
+                <button class="btn btn-outline-primary" onclick="request_camera_capture()">Capture <i
+                        class="fas fa-camera mr-1"></i></button>
+
+                <img class="card-img-top" data-holder-rendered="true" src="{{PREVIEW_DATA}}">
+                <button class="btn btn-primary btn-outline-primary btn-lg btn-block" data-target="#modal_big_preview" data-toggle="modal"
+                        type="button">
+                    Expand view
+                </button>
+            </div>
+
+        </div>
+        <!-- Card -->
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modal_big_preview" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <img class="card-img-top" src="{{PREVIEW_DATA}}" data-holder-rendered="true">
+            </div>
+        </div>
+    </div>
+</div>
